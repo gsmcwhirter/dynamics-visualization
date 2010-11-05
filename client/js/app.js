@@ -199,21 +199,25 @@ var app = $.sammy("#container2", function (){
 
     this.bind('symbind', function (e, data){
         var form = data.form;
-        this.log("symbind");
 
-        $(".entry-input[name=tl-r]", form).bind('keyup.sym blur.sym', {name: 'tl-r', form: form}, symmetric_input_binding);
-        $(".entry-input[name=tr-r]", form).bind('keyup.sym blur.sym', {name: 'tr-r', form: form}, symmetric_input_binding);
-        $(".entry-input[name=bl-r]", form).bind('keyup.sym blur.sym', {name: 'bl-r', form: form}, symmetric_input_binding);
-        $(".entry-input[name=br-r]", form).bind('keyup.sym blur.sym', {name: 'br-r', form: form}, symmetric_input_binding);
+        $(".entry-input[name=tl-r]", form).bind('keyup.sym blur.sym focus.sym', {name: 'tl-r', form: form}, symmetric_input_binding);
+        $(".entry-input[name=tr-r]", form).bind('keyup.sym blur.sym focus.sym', {name: 'tr-r', form: form}, symmetric_input_binding);
+        $(".entry-input[name=bl-r]", form).bind('keyup.sym blur.sym focus.sym', {name: 'bl-r', form: form}, symmetric_input_binding);
+        $(".entry-input[name=br-r]", form).bind('keyup.sym blur.sym focus.sym', {name: 'br-r', form: form}, symmetric_input_binding);
+
+        $(".entry-input[name=br-r]", form).focus();
+        $(".entry-input[name=bl-r]", form).focus();
+        $(".entry-input[name=tr-r]", form).focus();
+        $(".entry-input[name=tl-r]", form).focus();
     });
 
     this.bind('symunbind', function (e, data){
         var form = data.form;
 
-        $(".entry-input[name=tl-r]", form).unbind('keyup.sym blur.sym');
-        $(".entry-input[name=tr-r]", form).unbind('keyup.sym blur.sym');
-        $(".entry-input[name=bl-r]", form).unbind('keyup.sym blur.sym');
-        $(".entry-input[name=br-r]", form).unbind('keyup.sym blur.sym');
+        $(".entry-input[name=tl-r]", form).unbind('keyup.sym blur.sym focus.sym');
+        $(".entry-input[name=tr-r]", form).unbind('keyup.sym blur.sym focus.sym');
+        $(".entry-input[name=bl-r]", form).unbind('keyup.sym blur.sym focus.sym');
+        $(".entry-input[name=br-r]", form).unbind('keyup.sym blur.sym focus.sym');
     });
 
     this.bind('restrictgame', function (e, data){
