@@ -1,3 +1,6 @@
 *.pyc
 *.pyo
 nbproject
+client/css/readme.txt
+client/css/site.css
+server/static

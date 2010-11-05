@@ -1,0 +1,17 @@
+# refer to http://www.yaml.org/spec/1.1/ for clarification on YAML collections
+dynamics-viz:
+  path: /home/gmcwhirt/Documents/Sources/dynamics-visualization/client/css
+  custom_css:
+    screen.css:
+      - site.css
+  plugins:
+    - buttons
+  semantic_classes:
+    "#container": ".container"
+    "#header": ".span-24, .last"
+    "#container2": ".span-24, .last"
+    "#main.wide": ".span-22, .prepend-1, .append-1, .last"
+    "#main": ".span-15, .prepend-1, .append-1"
+    "#sidebar": ".span-6, .append-1, .last"
+    "#footer": ".span-22, .prepend-1, .append-1, .last"
+    "#subfooter": ".span-24, .last"
