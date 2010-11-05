@@ -261,6 +261,100 @@ strong,
         }
     }
 
+    a.button.positive { color: #529214; }
+    a.button.negative { color: #D12F19; }
+
+    .game {
+        overflow: auto;
+
+        .game-grid {
+            width: 632px;
+            float: left;
+
+            .game-grid-actual {
+                width: 300px;
+                @game_bordercolor: #bbb;
+                border: 1px solid @game_bordercolor;
+
+                input[type=text],
+                input[type=password],
+                input[type=email],
+                input[type=url],
+                input[type=number],
+                input[type=date],
+                input[type=datetime],
+                input[type=month],
+                input[type=week],
+                input[type=time],
+                input[type=search],
+                input[type=color],
+                select,
+                textarea
+                {
+                    width: 100px;
+                }
+
+                .row {
+                    overflow: auto;
+                    border-bottom: 1px solid @game_bordercolor;
+
+                    .cell {
+                        float: left;
+                        width: 148px;
+                        border-right: 1px solid @game_bordercolor;
+                        overflow: auto;
+                        text-align: center;
+                        padding: 10px 0;
+
+                        .entry {
+                            width: 60px;
+                            padding: 5px;
+                            margin: 0.5em 0;
+                            font-size: 1.5em;
+                        }
+
+                        .entry-input {
+                            width: 50px;
+                        }
+
+                        .entry.left, .entry-input.left {
+                            text-align: right;
+                            float: left;
+                        }
+
+                        .entry-input.left { margin-left: 2px; }
+
+                        .entry.right, .entry-input.right {
+                            text-align: left;
+                            float: right;
+                        }
+
+                        .entry-input.right { margin-right: 2px; }
+
+                        .sep {
+                            padding: 5px 0;
+                            margin: 0.5em 0;
+                            display: block;
+                            font-size: 1.5em;
+                        }
+                    }
+                    .cell.last {
+                        border-right: none;
+                    }
+                }
+
+                .row.last{
+                    border-bottom: none;
+                }
+            }
+        }
+
+        .game-actions {
+            width: 190px;
+            float: right;
+        }
+    }
+
     fieldset
     {
         background-color: @lightbase;
@@ -361,23 +455,44 @@ strong,
 	fieldset.narrow-fields
 	{
 	    input[type=text],
-		input[type=password],
-		input[type=email],
-		input[type=url],
-		input[type=number],
-		input[type=date],
-		input[type=datetime],
-		input[type=month],
-		input[type=week],
-		input[type=time],
-		input[type=search],
-		input[type=color],
-		select,
-		textarea
-		{
-		    width: 50%;
-		}
+            input[type=password],
+            input[type=email],
+            input[type=url],
+            input[type=number],
+            input[type=date],
+            input[type=datetime],
+            input[type=month],
+            input[type=week],
+            input[type=time],
+            input[type=search],
+            input[type=color],
+            select,
+            textarea
+            {
+                width: 50%;
+            }
 	}
+
+        fieldset.wide-fields
+        {
+            input[type=text],
+            input[type=password],
+            input[type=email],
+            input[type=url],
+            input[type=number],
+            input[type=date],
+            input[type=datetime],
+            input[type=month],
+            input[type=week],
+            input[type=time],
+            input[type=search],
+            input[type=color],
+            select,
+            textarea
+            {
+                width: 90%;
+            }
+        }
 
     ul.form-error
     {

@@ -314,6 +314,24 @@ strong, .bold {font-weight:bold;}
 #main button.button, #main a.button {border-radius:10px;-moz-border-radius:10px;-webkit-border-radius:10px;}
 #main a.button {text-decoration:none;}
 #main a.button :hover {text-decoration:none;}
+#main a.button.positive {color:#529214;}
+#main a.button.negative {color:#D12F19;}
+#main .game {overflow:auto;}
+#main .game .game-grid {width:632px;float:left;}
+#main .game .game-grid .game-grid-actual {width:300px;border:1px solid #bbbbbb;}
+#main .game .game-grid .game-grid-actual input[type=text], #main .game .game-grid .game-grid-actual input[type=password], #main .game .game-grid .game-grid-actual input[type=email], #main .game .game-grid .game-grid-actual input[type=url], #main .game .game-grid .game-grid-actual input[type=number], #main .game .game-grid .game-grid-actual input[type=date], #main .game .game-grid .game-grid-actual input[type=datetime], #main .game .game-grid .game-grid-actual input[type=month], #main .game .game-grid .game-grid-actual input[type=week], #main .game .game-grid .game-grid-actual input[type=time], #main .game .game-grid .game-grid-actual input[type=search], #main .game .game-grid .game-grid-actual input[type=color], #main .game .game-grid .game-grid-actual select, #main .game .game-grid .game-grid-actual textarea {width:100px;}
+#main .game .game-grid .game-grid-actual .row {overflow:auto;border-bottom:1px solid #bbbbbb;}
+#main .game .game-grid .game-grid-actual .row .cell {float:left;width:148px;border-right:1px solid #bbbbbb;overflow:auto;text-align:center;padding:10px 0;}
+#main .game .game-grid .game-grid-actual .row .cell .entry {width:60px;padding:5px;margin:0.5em 0;font-size:1.5em;}
+#main .game .game-grid .game-grid-actual .row .cell .entry-input {width:50px;}
+#main .game .game-grid .game-grid-actual .row .cell .entry.left, #main .game .game-grid .game-grid-actual .row .cell .entry-input.left {text-align:right;float:left;}
+#main .game .game-grid .game-grid-actual .row .cell .entry-input.left {margin-left:2px;}
+#main .game .game-grid .game-grid-actual .row .cell .entry.right, #main .game .game-grid .game-grid-actual .row .cell .entry-input.right {text-align:left;float:right;}
+#main .game .game-grid .game-grid-actual .row .cell .entry-input.right {margin-right:2px;}
+#main .game .game-grid .game-grid-actual .row .cell .sep {padding:5px 0;margin:0.5em 0;display:block;font-size:1.5em;}
+#main .game .game-grid .game-grid-actual .row .cell.last {border-right:none;}
+#main .game .game-grid .game-grid-actual .row.last {border-bottom:none;}
+#main .game .game-actions {width:190px;float:right;}
 #main fieldset {background-color:#ffffff;border-color:1px solid #888888;clear:both;border-radius:10px;-webkit-border-radius:10px;-moz-border-radius:10px;}
 #main fieldset .form-line {overflow:auto;margin-bottom:.5em;}
 #main fieldset input[type=text], #main fieldset input[type=password], #main fieldset input[type=email], #main fieldset input[type=url], #main fieldset input[type=number], #main fieldset input[type=date], #main fieldset input[type=datetime], #main fieldset input[type=month], #main fieldset input[type=week], #main fieldset input[type=time], #main fieldset input[type=search], #main fieldset input[type=color], #main fieldset select, #main fieldset textarea {width:75%;margin:0.5em 0px;padding:5px;}
@@ -327,6 +345,7 @@ strong, .bold {font-weight:bold;}
 #main fieldset ul.field-error {color:#f00;margin:0;margin-bottom:2px;}
 #main fieldset ul.field-error li {color:#f00;}
 #main fieldset.narrow-fields input[type=text], #main fieldset.narrow-fields input[type=password], #main fieldset.narrow-fields input[type=email], #main fieldset.narrow-fields input[type=url], #main fieldset.narrow-fields input[type=number], #main fieldset.narrow-fields input[type=date], #main fieldset.narrow-fields input[type=datetime], #main fieldset.narrow-fields input[type=month], #main fieldset.narrow-fields input[type=week], #main fieldset.narrow-fields input[type=time], #main fieldset.narrow-fields input[type=search], #main fieldset.narrow-fields input[type=color], #main fieldset.narrow-fields select, #main fieldset.narrow-fields textarea {width:50%;}
+#main fieldset.wide-fields input[type=text], #main fieldset.wide-fields input[type=password], #main fieldset.wide-fields input[type=email], #main fieldset.wide-fields input[type=url], #main fieldset.wide-fields input[type=number], #main fieldset.wide-fields input[type=date], #main fieldset.wide-fields input[type=datetime], #main fieldset.wide-fields input[type=month], #main fieldset.wide-fields input[type=week], #main fieldset.wide-fields input[type=time], #main fieldset.wide-fields input[type=search], #main fieldset.wide-fields input[type=color], #main fieldset.wide-fields select, #main fieldset.wide-fields textarea {width:90%;}
 #main ul.form-error {color:#f00;margin-bottom:2px;padding:10px;border:2px solid #800;background-color:#ddd;display:block;font-weight:bold;}
 #main ul.form-error li {color:#f00;}
 #footer {margin-top:1em;border-top:1px solid #ccc;font-size:85%;}
