@@ -307,6 +307,7 @@ strong, .bold {font-weight:bold;}
 #main h1 {color:#222;font-size:182%;}
 #main h2 {padding-bottom:5px;line-height:1em;color:#444;font-size:167%;}
 #main h3 {color:#666;font-size:153.9%;}
+#main h2.game-type {color:#666;font-size:153.9%;}
 #main #flash .info, #main #flash .error {padding:5px 20px;margin-bottom:5px;border-radius:10px;-moz-border-radius:10px;-webkit-border-radius:10px;}
 #main #flash .info .x, #main #flash .error .x {float:right;font-weight:bold;cursor:pointer;opacity:0.5;}
 #main .actions {overflow:auto;}
