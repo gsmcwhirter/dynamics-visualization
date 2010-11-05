@@ -1,72 +1,90 @@
-var _setup = false;
-
-function is_symmetric(game){
-    return  (game['tl-r'] || 0) == (game['tl-c'] || 0) &&
-            (game['tr-r'] || 0) == (game['bl-c'] || 0) &&
-            (game['bl-r'] || 0) == (game['tr-c'] || 0) &&
-            (game['br-r'] || 0) == (game['br-c'] || 0);
-}
-
-function identify_game(game){
-    if (!is_symmetric(game)){
-        return false;
-    }
-
-    var a = (game['tl-r'] || 0) - (game['bl-r'] || 0);
-    var b = (game['br-r'] || 0) - (game['tr-r'] || 0);
-
-    if (a > 0 && b > 0) {
-        return 'sh';
-    }
-    else if (a > 0 && b < 0) {
-        return 'pl';
-    }
-    else if (a < 0 && b > 0) {
-        return 'pd';
-    }
-    else if (a < 0 && b < 0) {
-        return 'hd';
-    }
-    else {
-        return 'edge';
-    }
-}
-
-function get_game_type(game){
-    var type = identify_game(game);
-
-    var game_type;
-    if (type){
-        game_type = "Symmetric";
-        switch(type){
-            case "hd":
-                game_type += ", Hawk-Dove";
-                break;
-            case "pd":
-                game_type += ", Prisoner's Dilemma";
-                break;
-            case "pl":
-                game_type += ", Prisoner's Delight";
-                break;
-            case "sh":
-                game_type += ", Stag Hunt";
-                break;
-            case "edge":
-                game_type += ", Edge Case";
-                break;
-            default:
-                game_type += "";
-        }
-    }
-    else {
-        game_type = "Asymmetric";
-    }
-
-    return game_type;
-}
-
 var app = $.sammy("#container2", function (){
     var gamect = 0;
+    var _setup = false;
+
+    function is_symmetric(game){
+        return  (game['tl-r'] || 0) == (game['tl-c'] || 0) &&
+                (game['tr-r'] || 0) == (game['bl-c'] || 0) &&
+                (game['bl-r'] || 0) == (game['tr-c'] || 0) &&
+                (game['br-r'] || 0) == (game['br-c'] || 0);
+    }
+
+    function identify_game(game){
+        if (!is_symmetric(game)){
+            return false;
+        }
+
+        var a = (game['tl-r'] || 0) - (game['bl-r'] || 0);
+        var b = (game['br-r'] || 0) - (game['tr-r'] || 0);
+
+        if (a > 0 && b > 0) {
+            return 'sh';
+        }
+        else if (a > 0 && b < 0) {
+            return 'pl';
+        }
+        else if (a < 0 && b > 0) {
+            return 'pd';
+        }
+        else if (a < 0 && b < 0) {
+            return 'hd';
+        }
+        else {
+            return 'edge';
+        }
+    }
+
+    function get_game_type(game){
+        var type = identify_game(game);
+
+        var game_type;
+        if (type){
+            game_type = "Symmetric";
+            switch(type){
+                case "hd":
+                    game_type += ", Hawk-Dove";
+                    break;
+                case "pd":
+                    game_type += ", Prisoner's Dilemma";
+                    break;
+                case "pl":
+                    game_type += ", Prisoner's Delight";
+                    break;
+                case "sh":
+                    game_type += ", Stag Hunt";
+                    break;
+                case "edge":
+                    game_type += ", Edge Case";
+                    break;
+                default:
+                    game_type += "";
+            }
+        }
+        else {
+            game_type = "Asymmetric";
+        }
+
+        return game_type;
+    }
+
+    function symmetric_input_binding(event){
+        var data = event.data;
+        var name = data.name;
+        var form = $(data.form);
+        var val = $(this).val();
+
+        var target = name.substring(0, name.length - 1);
+        if (target == "tr-"){
+            target = "bl-";
+        }
+        else if (target == "bl-"){
+            target = "tr-";
+        }
+        target += "c";
+
+        $(".entry-input[name="+target+"]", form).val(val);
+        $(".entry."+target).text(val || 0);
+    }
 
     this.use(Sammy.Session);
 
@@ -178,25 +196,6 @@ var app = $.sammy("#container2", function (){
         $("#games").append(new_game);
         new_game.slideDown();
     });
-
-    function symmetric_input_binding(event){
-        var data = event.data;
-        var name = data.name;
-        var form = $(data.form);
-        var val = $(this).val();
-
-        var target = name.substring(0, name.length - 1);
-        if (target == "tr-"){
-            target = "bl-";
-        }
-        else if (target == "bl-"){
-            target = "tr-";
-        }
-        target += "c";
-
-        $(".entry-input[name="+target+"]", form).val(val);
-        $(".entry."+target).text(val || 0);
-    }
 
     this.bind('symbind', function (e, data){
         var form = data.form;
