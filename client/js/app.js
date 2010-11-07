@@ -106,6 +106,7 @@ var app = $.sammy("#container2", function (){
         var games2 = [[]];
 
         $.each(games, function (index, game){
+            game.key = index;
             if (game.sort){
                 if (!games2[game.sort + 1]){
                     games2[game.sort + 1] = [];
@@ -128,11 +129,10 @@ var app = $.sammy("#container2", function (){
             });
         });
 
-        var game;
-        for (var key in games){
-            game = games[key];
-            this.trigger('loadgame', {key: key, add: false, game: game});
-        }
+        var self = this;
+        $.each(games, function (index, game){
+            self.trigger('loadgame', {key: game.key, add: false, game: game});
+        });
     });
 
     this.bind('loadgame', function (e, data){
