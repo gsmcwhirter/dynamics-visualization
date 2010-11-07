@@ -86,20 +86,52 @@ var app = $.sammy("#container2", function (){
         $(".entry."+target).text(val || 0);
     }
 
+    this.use(Sammy.JSON);
     this.use(Sammy.Session);
 
     this.bind('run', function (){
         if (!_setup){
-            this.session('games', function (){ return {}; });
             _setup = true;
-
+            this.session('games', function (){return {};});
             var games = this.session('games');
+            this.trigger('reloadgames', {games: games});
 
-            var game;
-            for (var key in games){
-                game = games[key];
-                this.trigger('loadgame', {key: key, add: false, game: game});
+            this.trigger('permalinks');
+        }
+    });
+
+    this.bind('reloadgames', function (e, data){
+        $("#games").empty();
+        var games = data.games;
+        var games2 = [[]];
+
+        $.each(games, function (index, game){
+            if (game.sort){
+                if (!games2[game.sort + 1]){
+                    games2[game.sort + 1] = [];
+                }
+
+                games2[game.sort + 1].push(game);
             }
+            else {
+                games2[0].push(game);
+            }
+        });
+
+        var nonsorted = games2.shift();
+        games2.push(nonsorted);
+
+        games = [];
+        $.each(games2, function (index, gamelist){
+            $.each(gamelist, function (index2, game){
+                games.push(game);
+            });
+        });
+
+        var game;
+        for (var key in games){
+            game = games[key];
+            this.trigger('loadgame', {key: key, add: false, game: game});
         }
     });
 
@@ -195,6 +227,15 @@ var app = $.sammy("#container2", function (){
         });
         $("#games").append(new_game);
         new_game.slideDown();
+    });
+
+    this.bind('permalinks', function (e, data){
+        $(".actions .permalink").remove();
+        var games = this.session('games') || {};
+
+        var permalink = $("<a/>").text("permalink").attr("href","#/load/"+this.json(games)).addClass('permalink');
+
+        $(".actions").prepend(permalink);
     });
 
     this.bind('symbind', function (e, data){
@@ -367,6 +408,22 @@ var app = $.sammy("#container2", function (){
         $(".entry-input[name=br-c]", form).hide();
     });
 
+    this.bind('updatesort', function (e, data){
+        var order = data.order;
+        var games = this.session('games');
+
+        $.each(order, function (index, value){
+            var key = value.substring(5);
+
+            if (games[key]){
+                games[key].sort = index;
+            }
+        });
+
+        this.session('games', games);
+        this.trigger('permalinks');
+    });
+
     this.get("#/", function (){
         //todo - directions or something?
     });
@@ -439,6 +496,7 @@ var app = $.sammy("#container2", function (){
 
         games[key] = game;
         this.session('games', games);
+        this.trigger('permalinks');
 
         var game_type = get_game_type(game);
 
@@ -471,18 +529,51 @@ var app = $.sammy("#container2", function (){
             if (games[key]){
                 delete games[key];
                 this.session('games', games);
+                this.trigger('permalinks');
             }
 
             var self = this;
-            $("#game-"+key).slideUp(function (){ $("#game-"+key).remove(); self.redirect("#/"); });
+            $("#game-"+key).slideUp(function (){$("#game-"+key).remove();self.redirect("#/");});
         }
         else {
             this.redirect("#/");
         }
     });
 
+    this.get("#/load/:games", function (){
+        var games;
+        try {
+            games = this.json(this.params.games);
+            if ($.isPlainObject(games) && confirm("This will remove all games you have loaded. Do you wish to continue?")){
+                this.session('games', games);
+                this.trigger('reloadgames', {games: games});
+                this.trigger('permalinks');
+            }
+            else {
+                this.log(games);
+                alert("Load data was not a plain object.");
+            }
+        }
+        catch(e){
+            this.log(this.params.games);
+            alert("Load data was not well formed.");
+        }
+
+        this.redirect("#/");
+    });
+
 });
 
 $(function (){
+    $("#games").sortable({
+       distance: 25,
+       forcePlaceholderSize: true,
+       items: '.game',
+       placeholder: 'info',
+       update: function (e, ui){
+           app.trigger("updatesort", {order: $("#games").sortable("toArray")});
+       }
+    });
+
    app.run("#/");
 });
