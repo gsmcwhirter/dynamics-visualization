@@ -4,3 +4,5 @@ nbproject
 client/css/readme.txt
 client/css/site.css
 server/static
+build
+dist
