@@ -93,6 +93,7 @@ var app = $.sammy("#container2", function (){
         if (!_setup){
             _setup = true;
             this.session('games', function (){return {};});
+            this.session('applet_count', function (){return 0;});
             var games = this.session('games');
             this.trigger('reloadgames', {games: games});
 
@@ -565,6 +566,7 @@ var app = $.sammy("#container2", function (){
 
     this.get("#/process/:key", function (){
         var games = this.session('games');
+        var count = this.session('applet_count');
         var key = this.params.key;
 
         if (games[key]){
@@ -576,7 +578,7 @@ var app = $.sammy("#container2", function (){
                                             code: "DynVizGraph",
                                             archive: "applet.jar",
                                             type: "application/x-java-applet",
-                                            name: "game-applet-"+key}, [
+                                            name: "game-applet-"+(count++)}, [
                     ["%param", {name: "java_arguments", value: "-Djnlp.packEnabled=true"}],
                     ["%param", {name: "A", value: game['tl-r'] - game['bl-r']}],
                     ["%param", {name: "B", value: game['tl-c'] - game['tr-c']}],
@@ -585,6 +587,8 @@ var app = $.sammy("#container2", function (){
                     "Applet failed to run. No Java plug-in was found."
                 ]]
             ]);
+
+            this.session('applet_count', count);
         }
 
         this.redirect("#/");
