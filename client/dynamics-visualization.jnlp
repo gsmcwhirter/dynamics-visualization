@@ -4,6 +4,7 @@
         <title>Dynamics Visualization</title>
         <vendor>Gregory McWhirter</vendor>
     </information>
+    <update check="always" />
     <resources>
         <!-- Application Resources -->
         <j2se href="http://java.sun.com/products/autodl/j2se" version="1.6+"/>
