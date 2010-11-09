@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jnlp spec="1.0+" codebase="" href="">
+<jnlp spec="1.0+" codebase="" href="dynamics-visualization.jnlp">
     <information>
         <title>Dynamics Visualization</title>
         <vendor>Gregory McWhirter</vendor>
