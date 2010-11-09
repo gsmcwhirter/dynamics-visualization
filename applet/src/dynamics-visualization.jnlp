@@ -10,7 +10,7 @@
         <j2se href="http://java.sun.com/products/autodl/j2se" version="1.6+"/>
         <jar href="dynamics-visualization.jar" main="true" />
     </resources>
-    <application-desc name="Dynamics Visualization" main-class="DynVizGraph" width="100" height="100">
+    <applet-desc name="Dynamics Visualization" main-class="DynVizGraph" width="100" height="100">
         <!-- Application Arguments -->
-    </application-desc>
+    </applet-desc>
 </jnlp>
