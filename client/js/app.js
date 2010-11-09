@@ -566,7 +566,9 @@ var app = $.sammy("#container2", function (){
         var games = this.session('games');
         var key = this.params.key;
 
+        this.log(key);
         if (games[key]){
+            this.log(key);
             $("#games-"+key+" .game-grid").haml([
                 ["%object.visualization", {width: "648", height: "218", code: "DynVizGraph", archive: "applet.jar", type: "application/x-java-applet"}, [
                     ["%param", {name: "java_arguments", value: "-Djnlp.packEnabled=true"}],
