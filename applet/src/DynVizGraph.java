@@ -102,8 +102,6 @@ public class DynVizGraph extends JApplet {
         //BRChart
         BRChart.setLines(lines);
         BRChart.setArrows(arrows);
-        System.out.println("Set lines");
-        //BRChart.repaint();
     }
     
     private void DtRGraphInfo(BufferedImage bi){
@@ -184,9 +182,7 @@ public class DynVizGraph extends JApplet {
 
             //draw stuff
             float qlimf = (float)C / (float)(A + C);
-            System.out.println(qlimf);
             int qlim = (int) Math.floor(200f * (1f - qlimf));
-            System.out.println(qlim);
 
             lines = new Line[106];
             int index = 0;
@@ -244,7 +240,7 @@ public class DynVizGraph extends JApplet {
             int plim = (int) Math.floor(200f * (1 - plimf));
 
             if (B + D > 0){
-                lrespy = 0;
+                lrespy = 200;
                 if (plimf >= 0f && plimf <= 1f){
                     lines[index++] = new Line(plim, 200, 0, 200, Color.BLUE);
                     lines[index++] = new Line(plim, 0, 200, 0, Color.BLUE);
@@ -260,7 +256,7 @@ public class DynVizGraph extends JApplet {
                     brlimx = 0f;
                 }
             } else if (B + D < 0){
-                lrespy = 200;
+                lrespy = 0;
                 if (plimf >= 0f && plimf <= 1f){
                     lines[index++] = new Line(plim, 200, 200, 200, Color.BLUE);
                     lines[index++] = new Line(plim, 0, 0, 0, Color.BLUE);
@@ -277,13 +273,13 @@ public class DynVizGraph extends JApplet {
                 }
             } else if (0 >= D) {
                 //play this
-                lines[index++] = new Line(0, 200, 200, 200, Color.BLUE);
-                lrespy = 0;
+                lines[index++] = new Line(0, 0, 200, 0, Color.BLUE);
+                lrespy = 200;
                 brlimx = 0f;
             } else {
                 //play other
-                lines[index++] = new Line(0, 200, 200, 0, Color.BLUE);
-                lrespy = 0;
+                lines[index++] = new Line(0, 200, 200, 200, Color.BLUE);
+                lrespy = 200;
                 brlimx = 1f;
             }
 

@@ -458,6 +458,7 @@ var app = $.sammy("#container2", function (){
             var form = $("#game-"+key+" form");
             form.addClass('editing');
             var self = this;
+            $(".game-grid .visualization", form).remove();
             form.slideUp(function (){
                 $("input[name=label]", form).val(game.label).show();
                 $("select.presets", form).show();
