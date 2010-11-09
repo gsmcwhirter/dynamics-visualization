@@ -585,7 +585,7 @@ var app = $.sammy("#container2", function (){
                                             name: "game-applet-"+(count++),
                                             id: "game-applet-"+(count)}, [
                     ["%param", {name: "jnlp_href", value: "dynamics-visualization.jnlp"}],
-                    ["%param", {name: "java_arguments", value: "-Djnlp.packEnabled=true -Djava.security.policy=applet.policy"}],
+                    ["%param", {name: "java_arguments", value: "-Djava.security.policy=applet.policy"}],
                     ["%param", {name: "boxborder", value: "false"}],
                     ["%param", {name: "A", value: game['tl-r'] - game['bl-r']}],
                     ["%param", {name: "B", value: game['tl-c'] - game['tr-c']}],
