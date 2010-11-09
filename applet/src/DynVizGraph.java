@@ -94,8 +94,11 @@ public class DynVizGraph extends JApplet {
             payoffD = 0;
         }
 
-        Thread BRGen = new Thread(new BRGraphGenerator(payoffA, payoffB, payoffC, payoffD));
-        BRGen.start();
+    }
+
+    @Override
+    public void start(){
+        (new Thread(new BRGraphGenerator(payoffA, payoffB, payoffC, payoffD))).start();
     }
     
     private void BRGraphInfo(Line[] lines, Line[] arrows){
