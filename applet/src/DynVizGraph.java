@@ -14,8 +14,6 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.awt.Composite;
-import java.awt.AlphaComposite;
 
 /**
  *
@@ -310,7 +308,7 @@ public class DynVizGraph extends JApplet {
                     } else if (j > brlimy) {
                         tox = Math.abs(lrespx - 200);
                     } else {
-                        tox = 100;
+                        tox = fmx;
                     }
 
                     if (i < brlimx){
@@ -318,7 +316,7 @@ public class DynVizGraph extends JApplet {
                     } else if (i > brlimx) {
                         toy = Math.abs(lrespy - 200);
                     } else {
-                        toy = 100;
+                        toy = fmy;
                     }
 
                     arrows[index2++] = new Line(fmx, fmy, tox, toy, Color.GREEN, Color.BLACK);
