@@ -429,6 +429,10 @@ var app = $.sammy("#container2", function (){
         //todo - directions or something?
     });
 
+    this.get("#/view-game/:key", function (){
+        //todo - anything? (really a 404 fix)
+    });
+
     this.get('#/add-game', function (){
         var d = new Date();
         var key = hex_sha1(d.getTime() + ":" + d.getMilliseconds());

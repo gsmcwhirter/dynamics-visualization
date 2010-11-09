@@ -283,14 +283,14 @@ public class DynVizGraph extends JApplet {
                 brlimx = 1f;
             }
 
-            arrows = new Line[100];
+            arrows = new Line[121];
             float step = 0.1f;
             int fmx;
             int fmy;
             int tox;
             int toy;
-            for (float i = 0f; i < 1f; i += step){
-                for (float j = 0f; j < 1f; j += step){
+            for (float i = 0f; i <= 1f; i += step){
+                for (float j = 0f; j <= 1f; j += step){
                     //response at (i, j)
                     fmx = (int) Math.floor( 200 * (1f - i) );
                     fmy = (int) Math.floor( 200 * (1f - j) );
