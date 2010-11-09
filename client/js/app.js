@@ -580,10 +580,13 @@ var app = $.sammy("#container2", function (){
                 ["%object.visualization",  {width: "648",
                                             height: "218",
                                             code: "DynVizGraph",
-                                            archive: "applet.jar",
+                                            archive: "dynamics-visualization.jar",
                                             type: "application/x-java-applet",
-                                            name: "game-applet-"+(count++)}, [
-                    ["%param", {name: "java_arguments", value: "-Djnlp.packEnabled=true"}],
+                                            name: "game-applet-"+(count++),
+                                            id: "game-applet-"+(count)}, [
+                    ["%param", {name: "jnlp_href", value: "dynamics-visualization.jnlp"}],
+                    ["%param", {name: "java_arguments", value: "-Djnlp.packEnabled=true -Djava.security.policy=applet.policy"}],
+                    ["%param", {name: "boxborder", value: "false"}],
                     ["%param", {name: "A", value: game['tl-r'] - game['bl-r']}],
                     ["%param", {name: "B", value: game['tl-c'] - game['tr-c']}],
                     ["%param", {name: "C", value: game['br-r'] - game['tr-r']}],
