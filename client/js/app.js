@@ -567,10 +567,15 @@ var app = $.sammy("#container2", function (){
         var key = this.params.key;
 
         if (games[key]){
+            var game = games[key];
             $("#game-"+key+" .game-grid .visualization").remove();
             $("#game-"+key+" .game-grid").haml([
                 ["%object.visualization", {width: "648", height: "218", code: "DynVizGraph", archive: "applet.jar", type: "application/x-java-applet"}, [
                     ["%param", {name: "java_arguments", value: "-Djnlp.packEnabled=true"}],
+                    ["%param", {name: "A", value: game['tl-r'] - game['bl-r']}],
+                    ["%param", {name: "B", value: game['tl-c'] - game['tr-c']}],
+                    ["%param", {name: "C", value: game['br-r'] - game['tr-r']}],
+                    ["%param", {name: "D", value: game['br-c'] - game['bl-c']}],
                     "Applet failed to run. No Java plug-in was found."
                 ]]
             ]);
