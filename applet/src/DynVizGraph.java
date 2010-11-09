@@ -1,11 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import javax.swing.JApplet;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
+import javax.swing.SwingUtilities;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -35,6 +31,19 @@ public class DynVizGraph extends JApplet {
 
     @Override
     public void init(){
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                @Override
+                public void run() {
+                    goBabyGo();
+                }
+            });
+        } catch (Exception e) {
+            System.err.println("createGUI didn't complete successfully");
+        }
+    }
+
+    public void goBabyGo(){
         Container c = getContentPane();
 
         setPreferredSize(new Dimension(chartWidth * 3 + 2, chartHeight));
