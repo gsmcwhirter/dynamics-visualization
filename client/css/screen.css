@@ -332,6 +332,7 @@ strong, .bold {font-weight:bold;}
 #main .game .game-grid .game-grid-actual .row .cell .sep {padding:5px 0;margin:0.5em 0;display:block;font-size:1.5em;}
 #main .game .game-grid .game-grid-actual .row .cell.last {border-right:none;}
 #main .game .game-grid .game-grid-actual .row.last {border-bottom:none;}
+#main .game .game-grid .visualization {margin-top:1.5em;}
 #main .game .game-actions {width:172px;float:right;}
 #main fieldset {background-color:#ffffff;border-color:1px solid #888888;clear:both;border-radius:10px;-webkit-border-radius:10px;-moz-border-radius:10px;}
 #main fieldset .form-line {overflow:auto;margin-bottom:.5em;}
