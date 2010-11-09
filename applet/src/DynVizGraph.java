@@ -33,11 +33,30 @@ public class DynVizGraph extends JApplet {
     private int payoffC;
     private int payoffD;
 
-    public DynVizGraph(){
+    @Override
+    public void init(){
         Container c = getContentPane();
 
         setPreferredSize(new Dimension(chartWidth * 3 + 2, chartHeight));
         c.setPreferredSize(new Dimension(chartWidth * 3 + 2, chartHeight));
+
+        JPanel panel = new JPanel(new GridLayout(1,3));
+
+        BRChart = new CanvasPanel();
+        DtRChart = new CanvasPanel();
+        CtRChart = new CanvasPanel();
+
+        panel.setBorder(new LineBorder(Color.LIGHT_GRAY));
+        panel.setPreferredSize(new Dimension(chartWidth * 3 + 2, chartHeight));
+
+        BRChart.setPreferredSize(new Dimension(chartWidth, chartHeight));
+        DtRChart.setPreferredSize(new Dimension(chartWidth, chartHeight));
+        CtRChart.setPreferredSize(new Dimension(chartWidth, chartHeight));
+        panel.add(BRChart);
+        panel.add(DtRChart);
+        panel.add(CtRChart);
+
+        c.add(panel);
 
         try {
             String pAS = getParameter("A");
@@ -74,29 +93,6 @@ public class DynVizGraph extends JApplet {
         } catch (NullPointerException e) {
             payoffD = 0;
         }
-
-        System.out.println(payoffA);
-        System.out.println(payoffB);
-        System.out.println(payoffC);
-        System.out.println(payoffD);
-
-        JPanel panel = new JPanel(new GridLayout(1,3));
-
-        BRChart = new CanvasPanel();
-        DtRChart = new CanvasPanel();
-        CtRChart = new CanvasPanel();
-
-        panel.setBorder(new LineBorder(Color.LIGHT_GRAY));
-        panel.setPreferredSize(new Dimension(chartWidth * 3 + 2, chartHeight));
-
-        BRChart.setPreferredSize(new Dimension(chartWidth, chartHeight));
-        DtRChart.setPreferredSize(new Dimension(chartWidth, chartHeight));
-        CtRChart.setPreferredSize(new Dimension(chartWidth, chartHeight));
-        panel.add(BRChart);
-        panel.add(DtRChart);
-        panel.add(CtRChart);
-
-        c.add(panel);
 
         Thread BRGen = new Thread(new BRGraphGenerator(payoffA, payoffB, payoffC, payoffD));
         BRGen.start();
