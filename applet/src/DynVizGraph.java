@@ -428,8 +428,13 @@ public class DynVizGraph extends JApplet {
 
             // setup length parameters
             fLength = (float)Math.sqrt( vecLine[0] * vecLine[0] + vecLine[1] * vecLine[1] ) ;
-            th = arrowWidth / ( 2.0f * fLength ) ;
-            ta = arrowWidth / ( 2.0f * ( (float)Math.tan( theta ) / 2.0f ) * fLength ) ;
+            if (fLength > 0f){
+                th = arrowWidth / ( 2.0f * fLength ) ;
+                ta = arrowWidth / ( 2.0f * ( (float)Math.tan( theta ) / 2.0f ) * fLength ) ;
+            } else {
+                th = 0f;
+                ta = 0f;
+            }
 
             // find the base of the arrow
             baseX = ( (float)xPoints[ 0 ] - ta * vecLine[0]);
