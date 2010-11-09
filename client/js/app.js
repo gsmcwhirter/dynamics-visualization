@@ -158,7 +158,7 @@ var app = $.sammy("#container2", function (){
                 ["%fieldset.wide-fields",[
                     [".game-actions",[
                         ["%button.button.positive.save-button",{"type": "submit", style: !input ? "display: none;" : "", tabindex: tabindex + 11},"Save Game"],
-                        ["%a.button.positive.process-button",{href: "#/", style: input ? "display: none;" : ""}, "Process Game"],
+                        ["%a.button.positive.process-button",{href: "#/process/"+key, style: input ? "display: none;" : ""}, "Process Game"],
                         ["%br"],
                         ["%a.button.edit-button",{href: "#/edit-game/"+key, style: input ? "display: none;" : ""},"Edit Game"],
                         ["%br.edit-button", {style: input ? "display: none;" : ""}],
@@ -557,6 +557,22 @@ var app = $.sammy("#container2", function (){
         catch(e){
             this.log(this.params.games);
             alert("Load data was not well formed.");
+        }
+
+        this.redirect("#/");
+    });
+
+    this.get("#/process/:key", function (){
+        var games = this.session('games');
+        var key = this.params.key;
+
+        if (games[key]){
+            $("#games-"+key+" .game-grid").haml([
+                ["%object.visualization", {width: "648", height: "218", code: "DynVizGraph", archive: "applet.jar", type: "application/x-java-applet"}, [
+                    ["%param", {name: "java_arguments", value: "-Djnlp.packEnabled=true"}],
+                    "Applet failed to run. No Java plug-in was found."
+                ]]
+            ]);
         }
 
         this.redirect("#/");
