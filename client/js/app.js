@@ -570,7 +570,12 @@ var app = $.sammy("#container2", function (){
             var game = games[key];
             $("#game-"+key+" .game-grid .visualization").remove();
             $("#game-"+key+" .game-grid").haml([
-                ["%object.visualization", {width: "648", height: "218", code: "DynVizGraph", archive: "applet.jar", type: "application/x-java-applet"}, [
+                ["%object.visualization",  {width: "648",
+                                            height: "218",
+                                            code: "DynVizGraph",
+                                            archive: "applet.jar",
+                                            type: "application/x-java-applet",
+                                            name: "game-applet-"+key}, [
                     ["%param", {name: "java_arguments", value: "-Djnlp.packEnabled=true"}],
                     ["%param", {name: "A", value: game['tl-r'] - game['bl-r']}],
                     ["%param", {name: "B", value: game['tl-c'] - game['tr-c']}],
