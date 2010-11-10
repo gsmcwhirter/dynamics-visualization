@@ -77,8 +77,10 @@ public class BRGraphGenerator implements GraphGenerator {
                     System.out.println("qlim is NaN");
                     if (A < 0){
                         yyf = 0f;
-                    } else {
+                    } else if (A > 0) {
                         yyf = 1f;
+                    } else {
+                        yyf = yf;
                     }
                 } else if (xf < qlim){
                     yyf = lrespy;
@@ -92,8 +94,10 @@ public class BRGraphGenerator implements GraphGenerator {
                     System.out.println("plim is NaN");
                     if (D > 0){
                         xxf = 1f;
-                    } else {
+                    } else if (D < 0) {
                         xxf = 0f;
+                    } else {
+                        xxf = xf;
                     }
                 } else if(yf < plim || Float.isNaN(plim))
                 {
@@ -134,10 +138,10 @@ public class BRGraphGenerator implements GraphGenerator {
                 //play this
                 ci.drawLine(0f, 1f, 1f, 1f, Color.red);
             }
-        } else if (0 <= A) {
+        } else if (0 < A) {
             //play this
             ci.drawLine(0f, 1f, 1f, 1f, Color.red);
-        } else {
+        } else if (0 > A) {
             //play other
             ci.drawLine(0f, 0f, 1f, 0f, Color.red);
         }
@@ -147,7 +151,7 @@ public class BRGraphGenerator implements GraphGenerator {
             if (plim >= 0f && plim <= 1f){
                 ci.drawLine(0f, 1f, 0f, plim, Color.blue);
                 ci.drawLine(1f, plim, 1f, 0f, Color.blue);
-                ci.drawLine(0f, plim, 1f, plim);
+                ci.drawLine(0f, plim, 1f, plim, Color.blue);
             } else if (plim > 1f){
                 //play other
                 ci.drawLine(1f, 1f, 1f, 0f, Color.blue);
@@ -170,7 +174,7 @@ public class BRGraphGenerator implements GraphGenerator {
         } else if (D > 0) {
             //play this
             ci.drawLine(1f, 0f, 1f, 1f, Color.blue);
-        } else {
+        } else if (D < 0) {
             //play other
             ci.drawLine(0f, 0f, 0f, 1f, Color.blue);
         }

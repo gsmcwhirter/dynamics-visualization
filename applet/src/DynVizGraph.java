@@ -74,36 +74,36 @@ public class DynVizGraph extends JApplet {
             String pAS = getParameter("A");
             payoffA = Integer.parseInt(pAS);
         } catch (NumberFormatException e) {
-            payoffA = -1;
+            payoffA = 0;
         } catch (NullPointerException e) {
-            payoffA = -1;
+            payoffA = 0;
         }
 
         try {
             String pBS = getParameter("B");
             payoffB = Integer.parseInt(pBS);
         } catch (NumberFormatException e) {
-            payoffB = -1;
+            payoffB = 0;
         } catch (NullPointerException e) {
-            payoffB = -1;
+            payoffB = 0;
         }
 
         try {
             String pCS = getParameter("C");
             payoffC = Integer.parseInt(pCS);
         } catch (NumberFormatException e) {
-            payoffC = 1;
+            payoffC = 0;
         } catch (NullPointerException e) {
-            payoffC = 1;
+            payoffC = 0;
         }
 
         try {
             String pDS = getParameter("D");
             payoffD = Integer.parseInt(pDS);
         } catch (NumberFormatException e) {
-            payoffD = 1;
+            payoffD = 0;
         } catch (NullPointerException e) {
-            payoffD = 1;
+            payoffD = 0;
         }
 
         System.out.println(payoffA);
