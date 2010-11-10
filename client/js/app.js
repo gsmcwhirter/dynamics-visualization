@@ -461,6 +461,18 @@ var app = $.sammy("#container2", function (){
         this.redirect("#/");
     });
 
+    this.get("#/clear", function (){
+        if (confirm("Are you sure you want to delete all data?")){
+            this.session('games', {});
+            this.session('applet_count', 0);
+
+            this.trigger('reloadgames', {games: {}});
+            this.trigger('permalinks');
+        }
+
+        this.redirect("#/");
+    });
+
     this.get('#/add-game', function (){
         var d = new Date();
         var key = hex_sha1(d.getTime() + ":" + d.getMilliseconds());
