@@ -162,7 +162,7 @@ var app = $.sammy("#container2", function (){
         $("#games").append(new_game);
         new_game.hide();
         new_game.haml(
-            ["%form"+(input ? ".editing" : ""), {action: "#!/edit-game/"+key, method: "PUT"},[
+            ["%form"+(input ? ".editing" : ""), {action: "#!/edit-game/"+key, method: "PUT", "accept-charset": "utf-8"},[
                 ["%fieldset.wide-fields",[
                     [".game-actions", [
                         ["%button.button.positive.save-button",{"type": "submit", style: !input ? "display: none;" : "", tabindex: tabindex + 11},"save game"],
