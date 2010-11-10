@@ -106,7 +106,10 @@ public class DynVizGraph extends JApplet {
         } catch (NullPointerException e) {
             payoffD = 0;
         }
+    }
 
+    @Override
+    public void start(){
         (new Thread(new BRGraphGenerator(payoffA, payoffB, payoffC, payoffD, BRChart.getRealWidth(), BRChart.getRealHeight()))).start();
         (new Thread(new DtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, DtRChart.getRealWidth(), DtRChart.getRealHeight()))).start();
         (new Thread(new CtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, CtRChart.getRealWidth(), CtRChart.getRealHeight()))).start();
@@ -114,17 +117,17 @@ public class DynVizGraph extends JApplet {
 
     private void BRGraphInfo(CanvasImage ci){
         BRChart.setCImage(ci);
-        BRChart.repaint();
+        BRChart.flush();
     }
     
     private void DtRGraphInfo(CanvasImage ci){
         DtRChart.setCImage(ci);
-        DtRChart.repaint();
+        DtRChart.flush();
     }
     
     private void CtRGraphInfo(CanvasImage ci){
         CtRChart.setCImage(ci);
-        CtRChart.repaint();
+        CtRChart.flush();
     }
 
     class BRGraphGenerator implements Runnable {
@@ -273,6 +276,8 @@ public class DynVizGraph extends JApplet {
                 //play other
                 ci.drawLine(1f, 1f, 1f, 0f, Color.blue);
             }
+
+            ci.flush();
         }
     }
 

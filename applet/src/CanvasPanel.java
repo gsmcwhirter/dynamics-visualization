@@ -58,4 +58,11 @@ public class CanvasPanel extends JPanel {
         }
     }
 
+    public void flush(){
+        if (_ci != null){
+            _ci.flush();
+        }
+        repaint();
+    }
+
  } // End canvasPanel class

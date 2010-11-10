@@ -24,6 +24,10 @@ public class CanvasImage {
         return ci;
     }
 
+    public void flush(){
+        ci.flush();
+    }
+
     public void drawLine(float x1, float y1, float x2, float y2, Color color){
         int _height = ci.getHeight() - 1;
         int _width = ci.getWidth() - 1;
