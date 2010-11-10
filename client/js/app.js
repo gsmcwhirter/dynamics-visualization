@@ -640,7 +640,7 @@ var app = $.sammy("#container2", function (){
         if (games[key]){
             var game = games[key];
             $("#game-"+key+" .game-grid .visualization").remove();
-            $("#game-"+key+" .game-grid").haml([
+            $("#game-"+key+" .game-grid").haml(
                 ["%object.visualization",  {width: "648",
                                             height: "218",
                                             code: "DynVizGraph",
@@ -655,9 +655,9 @@ var app = $.sammy("#container2", function (){
                     ["%param", {name: "B", value: game['tl-c'] - game['tr-c']}],
                     ["%param", {name: "C", value: game['br-r'] - game['tr-r']}],
                     ["%param", {name: "D", value: game['br-c'] - game['bl-c']}],
-                    "Applet failed to run. No Java plug-in was found."
+                    ["Applet failed to run. No Java plug-in was found."]
                 ]]
-            ]);
+            );
 
             this.session('applet_count', count);
         }
