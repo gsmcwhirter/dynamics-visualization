@@ -459,8 +459,9 @@ var app = $.sammy("#container2", function (){
     });
 
     this.get("#!/toggle-all", function (){
+        var self = this;
         $(".game").each(function (index, div){
-            this.trigger('mingame', {gamediv: $(div)});
+            self.trigger('mingame', {gamediv: $(div)});
         });
 
         this.redirect("#!/")
