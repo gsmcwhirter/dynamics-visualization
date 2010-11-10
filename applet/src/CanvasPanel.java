@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Dimension;
-import java.awt.image.VolatileImage;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
@@ -47,7 +47,7 @@ public class CanvasPanel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
 
         if (_ci != null){
-            VolatileImage bi = _ci.getImage();
+            BufferedImage bi = _ci.getImage();
             System.out.println("adding buffered image");
             if (g2d.drawImage(bi, _chartPadding, _chartPadding, null)){
                 System.out.println("ret true");

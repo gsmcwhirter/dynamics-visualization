@@ -1,4 +1,4 @@
-import java.awt.image.VolatileImage;
+import java.awt.image.BufferedImage;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -11,16 +11,16 @@ import java.awt.geom.GeneralPath;
  */
 public class CanvasImage {
     //private BufferedImage ci;
-    private VolatileImage ci;
+    private BufferedImage ci;
 
-    public CanvasImage(VolatileImage bi){
+    public CanvasImage(BufferedImage bi){
         ci = bi;
         Graphics2D g2d = ci.createGraphics();
         g2d.setColor(Color.lightGray);
         g2d.drawRect(0, 0, ci.getWidth() - 1, ci.getHeight() - 1);
     }
 
-    public VolatileImage getImage(){
+    public BufferedImage getImage(){
         return ci;
     }
 

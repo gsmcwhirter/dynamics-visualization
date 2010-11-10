@@ -114,14 +114,17 @@ public class DynVizGraph extends JApplet {
 
     private void BRGraphInfo(CanvasImage ci){
         BRChart.setCImage(ci);
+        BRChart.repaint();
     }
     
     private void DtRGraphInfo(CanvasImage ci){
         DtRChart.setCImage(ci);
+        DtRChart.repaint();
     }
     
     private void CtRGraphInfo(CanvasImage ci){
         CtRChart.setCImage(ci);
+        CtRChart.repaint();
     }
 
     class BRGraphGenerator implements Runnable {
@@ -138,7 +141,7 @@ public class DynVizGraph extends JApplet {
             GraphicsDevice gs = ge.getDefaultScreenDevice();
             GraphicsConfiguration gc = gs.getDefaultConfiguration();
 
-            ci = new CanvasImage(gc.createCompatibleVolatileImage(width, height, Transparency.BITMASK));
+            ci = new CanvasImage(gc.createCompatibleImage(width, height, Transparency.BITMASK));
 
             BRGraphInfo(ci);
         }
@@ -287,7 +290,7 @@ public class DynVizGraph extends JApplet {
             GraphicsDevice gs = ge.getDefaultScreenDevice();
             GraphicsConfiguration gc = gs.getDefaultConfiguration();
 
-            ci = new CanvasImage(gc.createCompatibleVolatileImage(width, height, Transparency.BITMASK));
+            ci = new CanvasImage(gc.createCompatibleImage(width, height, Transparency.BITMASK));
 
             DtRGraphInfo(ci);
         }
@@ -312,7 +315,7 @@ public class DynVizGraph extends JApplet {
             GraphicsDevice gs = ge.getDefaultScreenDevice();
             GraphicsConfiguration gc = gs.getDefaultConfiguration();
 
-            ci = new CanvasImage(gc.createCompatibleVolatileImage(width, height, Transparency.BITMASK));
+            ci = new CanvasImage(gc.createCompatibleImage(width, height, Transparency.BITMASK));
 
             CtRGraphInfo(ci);
         }
