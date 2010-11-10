@@ -175,7 +175,7 @@ var app = $.sammy("#container2", function (){
                         ["%a#/add-game/"+key, " "],
                         ["%a#/edit-game/"+key, " "],
                         ["%a#/view-game/"+key, " "],
-                        ["%a#/toggle-game/"+key, {href: "#/toggle-game/"+key}, [
+                        ["%a", {href: "#/toggle-game/"+key}, [
                             ["%h1.label", {style: input ? "display: none;" : ""}, game.label]
                         ]]
                     ]],
@@ -437,6 +437,7 @@ var app = $.sammy("#container2", function (){
 
     this.get("#/", function (){
         //todo - directions or something?
+        return false;
     });
 
     this.get("#/view-game/:key", function (){
