@@ -165,11 +165,15 @@ var app = $.sammy("#container2", function (){
                         ["%br.edit-button", {style: input ? "display: none;" : ""}],
                         ["%a.button.negative",{href: "#/delete-game/"+key, tabindex: tabindex + 12}, "Delete Game"]
                     ]],
-                    [".game-grid",[
+                    [".game-header", [
                         ["%a#/add-game/"+key, " "],
                         ["%a#/edit-game/"+key, " "],
                         ["%a#/view-game/"+key, " "],
-                        ["%h1.label", {style: input ? "display: none;" : ""}, game.label],
+                        ["%a", {href:"#/toggle-game/"+key}, [
+                            ["%h1.label", {style: input ? "display: none;" : ""}, game.label]
+                        ]]
+                    ]],
+                    [".game-grid",[
                         ["%input.title",{type: "text", name: "label", placeholder: "Game Label", style: !input ? "display: none;" : "", tabindex: ++tabindex}],
                         ["%h2.game-type", {style: input ? "display: none;" : ""}, !input ? get_game_type(game) : ""],
                         ["%select.presets",{size: 1, name: "presets", style: !input ? "display: none;" : "", tabindex: ++tabindex},[
@@ -431,6 +435,23 @@ var app = $.sammy("#container2", function (){
 
     this.get("#/view-game/:key", function (){
         //todo - anything? (really a 404 fix)
+    });
+
+    this.get("#/toggle-game/:key", function (){
+        var key = this.params.key;
+
+        var gamediv = $("#game-"+key);
+
+        if($(".game-actions:hidden", gamediv).length){
+            $(".game-actions", gamediv).slideDown();
+            $(".game-grid", gamediv).slideDown();
+        }
+        else {
+            $(".game-actions", gamediv).slideUp();
+            $(".game-grid", gamediv).slideUp();
+        }
+
+        this.redirect("#/");
     });
 
     this.get('#/add-game', function (){
