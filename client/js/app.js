@@ -621,7 +621,6 @@ var app = $.sammy("#container2", function (){
             }
             else {
                 this.log(games);
-                alert("Load data was not a plain object.");
             }
         }
         catch(e){
