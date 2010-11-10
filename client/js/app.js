@@ -437,7 +437,7 @@ var app = $.sammy("#container2", function (){
         //todo - anything? (really a 404 fix)
     });
 
-    this.get("#/toggle-game/:key", function (){
+    /*this.get("#/toggle-game/:key", function (){
         var key = this.params.key;
 
         var gamediv = $("#game-"+key);
@@ -452,7 +452,7 @@ var app = $.sammy("#container2", function (){
         }
 
         this.redirect("#/");
-    });
+    });*/
 
     this.get('#/add-game', function (){
         var d = new Date();
