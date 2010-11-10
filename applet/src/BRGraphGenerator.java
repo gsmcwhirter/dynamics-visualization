@@ -43,9 +43,9 @@ public class BRGraphGenerator implements GraphGenerator {
         } else if (B + D < 0){
             return 0f;
         } else if (0 >= D){
-            return 1f;
-        } else {
             return 0f;
+        } else {
+            return 1f;
         }
     }
 
