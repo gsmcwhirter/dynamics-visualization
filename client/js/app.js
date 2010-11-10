@@ -165,7 +165,7 @@ var app = $.sammy("#container2", function (){
             ["%form"+(input ? ".editing" : ""), {action: "#!/edit-game/"+key, method: "POST", "accept-charset": "utf-8"},[
                 ["%fieldset.wide-fields",[
                     [".game-actions", [
-                        ["%button.button.positive.save-button",{"type": "submit", style: !input ? "display: none;" : "", tabindex: tabindex + 11},"save game"],
+                        ["%button.button.positive.save-button",{style: !input ? "display: none;" : "", tabindex: tabindex + 11},"save game"],
                         ["%a.button.positive.process-button",{href: "#!/process/"+key, style: input ? "display: none;" : ""}, "process game"],
                         ["%br"],
                         ["%a.button.edit-button",{href: "#!/edit-game/"+key, style: input ? "display: none;" : ""},"edit game"],
