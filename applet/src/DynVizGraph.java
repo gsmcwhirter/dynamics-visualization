@@ -293,6 +293,7 @@ public class DynVizGraph extends JApplet {
             }
 
             ci.flush();
+            BRGraphInfo(ci);
         }
     }
 
