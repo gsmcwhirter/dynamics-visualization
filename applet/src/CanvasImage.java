@@ -10,28 +10,27 @@ import java.awt.geom.GeneralPath;
  * @author gmcwhirt
  */
 public class CanvasImage {
-    //private BufferedImage ci;
-    private BufferedImage ci;
+    private BufferedImage _bi;
 
     public CanvasImage(BufferedImage bi){
-        ci = bi;
-        Graphics2D g2d = ci.createGraphics();
+        _bi = bi;
+        Graphics2D g2d = _bi.createGraphics();
         g2d.setColor(Color.lightGray);
-        g2d.drawRect(0, 0, ci.getWidth() - 1, ci.getHeight() - 1);
+        g2d.drawRect(0, 0, _bi.getWidth() - 1, _bi.getHeight() - 1);
     }
 
     public BufferedImage getImage(){
-        return ci;
+        return _bi;
     }
 
     public void flush(){
-        ci.flush();
+        _bi.flush();
     }
 
     public void drawLine(float x1, float y1, float x2, float y2, Color color){
-        int _height = ci.getHeight() - 1;
-        int _width = ci.getWidth() - 1;
-        Graphics2D g2d = ci.createGraphics();
+        int _height = _bi.getHeight() - 1;
+        int _width = _bi.getWidth() - 1;
+        Graphics2D g2d = _bi.createGraphics();
 
         float xx1, xx2, yy1, yy2;
         xx1 = (float) Math.floor(_width * (1f - x1));
@@ -54,8 +53,8 @@ public class CanvasImage {
     }
 
     public void drawArrow(float x1, float y1, float x2, float y2, Color lcolor, Color acolor){
-        int _height = ci.getHeight() - 1;
-        int _width = ci.getWidth() - 1;
+        int _height = _bi.getHeight() - 1;
+        int _width = _bi.getWidth() - 1;
 
         float xx1, xx2, yy1, yy2;
         xx1 = (float) Math.floor(_width * (1f - x1));
@@ -74,17 +73,9 @@ public class CanvasImage {
         drawArrow(x1, y1, x2, y2, Color.black, Color.black);
     }
 
-    /**
-     * Draws an arrow on the given Graphics2D context
-     * @param g The Graphics2D context to draw on
-     * @param x The x location of the "tail" of the arrow
-     * @param y The y location of the "tail" of the arrow
-     * @param xx The x location of the "head" of the arrow
-     * @param yy The y location of the "head" of the arrow
-     */
     private void _drawArrow(float x, float y, float xx, float yy, Color lcolor, Color acolor )
     {
-        Graphics2D g = ci.createGraphics();
+        Graphics2D g = _bi.createGraphics();
 
         float arrowWidth = 5.0f ;
         float theta = 0.423f ;

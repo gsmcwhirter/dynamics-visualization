@@ -7,10 +7,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Container;
 import java.awt.GridLayout;
-import java.awt.GraphicsEnvironment;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsConfiguration;
-import java.awt.Transparency;
 
 
 /**
@@ -23,7 +19,7 @@ public class DynVizGraph extends JApplet {
     private int chartHeight = 210; // The height of the canvas panel
     private int chartPadding = 5;
 
-    private CanvasPanel BRChart;  // JPanel canvas for graphics drawing
+    private CanvasPanel BRChart;
     private CanvasPanel DtRChart;
     private CanvasPanel CtRChart;
 
@@ -47,7 +43,6 @@ public class DynVizGraph extends JApplet {
             });
         } catch (Exception e) {
             System.err.println("goBabyGo failed.");
-            e.printStackTrace();
         }
     }
 
@@ -111,9 +106,9 @@ public class DynVizGraph extends JApplet {
             payoffD = 0;
         }
 
-        BRThread = new Thread(new BRGraphGenerator(payoffA, payoffB, payoffC, payoffD, BRChart.getRealWidth(), BRChart.getRealHeight()));
-        DtRThread = new Thread(new DtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, DtRChart.getRealWidth(), DtRChart.getRealHeight()));
-        CtRThread = new Thread(new CtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, CtRChart.getRealWidth(), CtRChart.getRealHeight()));
+        BRThread = new Thread(new GraphGeneratorRunner(new BRGraphGenerator(payoffA, payoffB, payoffC, payoffD, BRChart.getRealWidth(), BRChart.getRealHeight()), GraphGeneratorRunner.BR));
+        DtRThread = new Thread(new GraphGeneratorRunner(new DtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, DtRChart.getRealWidth(), DtRChart.getRealHeight()), GraphGeneratorRunner.DTR));
+        CtRThread = new Thread(new GraphGeneratorRunner(new CtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, CtRChart.getRealWidth(), CtRChart.getRealHeight()), GraphGeneratorRunner.CTR));
     }
 
     @Override
@@ -130,220 +125,44 @@ public class DynVizGraph extends JApplet {
         CtRThread.interrupt();
     }
 
-    private void BRGraphInfo(CanvasImage ci){
-        BRChart.setCImage(ci);
-        BRChart.flush();
-    }
-    
-    private void DtRGraphInfo(CanvasImage ci){
-        DtRChart.setCImage(ci);
-        DtRChart.flush();
-    }
-    
-    private void CtRGraphInfo(CanvasImage ci){
-        CtRChart.setCImage(ci);
-        CtRChart.flush();
-    }
+    private void GraphInfo(CanvasImage ci, int typ){
+        CanvasPanel chart = null;
 
-    class BRGraphGenerator implements Runnable {
-        private CanvasImage ci;
-        private int A, B, C, D;
-
-        public BRGraphGenerator(int Ap, int Bp, int Cp, int Dp, int width, int height){
-            A = Ap;
-            B = Bp;
-            C = Cp;
-            D = Dp;
-
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            GraphicsDevice gs = ge.getDefaultScreenDevice();
-            GraphicsConfiguration gc = gs.getDefaultConfiguration();
-
-            ci = new CanvasImage(gc.createCompatibleImage(width, height, Transparency.BITMASK));
-
-            BRGraphInfo(ci);
+        if (typ == GraphGeneratorRunner.BR){
+            chart = BRChart;
+        } else if (typ == GraphGeneratorRunner.DTR){
+            chart = DtRChart;
+        } else if (typ == GraphGeneratorRunner.CTR){
+            chart = CtRChart;
         }
 
-        private float _lrespy(){
-            if (A + C > 0){
-                return 1f;
-            } else if (A + C < 0){
-                return 0f;
-            } else if (0 <= A) {
-                return 1f;
-            } else {
-                return 0f;
-            }
+        if (chart != null){
+            chart.setCImage(ci);
+            chart.flush();
         }
+    }
 
-        private float _lrespx(){
-            if (B + D > 0){
-                return 0f;
-            } else if (B + D < 0){
-                return 1f;
-            } else if (0 >= D){
-                return 0f;
-            } else {
-                return 1f;
-            }
+    class GraphGeneratorRunner implements Runnable {
+        private GraphGenerator _gen;
+        private int _typ;
+
+        final static int BR = 1;
+        final static int DTR = 2;
+        final static int CTR = 3;
+
+        public GraphGeneratorRunner(GraphGenerator gen, int typ){
+            _gen = gen;
+            _typ = typ;
+
+            GraphInfo(_gen.getCImage(), _typ);
         }
 
         @Override
         public void run(){
-            //draw stuff
-            float lrespx = _lrespx();
-            float lrespy = _lrespy();
-            
-            float qlim = (float)A / (float)(A + C);
-
-            float plim = (float)D / (float)(B + D);
-
-            int dots = 11; //effectively 10
-            for (int x = 0; x <= dots; x++){
-                for (int y = 0; y <= dots; y++){
-                    float xf = (float)x / (float)dots;
-                    float yf = (float)y / (float)dots;
-
-                    float xxf;
-                    float yyf;
-
-                    if (xf < qlim || Float.isNaN(qlim)){
-                        yyf = lrespy;
-                    } else if (xf > qlim){
-                        yyf = 1f - lrespy;
-                    } else {
-                        yyf = yf;
-                    }
-
-                    if (yf < plim || Float.isNaN(plim)){
-                        xxf = lrespx;
-                    } else if (yf > qlim){
-                        xxf = 1f - lrespx;
-                    } else {
-                        xxf = xf;
-                    }
-
-                    ci.drawArrow(xf, yf, xxf, yyf, Color.green, Color.black);
-                    ci.drawLine(xf, yf, xf, yf, Color.black);
-                }
-            }
-
-                        if (A + C > 0){
-                if (qlim <= 1f && qlim >= 0f){
-                    ci.drawLine(0f, 1f, qlim, 1f, Color.red);
-                    ci.drawLine(qlim, 0f, 1f, 0f, Color.red);
-                    ci.drawLine(qlim, 0f, qlim, 1f, Color.red);
-                } else if (qlim > 1f) {
-                    //play this
-                    ci.drawLine(0f, 1f, 1f, 1f, Color.red);
-                } else {
-                    //play other
-                    ci.drawLine(0f, 0f, 1f, 0f, Color.red);
-                }
-            } else if (A + C < 0){
-                if (qlim <= 1f && qlim >= 0f){
-                    ci.drawLine(0f, 0f, qlim, 0f, Color.red);
-                    ci.drawLine(qlim, 1f, 1f, 1f, Color.red);
-                    ci.drawLine(qlim, 0f, qlim, 1f, Color.red);
-                } else if (qlim > 1f) {
-                    //play other
-                    ci.drawLine(0f, 0f, 1f, 0f, Color.red);
-                } else {
-                    //play this
-                    ci.drawLine(0f, 1f, 1f, 1f, Color.red);
-                }
-            } else if (0 <= A) {
-                //play this
-                ci.drawLine(0f, 1f, 1f, 1f, Color.red);
-            } else {
-                //play other
-                ci.drawLine(0f, 0f, 1f, 0f, Color.red);
-            }
-
-            if (B + D > 0){
-                if (plim >= 0f && plim <= 1f){
-                    ci.drawLine(0f, 1f, 0f, plim, Color.blue);
-                    ci.drawLine(1f, plim, 1f, 0f, Color.blue);
-                    ci.drawLine(0f, plim, 1f, plim);
-                } else if (plim > 1f){
-                    //play other
-                    ci.drawLine(1f, 1f, 1f, 0f, Color.blue);
-                } else {
-                    //play this
-                    ci.drawLine(0f, 1f, 0f, 0f, Color.blue);
-                }
-            } else if (B + D < 0){
-                if (plim >= 0f && plim <= 1f){
-                    ci.drawLine(0f, 0f, 0f, plim, Color.blue);
-                    ci.drawLine(1f, plim, 1f, 1f, Color.blue);
-                    ci.drawLine(0f, plim, 1f, plim, Color.blue);
-                } else if (plim > 1f) {
-                    //play this
-                    ci.drawLine(0f, 1f, 0f, 0f, Color.blue);
-                } else {
-                    //play other
-                    ci.drawLine(1f, 1f, 1f, 0f, Color.blue);
-                }
-            } else if (0 >= D) {
-                //play this
-                ci.drawLine(0f, 1f, 0f, 0f, Color.blue);
-            } else {
-                //play other
-                ci.drawLine(1f, 1f, 1f, 0f, Color.blue);
-            }
+            CanvasImage ci = _gen.generate();
 
             ci.flush();
-            BRGraphInfo(ci);
-        }
-    }
-
-    class DtRGraphGenerator implements Runnable {
-        private CanvasImage ci;
-        private int A, B, C, D;
-
-        public DtRGraphGenerator(int Ap, int Bp, int Cp, int Dp, int width, int height){
-            A = Ap;
-            B = Bp;
-            C = Cp;
-            D = Dp;
-
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            GraphicsDevice gs = ge.getDefaultScreenDevice();
-            GraphicsConfiguration gc = gs.getDefaultConfiguration();
-
-            ci = new CanvasImage(gc.createCompatibleImage(width, height, Transparency.BITMASK));
-
-            DtRGraphInfo(ci);
-        }
-
-        @Override
-        public void run(){
-            //todo
-        }
-    }
-
-    class CtRGraphGenerator implements Runnable {
-        private CanvasImage ci;
-        private int A, B, C, D;
-
-        public CtRGraphGenerator(int Ap, int Bp, int Cp, int Dp, int width, int height){
-            A = Ap;
-            B = Bp;
-            C = Cp;
-            D = Dp;
-
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            GraphicsDevice gs = ge.getDefaultScreenDevice();
-            GraphicsConfiguration gc = gs.getDefaultConfiguration();
-
-            ci = new CanvasImage(gc.createCompatibleImage(width, height, Transparency.BITMASK));
-
-            CtRGraphInfo(ci);
-        }
-
-        @Override
-        public void run(){
-            //todo
+            GraphInfo(ci, _typ);
         }
     }
 }
