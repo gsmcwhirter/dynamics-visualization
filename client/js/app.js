@@ -195,7 +195,7 @@ var app = $.sammy("#container2", function (){
                                     ["%input.entry-input.right.text", {type: "text", name: "tr-c", placeholder: "Col TR", style: !input ? "display: none;" : "", tabindex: ++tabindex + 1}],
                                     [".entry.right.tr-c", {style: input ? "display: none;" : ""}, game['tr-c'] || 0],
                                     ["%input.entry-input.left.text", {type: "text", name: "tr-r", placeholder: "Row TR", style: !input ? "display: none;" : "", tabindex: ++tabindex - 1}],
-                                    [".entry.left.tr-r", {style: input ? "display: none;" : ""}, game['tl-r'] || 0],
+                                    [".entry.left.tr-r", {style: input ? "display: none;" : ""}, game['tr-r'] || 0],
                                     ["%span.sep", ","]
                                 ]]
                             ]],
