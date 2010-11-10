@@ -73,17 +73,21 @@ var app = $.sammy("#container2", function (){
         var form = $(data.form);
         var val = $(this).val();
 
-        var target = name.substring(0, name.length - 1);
-        if (target == "tr-"){
-            target = "bl-";
-        }
-        else if (target == "bl-"){
-            target = "tr-";
-        }
-        target += "c";
+        if (name){
+            var target = name.substring(0, name.length - 1);
+            if (target == "tr-"){
+                target = "bl-";
+            }
+            else if (target == "bl-"){
+                target = "tr-";
+            }
+            target += "c";
 
-        $(".entry-input[name="+target+"]", form).val(val);
-        $(".entry."+target).text(val || 0);
+            $(".entry-input[name="+target+"]", form).val(val);
+            $(".entry."+target).text(val || 0);
+        } else {
+            console.log("error");
+        }
     }
 
     this.use(Sammy.JSON);
