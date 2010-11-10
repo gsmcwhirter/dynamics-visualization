@@ -169,7 +169,7 @@ var app = $.sammy("#container2", function (){
                         ["%a#/add-game/"+key, " "],
                         ["%a#/edit-game/"+key, " "],
                         ["%a#/view-game/"+key, " "],
-                        ["%a", {href:"#/toggle-game/"+key}, [
+                        ["%a", {href: "#/toggle-game/"+key}, [
                             ["%h1.label", {style: input ? "display: none;" : ""}, game.label]
                         ]]
                     ]],
@@ -441,8 +441,8 @@ var app = $.sammy("#container2", function (){
         var key = this.params.key;
 
         var gamediv = $("#game-"+key);
-
-        if($(".game-actions:hidden", gamediv).length){
+        var tmp = $(".game-actions:hidden", gamediv);
+        if(tmp && tmp.length){
             $(".game-actions", gamediv).slideDown();
             $(".game-grid", gamediv).slideDown();
         }
