@@ -129,9 +129,11 @@ var app = $.sammy("#container2", function (){
 
         games = [];
         $.each(games2, function (index, gamelist){
-            $.each(gamelist, function (index2, game){
-                games.push(game);
-            });
+            if (gamelist){
+                $.each(gamelist, function (index2, game){
+                    games.push(game);
+                });
+            }
         });
 
         var self = this;
