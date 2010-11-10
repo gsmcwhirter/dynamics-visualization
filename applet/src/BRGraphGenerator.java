@@ -99,10 +99,10 @@ public class BRGraphGenerator implements GraphGenerator {
                     } else {
                         xxf = xf;
                     }
-                } else if(yf < plim || Float.isNaN(plim))
+                } else if(yf < plim)
                 {
                     xxf = lrespx;
-                } else if (yf > qlim){
+                } else if (yf > plim){
                     xxf = 1f - lrespx;
                 } else {
                     xxf = xf;
