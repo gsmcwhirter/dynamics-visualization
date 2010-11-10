@@ -160,7 +160,7 @@ var app = $.sammy("#container2", function (){
         
         var new_game = $("<div />").addClass('game').attr('id','game-'+key);
         new_game.hide();
-        new_game.haml([
+        new_game.haml(
             ["%form"+(input ? ".editing" : ""), {action: "#/edit-game/"+key, method: "PUT", "accept-charset": "utf-8"},[
                 ["%fieldset.wide-fields",[
                     [".game-actions", [
@@ -230,7 +230,7 @@ var app = $.sammy("#container2", function (){
 
                 ]]
             ]]
-        ]);
+        );
 
         var self = this;
         $("select.presets", new_game).bind('change', function (e, data){
