@@ -655,7 +655,7 @@ var app = $.sammy("#container2", function (){
                     ["%param", {name: "B", value: game['tl-c'] - game['tr-c']}],
                     ["%param", {name: "C", value: game['br-r'] - game['tr-r']}],
                     ["%param", {name: "D", value: game['br-c'] - game['bl-c']}],
-                    ["Applet failed to run. No Java plug-in was found."]
+                    ["%span", "Applet failed to run. No Java plug-in was found."]
                 ]]
             );
 
