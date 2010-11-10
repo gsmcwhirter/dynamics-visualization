@@ -5,11 +5,13 @@ import javax.swing.SwingUtilities;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Container;
 import java.awt.GridLayout;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
+import java.awt.GraphicsEnvironment;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsConfiguration;
+import java.awt.Transparency;
+
 
 /**
  *
@@ -19,6 +21,7 @@ public class DynVizGraph extends JApplet {
 
     private int chartWidth = 210;  // The width of the canvas panel
     private int chartHeight = 210; // The height of the canvas panel
+    private int chartPadding = 5;
 
     private CanvasPanel BRChart;  // JPanel canvas for graphics drawing
     private CanvasPanel DtRChart;
@@ -39,7 +42,8 @@ public class DynVizGraph extends JApplet {
                 }
             });
         } catch (Exception e) {
-            System.err.println("createGUI didn't complete successfully");
+            System.err.println("goBabyGo failed.");
+            e.printStackTrace();
         }
     }
 
@@ -51,9 +55,9 @@ public class DynVizGraph extends JApplet {
 
         JPanel panel = new JPanel(new GridLayout(1,3));
 
-        BRChart = new CanvasPanel();
-        DtRChart = new CanvasPanel();
-        CtRChart = new CanvasPanel();
+        BRChart = new CanvasPanel(chartWidth, chartHeight, chartPadding);
+        DtRChart = new CanvasPanel(chartWidth, chartHeight, chartPadding);
+        CtRChart = new CanvasPanel(chartWidth, chartHeight, chartPadding);
 
         panel.setBorder(new LineBorder(Color.LIGHT_GRAY));
         panel.setPreferredSize(new Dimension(chartWidth * 3 + 2, chartHeight));
@@ -103,356 +107,219 @@ public class DynVizGraph extends JApplet {
             payoffD = 0;
         }
 
-        Thread BRGen = new Thread(new BRGraphGenerator(payoffA, payoffB, payoffC, payoffD));
-        BRGen.start();
+        (new Thread(new BRGraphGenerator(payoffA, payoffB, payoffC, payoffD, BRChart.getRealWidth(), BRChart.getRealHeight()))).start();
+        (new Thread(new DtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, DtRChart.getRealWidth(), DtRChart.getRealHeight()))).start();
+        (new Thread(new CtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, CtRChart.getRealWidth(), CtRChart.getRealHeight()))).start();
+    }
+
+    private void BRGraphInfo(CanvasImage ci){
+        BRChart.setCImage(ci);
     }
     
-    private void BRGraphInfo(Line[] lines, Line[] arrows){
-        //BRChart
-        BRChart.setLines(lines);
-        BRChart.setArrows(arrows);
+    private void DtRGraphInfo(CanvasImage ci){
+        DtRChart.setCImage(ci);
     }
     
-    private void DtRGraphInfo(BufferedImage bi){
-        
-    }
-    
-    private void CtRGraphInfo(BufferedImage bi){
-        
-    }
-
-    class Line {
-        private int[] coords;
-        private Color color;
-        private Color color2;
-
-        public Line(int c1, int c2, int c3, int c4, Color c, Color cp){
-            coords = new int[4];
-            coords[0] = c1;
-            coords[1] = c2;
-            coords[2] = c3;
-            coords[3] = c4;
-            color = c;
-            color2 = cp;
-        }
-
-        public Line(int c1, int c2, int c3, int c4, Color c){
-            coords = new int[4];
-            coords[0] = c1;
-            coords[1] = c2;
-            coords[2] = c3;
-            coords[3] = c4;
-            color = c;
-            color2 = Color.BLACK;
-        }
-
-        public Line(int c1, int c2, int c3, int c4){
-            coords = new int[4];
-            coords[0] = c1;
-            coords[1] = c2;
-            coords[2] = c3;
-            coords[3] = c4;
-            color = Color.BLACK;
-            color2 = Color.BLACK;
-        }
-
-        public Color getColor(){
-            return color;
-        }
-
-        public Color getColor2(){
-            return color2;
-        }
-
-        public int[] getCoords(){
-            return coords;
-        }
-
-        @Override
-        public String toString(){
-            return coords.toString();
-        }
+    private void CtRGraphInfo(CanvasImage ci){
+        CtRChart.setCImage(ci);
     }
 
     class BRGraphGenerator implements Runnable {
+        private CanvasImage ci;
         private int A, B, C, D;
 
-        public BRGraphGenerator(int Ap, int Bp, int Cp, int Dp){
+        public BRGraphGenerator(int Ap, int Bp, int Cp, int Dp, int width, int height){
             A = Ap;
             B = Bp;
             C = Cp;
             D = Dp;
+
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            GraphicsDevice gs = ge.getDefaultScreenDevice();
+            GraphicsConfiguration gc = gs.getDefaultConfiguration();
+
+            ci = new CanvasImage(gc.createCompatibleVolatileImage(width, height, Transparency.BITMASK));
+
+            BRGraphInfo(ci);
+        }
+
+        private float _lrespy(){
+            if (A + C > 0){
+                return 1f;
+            } else if (A + C < 0){
+                return 0f;
+            } else if (0 <= A) {
+                return 1f;
+            } else {
+                return 0f;
+            }
+        }
+
+        private float _lrespx(){
+            if (B + D > 0){
+                return 0f;
+            } else if (B + D < 0){
+                return 1f;
+            } else if (0 >= D){
+                return 0f;
+            } else {
+                return 1f;
+            }
         }
 
         @Override
         public void run(){
-            Line[] lines;
-            Line[] arrows;
-
             //draw stuff
-            float qlimf = (float)C / (float)(A + C);
-            int qlim = (int) Math.floor(200f * (1f - qlimf));
+            float lrespx = _lrespx();
+            float lrespy = _lrespy();
+            
+            float qlim = (float)A / (float)(A + C);
 
-            lines = new Line[106];
-            int index = 0;
-            int index2 = 0;
-            float brlimx;
-            float brlimy;
-            int lrespx;
-            int lrespy;
+            float plim = (float)D / (float)(B + D);
 
-            if (A + C > 0){
-                lrespx = 0;
-                if (qlimf <= 1f && qlimf >= 0f){
-                    lines[index++] = new Line(200, qlim, 200, 0, Color.RED);
-                    lines[index++] = new Line(0, qlim, 0, 200, Color.RED);
-                    lines[index++] = new Line(0, qlim, 200, qlim, Color.RED);
-                    brlimy = qlimf;
-                } else if (qlimf > 1f) {
-                    //always play the other
-                    lines[index++] = new Line(0, 0, 0, 200, Color.RED);
-                    brlimy = 1f;
-                } else {
-                    //always play this
-                    lines[index++] = new Line(200, 0, 200, 200, Color.RED);
-                    brlimy = 0f;
+            int dots = 11; //effectively 10
+            for (int x = 0; x <= dots; x++){
+                for (int y = 0; y <= dots; y++){
+                    float xf = (float)x / (float)dots;
+                    float yf = (float)y / (float)dots;
+
+                    float xxf;
+                    float yyf;
+
+                    if (xf < qlim || Float.isNaN(qlim)){
+                        yyf = lrespy;
+                    } else if (xf > qlim){
+                        yyf = 1f - lrespy;
+                    } else {
+                        yyf = yf;
+                    }
+
+                    if (yf < plim || Float.isNaN(plim)){
+                        xxf = lrespx;
+                    } else if (yf > qlim){
+                        xxf = 1f - lrespx;
+                    } else {
+                        xxf = xf;
+                    }
+
+                    ci.drawArrow(xf, yf, xxf, yyf, Color.green, Color.black);
+                    ci.drawLine(xf, yf, xf, yf, Color.black);
                 }
-            } else if (A + C < 0){
-                lrespx = 200;
-                if (qlimf <= 1f && qlimf >= 0f){
-                    lines[index++] = new Line(200, qlim, 200, 200, Color.RED);
-                    lines[index++] = new Line(0, qlim, 0, 0, Color.RED);
-                    lines[index++] = new Line(0, qlim, 200, qlim, Color.RED);
-                    brlimy = qlimf;
-                } else if (qlimf > 1f) {
-                    //always play this
-                    lines[index++] = new Line(200, 0, 200, 200, Color.RED);
-                    brlimy = 0f;
-                } else {
-                    //always play the other
-                    lines[index++] = new Line(0, 0, 0, 200, Color.RED);
-                    brlimy = 1f;
-                }
-            } else if (0 >= C) {
-                //play this
-                lines[index++] = new Line(200, 0, 200, 200, Color.RED);
-                lrespx = 0;
-                brlimy = 0f;
-            } else {
-                //play other
-                lines[index++] = new Line(0, 0, 0, 200, Color.RED);
-                lrespx = 0;
-                brlimy = 1f;
             }
 
-            float plimf = (float)D / (float)(B + D);
-            int plim = (int) Math.floor(200f * (1 - plimf));
+                        if (A + C > 0){
+                if (qlim <= 1f && qlim >= 0f){
+                    ci.drawLine(0f, 1f, qlim, 1f, Color.red);
+                    ci.drawLine(qlim, 0f, 1f, 0f, Color.red);
+                    ci.drawLine(qlim, 0f, qlim, 1f, Color.red);
+                } else if (qlim > 1f) {
+                    //play this
+                    ci.drawLine(0f, 1f, 1f, 1f, Color.red);
+                } else {
+                    //play other
+                    ci.drawLine(0f, 0f, 1f, 0f, Color.red);
+                }
+            } else if (A + C < 0){
+                if (qlim <= 1f && qlim >= 0f){
+                    ci.drawLine(0f, 0f, qlim, 0f, Color.red);
+                    ci.drawLine(qlim, 1f, 1f, 1f, Color.red);
+                    ci.drawLine(qlim, 0f, qlim, 1f, Color.red);
+                } else if (qlim > 1f) {
+                    //play other
+                    ci.drawLine(0f, 0f, 1f, 0f, Color.red);
+                } else {
+                    //play this
+                    ci.drawLine(0f, 1f, 1f, 1f, Color.red);
+                }
+            } else if (0 <= A) {
+                //play this
+                ci.drawLine(0f, 1f, 1f, 1f, Color.red);
+            } else {
+                //play other
+                ci.drawLine(0f, 0f, 1f, 0f, Color.red);
+            }
 
             if (B + D > 0){
-                lrespy = 200;
-                if (plimf >= 0f && plimf <= 1f){
-                    lines[index++] = new Line(plim, 200, 0, 200, Color.BLUE);
-                    lines[index++] = new Line(plim, 0, 200, 0, Color.BLUE);
-                    lines[index++] = new Line(plim, 0, plim, 200, Color.BLUE);
-                    brlimx = plimf;
-                } else if (plimf > 1f){
-                    //play the other
-                    lines[index++] = new Line(0, 200, 200, 0, Color.BLUE);
-                    brlimx = 1f;
+                if (plim >= 0f && plim <= 1f){
+                    ci.drawLine(0f, 1f, 0f, plim, Color.blue);
+                    ci.drawLine(1f, plim, 1f, 0f, Color.blue);
+                    ci.drawLine(0f, plim, 1f, plim);
+                } else if (plim > 1f){
+                    //play other
+                    ci.drawLine(1f, 1f, 1f, 0f, Color.blue);
                 } else {
                     //play this
-                    lines[index++] = new Line(0, 200, 200, 200, Color.BLUE);
-                    brlimx = 0f;
+                    ci.drawLine(0f, 1f, 0f, 0f, Color.blue);
                 }
             } else if (B + D < 0){
-                lrespy = 0;
-                if (plimf >= 0f && plimf <= 1f){
-                    lines[index++] = new Line(plim, 200, 200, 200, Color.BLUE);
-                    lines[index++] = new Line(plim, 0, 0, 0, Color.BLUE);
-                    lines[index++] = new Line(plim, 0, plim, 200, Color.BLUE);
-                    brlimx = plimf;
-                } else if (plimf > 1f) {
+                if (plim >= 0f && plim <= 1f){
+                    ci.drawLine(0f, 0f, 0f, plim, Color.blue);
+                    ci.drawLine(1f, plim, 1f, 1f, Color.blue);
+                    ci.drawLine(0f, plim, 1f, plim, Color.blue);
+                } else if (plim > 1f) {
                     //play this
-                    lines[index++] = new Line(0, 200, 200, 200, Color.BLUE);
-                    brlimx = 0f;
+                    ci.drawLine(0f, 1f, 0f, 0f, Color.blue);
                 } else {
-                    //play the other
-                    lines[index++] = new Line(0, 200, 200, 0, Color.BLUE);
-                    brlimx = 1f;
+                    //play other
+                    ci.drawLine(1f, 1f, 1f, 0f, Color.blue);
                 }
             } else if (0 >= D) {
                 //play this
-                lines[index++] = new Line(0, 0, 200, 0, Color.BLUE);
-                lrespy = 200;
-                brlimx = 0f;
+                ci.drawLine(0f, 1f, 0f, 0f, Color.blue);
             } else {
                 //play other
-                lines[index++] = new Line(0, 200, 200, 200, Color.BLUE);
-                lrespy = 200;
-                brlimx = 1f;
+                ci.drawLine(1f, 1f, 1f, 0f, Color.blue);
             }
-
-            arrows = new Line[121];
-            float step = 0.1f;
-            int fmx;
-            int fmy;
-            int tox;
-            int toy;
-            for (float i = 0f; i <= 1f; i += step){
-                for (float j = 0f; j <= 1f; j += step){
-                    //response at (i, j)
-                    fmx = (int) Math.floor( 200 * (1f - i) );
-                    fmy = (int) Math.floor( 200 * (1f - j) );
-
-                    if (j < brlimy){
-                        tox = lrespx;
-                    } else if (j > brlimy) {
-                        tox = Math.abs(lrespx - 200);
-                    } else {
-                        tox = fmx;
-                    }
-
-                    if (i < brlimx){
-                        toy = lrespy;
-                    } else if (i > brlimx) {
-                        toy = Math.abs(lrespy - 200);
-                    } else {
-                        toy = fmy;
-                    }
-
-                    arrows[index2++] = new Line(fmx, fmy, tox, toy, Color.GREEN, Color.BLACK);
-                    lines[index++] = new Line(fmx, fmy, fmx, fmy, Color.BLACK);
-                }
-            }
-
-            BRGraphInfo(lines, arrows);
         }
     }
 
-    // Class to provide a drawing surface for graphics display
-    class CanvasPanel extends JPanel {
-        static final int BR = 1;
-        static final int DtR = 2;
-        static final int CtR = 3;
+    class DtRGraphGenerator implements Runnable {
+        private CanvasImage ci;
+        private int A, B, C, D;
 
-        private Line[] _lines;
-        private Line[] _arrows;
-        private int _typ;
+        public DtRGraphGenerator(int Ap, int Bp, int Cp, int Dp, int width, int height){
+            A = Ap;
+            B = Bp;
+            C = Cp;
+            D = Dp;
 
-        // Constructor
-        public CanvasPanel(){
-            setBackground(Color.white);
-            setPreferredSize( new Dimension( chartWidth, chartHeight ) );  // Set its size
-            setVisible( true );   // Make the window visible
-        }
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            GraphicsDevice gs = ge.getDefaultScreenDevice();
+            GraphicsConfiguration gc = gs.getDefaultConfiguration();
 
-        public void setLines(Line[] lines){
-            _lines = lines;
-        }
+            ci = new CanvasImage(gc.createCompatibleVolatileImage(width, height, Transparency.BITMASK));
 
-        public void setArrows(Line[] arrows){
-            _arrows = arrows;
+            DtRGraphInfo(ci);
         }
 
         @Override
-        public void paintComponent ( Graphics g ){
-            super.paintComponent( g );
+        public void run(){
+            //todo
+        }
+    }
 
-            Graphics2D g2d = (Graphics2D) g;
+    class CtRGraphGenerator implements Runnable {
+        private CanvasImage ci;
+        private int A, B, C, D;
 
-            g2d.setColor(Color.LIGHT_GRAY);
-            g2d.drawRect(5, 5, 200, 200);
+        public CtRGraphGenerator(int Ap, int Bp, int Cp, int Dp, int width, int height){
+            A = Ap;
+            B = Bp;
+            C = Cp;
+            D = Dp;
 
-            Color color;
-            Color color2;
-            int[] coords;
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            GraphicsDevice gs = ge.getDefaultScreenDevice();
+            GraphicsConfiguration gc = gs.getDefaultConfiguration();
 
-            if (_arrows != null && _arrows.length > 0) {
-                for (int i = 0; i < _arrows.length; i++){
-                    if (_arrows[i] != null){
-                        coords = _arrows[i].getCoords();
-                        color = _arrows[i].getColor();
-                        color2 = _arrows[i].getColor2();
+            ci = new CanvasImage(gc.createCompatibleVolatileImage(width, height, Transparency.BITMASK));
 
-                        drawArrow(g2d, coords[0] + 5, coords[1] + 5, coords[2] + 5, coords[3] + 5, color, color2);
-                    }
-                }
-            }
-
-            if (_lines != null && _lines.length > 0) {
-                System.out.println("We have lines!");
-
-                for (int i = 0; i < _lines.length; i++){
-                    if (_lines[i] != null){
-                        coords = _lines[i].getCoords();
-                        color = _lines[i].getColor();
-                        g2d.setColor(color);
-                        g2d.drawLine(coords[0] + 5, coords[1] + 5, coords[2] + 5, coords[3] + 5);
-                    }
-                }
-            }
-
-
+            CtRGraphInfo(ci);
         }
 
-        /**
-         * Draws an arrow on the given Graphics2D context
-         * @param g The Graphics2D context to draw on
-         * @param x The x location of the "tail" of the arrow
-         * @param y The y location of the "tail" of the arrow
-         * @param xx The x location of the "head" of the arrow
-         * @param yy The y location of the "head" of the arrow
-         */
-        private void drawArrow( Graphics2D g, int x, int y, int xx, int yy, Color lcolor, Color acolor )
-        {
-            float arrowWidth = 5.0f ;
-            float theta = 0.423f ;
-            int[] xPoints = new int[ 3 ] ;
-            int[] yPoints = new int[ 3 ] ;
-            float[] vecLine = new float[ 2 ] ;
-            float[] vecLeft = new float[ 2 ] ;
-            float fLength;
-            float th;
-            float ta;
-            float baseX, baseY ;
-
-            xPoints[ 0 ] = xx ;
-            yPoints[ 0 ] = yy ;
-
-            // build the line vector
-            vecLine[ 0 ] = (float)xPoints[ 0 ] - x ;
-            vecLine[ 1 ] = (float)yPoints[ 0 ] - y ;
-
-            // build the arrow base vector - normal to the line
-            vecLeft[ 0 ] = -vecLine[ 1 ] ;
-            vecLeft[ 1 ] = vecLine[ 0 ] ;
-
-            // setup length parameters
-            fLength = (float)Math.sqrt( vecLine[0] * vecLine[0] + vecLine[1] * vecLine[1] ) ;
-            if (fLength > 0f){
-                th = arrowWidth / ( 2.0f * fLength ) ;
-                ta = arrowWidth / ( 2.0f * ( (float)Math.tan( theta ) / 2.0f ) * fLength ) ;
-            } else {
-                th = 0f;
-                ta = 0f;
-            }
-
-            // find the base of the arrow
-            baseX = ( (float)xPoints[ 0 ] - ta * vecLine[0]);
-            baseY = ( (float)yPoints[ 0 ] - ta * vecLine[1]);
-
-            // build the points on the sides of the arrow
-            xPoints[ 1 ] = (int)( baseX + th * vecLeft[0] );
-            yPoints[ 1 ] = (int)( baseY + th * vecLeft[1] );
-            xPoints[ 2 ] = (int)( baseX - th * vecLeft[0] );
-            yPoints[ 2 ] = (int)( baseY - th * vecLeft[1] );
-
-            g.setColor(lcolor);
-            g.drawLine( x, y, (int)baseX, (int)baseY ) ;
-
-            g.setColor(acolor);
-            g.fillPolygon( xPoints, yPoints, 3 ) ;
+        @Override
+        public void run(){
+            //todo
         }
-     } // End canvasPanel class
-
+    }
 }
