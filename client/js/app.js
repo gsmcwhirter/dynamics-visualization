@@ -159,6 +159,7 @@ var app = $.sammy("#container2", function (){
         gamect++;
         
         var new_game = $("<div />").addClass('game').attr('id','game-'+key);
+        $("#games").append(new_game);
         new_game.hide();
         new_game.haml(
             ["%form"+(input ? ".editing" : ""), {action: "#!/edit-game/"+key, method: "PUT", "accept-charset": "utf-8"},[
@@ -236,7 +237,7 @@ var app = $.sammy("#container2", function (){
         $("select.presets", new_game).bind('change', function (e, data){
             self.trigger('restrictgame', {form: $(this).parents("form").first(), presets: $(this)});
         });
-        $("#games").append(new_game);
+        //$("#games").append(new_game);
         new_game.slideDown();
     });
 
