@@ -244,7 +244,7 @@ var app = $.sammy("#container2", function (){
         $(".actions .permalink").remove();
         var games = this.session('games') || {};
 
-        var permalink = $("<a/>").text("permalink").attr("href","#/load/"+this.json(games)).addClass('permalink');
+        var permalink = $("<a/>").text("permalink").attr("href","#/load/"+this.json(games)).addClass('permalink').addClass('button');
 
         $(".actions").prepend(permalink);
     });

@@ -311,7 +311,7 @@ strong, .bold {font-weight:bold;}
 #main #flash .info, #main #flash .error {padding:5px 20px;margin-bottom:5px;border-radius:10px;-moz-border-radius:10px;-webkit-border-radius:10px;}
 #main #flash .info .x, #main #flash .error .x {float:right;font-weight:bold;cursor:pointer;opacity:0.5;}
 #main .actions {overflow:auto;padding:5px;border:1px solid #ccc;border-radius:10px;-moz-border-radius:10px;-webkit-border-radius:10px;background-color:#fff;margin:0 0 1.5em;}
-#main .actions .add-game-link {float:right;}
+#main .actions .add-game-link, #main .actions .clear-all-link {float:right;}
 #main button.button, #main a.button {border-radius:10px;-moz-border-radius:10px;-webkit-border-radius:10px;}
 #main a.button {text-decoration:none;}
 #main a.button :hover {text-decoration:none;}
