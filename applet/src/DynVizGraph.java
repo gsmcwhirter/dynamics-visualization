@@ -32,6 +32,10 @@ public class DynVizGraph extends JApplet {
     private int payoffC;
     private int payoffD;
 
+    private Thread BRThread;
+    private Thread DtRThread;
+    private Thread CtRThread;
+
     @Override
     public void init(){
         try {
@@ -106,13 +110,24 @@ public class DynVizGraph extends JApplet {
         } catch (NullPointerException e) {
             payoffD = 0;
         }
+
+        BRThread = new Thread(new BRGraphGenerator(payoffA, payoffB, payoffC, payoffD, BRChart.getRealWidth(), BRChart.getRealHeight()));
+        DtRThread = new Thread(new DtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, DtRChart.getRealWidth(), DtRChart.getRealHeight()));
+        CtRThread = new Thread(new CtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, CtRChart.getRealWidth(), CtRChart.getRealHeight()));
     }
 
     @Override
     public void start(){
-        (new Thread(new BRGraphGenerator(payoffA, payoffB, payoffC, payoffD, BRChart.getRealWidth(), BRChart.getRealHeight()))).start();
-        (new Thread(new DtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, DtRChart.getRealWidth(), DtRChart.getRealHeight()))).start();
-        (new Thread(new CtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, CtRChart.getRealWidth(), CtRChart.getRealHeight()))).start();
+        BRThread.start();
+        DtRThread.start();
+        CtRThread.start();
+    }
+
+    @Override
+    public void stop(){
+        BRThread.interrupt();
+        DtRThread.interrupt();
+        CtRThread.interrupt();
     }
 
     private void BRGraphInfo(CanvasImage ci){
