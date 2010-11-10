@@ -157,7 +157,7 @@ var app = $.sammy("#container2", function (){
         new_game.haml([
             ["%form"+(input ? ".editing" : ""), {action: "#/edit-game/"+key, method: "PUT", "accept-charset": "utf-8"},[
                 ["%fieldset.wide-fields",[
-                    [".game-actions",[
+                    [".game-actions", [
                         ["%button.button.positive.save-button",{"type": "submit", style: !input ? "display: none;" : "", tabindex: tabindex + 11},"Save Game"],
                         ["%a.button.positive.process-button",{href: "#/process/"+key, style: input ? "display: none;" : ""}, "Process Game"],
                         ["%br"],
@@ -169,7 +169,7 @@ var app = $.sammy("#container2", function (){
                         ["%a#/add-game/"+key, " "],
                         ["%a#/edit-game/"+key, " "],
                         ["%a#/view-game/"+key, " "],
-                        ["%a", {href: "#/toggle-game/"+key}, [
+                        ["%a#/toggle-game/"+key, {href: "#/toggle-game/"+key}, [
                             ["%h1.label", {style: input ? "display: none;" : ""}, game.label]
                         ]]
                     ]],
