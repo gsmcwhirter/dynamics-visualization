@@ -164,12 +164,12 @@ var app = $.sammy("#container2", function (){
             ["%form"+(input ? ".editing" : ""), {action: "#!/edit-game/"+key, method: "PUT", "accept-charset": "utf-8"},[
                 ["%fieldset.wide-fields",[
                     [".game-actions", [
-                        ["%button.button.positive.save-button",{"type": "submit", style: !input ? "display: none;" : "", tabindex: tabindex + 11},"Save Game"],
-                        ["%a.button.positive.process-button",{href: "#!/process/"+key, style: input ? "display: none;" : ""}, "Process Game"],
+                        ["%button.button.positive.save-button",{"type": "submit", style: !input ? "display: none;" : "", tabindex: tabindex + 11},"save game"],
+                        ["%a.button.positive.process-button",{href: "#!/process/"+key, style: input ? "display: none;" : ""}, "process game"],
                         ["%br"],
-                        ["%a.button.edit-button",{href: "#!/edit-game/"+key, style: input ? "display: none;" : ""},"Edit Game"],
+                        ["%a.button.edit-button",{href: "#!/edit-game/"+key, style: input ? "display: none;" : ""},"edit game"],
                         ["%br.edit-button", {style: input ? "display: none;" : ""}],
-                        ["%a.button.negative",{href: "#!/delete-game/"+key, tabindex: tabindex + 12}, "Delete Game"]
+                        ["%a.button.negative",{href: "#!/delete-game/"+key, tabindex: tabindex + 12}, "delete game"]
                     ]],
                     [".game-header", [
                         ["%a#!/add-game/"+key, " "],
@@ -437,13 +437,14 @@ var app = $.sammy("#container2", function (){
 
     this.bind('mingame', function (e, data){
         var gamediv = data.gamediv;
+        var force = data.force || "";
 
-        var tmp = $(".game-actions:hidden", gamediv);
-        if(tmp.length){
+        var is_hidden = $(".game-actions:hidden", gamediv).length;
+        if (is_hidden && force != "collapse"){
             $(".game-actions", gamediv).slideDown();
             $(".game-grid", gamediv).slideDown();
         }
-        else {
+        else if (!is_hidden && force != "expand") {
             $(".game-actions", gamediv).slideUp();
             $(".game-grid", gamediv).slideUp();
         }
@@ -458,10 +459,19 @@ var app = $.sammy("#container2", function (){
         //todo - anything? (really a 404 fix)
     });
 
-    this.get("#!/toggle-all", function (){
+    this.get("#!/collapse-all", function (){
         var self = this;
         $(".game").each(function (index, div){
-            self.trigger('mingame', {gamediv: $(div)});
+            self.trigger('mingame', {gamediv: $(div), force: "collapse"});
+        });
+
+        this.redirect("#!/")
+    });
+
+    this.get("#!/expand-all", function (){
+        var self = this;
+        $(".game").each(function (index, div){
+            self.trigger('mingame', {gamediv: $(div), force: "expand"});
         });
 
         this.redirect("#!/")
