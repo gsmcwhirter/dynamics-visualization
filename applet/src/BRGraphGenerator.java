@@ -32,8 +32,10 @@ public class BRGraphGenerator implements GraphGenerator {
             return 0f;
         } else if (A < 0) {
             return 0f;
-        } else {
+        } else if (A > 0) {
             return 1f;
+        } else {
+            return Float.NaN;
         }
     }
 
@@ -44,8 +46,10 @@ public class BRGraphGenerator implements GraphGenerator {
             return 0f;
         } else if (D > 0){
             return 1f;
-        } else {
+        } else if (D < 0) {
             return 0f;
+        } else {
+            return Float.NaN;
         }
     }
 
@@ -82,6 +86,8 @@ public class BRGraphGenerator implements GraphGenerator {
                     } else {
                         yyf = yf;
                     }
+                } else if (Float.isNaN(lrespy)) {
+                    yyf = yf;
                 } else if (xf < qlim){
                     yyf = lrespy;
                 } else if (xf > qlim){
@@ -99,8 +105,9 @@ public class BRGraphGenerator implements GraphGenerator {
                     } else {
                         xxf = xf;
                     }
-                } else if(yf < plim)
-                {
+                } else if (Float.isNaN(lrespx)) {
+                    xxf = xf;
+                } else if (yf < plim){
                     xxf = lrespx;
                 } else if (yf > plim){
                     xxf = 1f - lrespx;
