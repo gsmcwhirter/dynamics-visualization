@@ -25,27 +25,27 @@ public class BRGraphGenerator implements GraphGenerator {
         ci = new CanvasImage(gc.createCompatibleImage(width, height, Transparency.BITMASK));
     }
 
-    private float _lrespy(){
+    private float _lqresp(){
         if (A + C > 0){
             return 1f;
         } else if (A + C < 0){
             return 0f;
-        } else if (0 <= A) {
-            return 1f;
-        } else {
+        } else if (A < 0) {
             return 0f;
+        } else {
+            return 1f;
         }
     }
 
-    private float _lrespx(){
+    private float _lpresp(){
         if (B + D > 0){
             return 1f;
         } else if (B + D < 0){
             return 0f;
-        } else if (0 >= D){
-            return 0f;
-        } else {
+        } else if (D > 0){
             return 1f;
+        } else {
+            return 0f;
         }
     }
 
@@ -57,13 +57,13 @@ public class BRGraphGenerator implements GraphGenerator {
     @Override
     public CanvasImage generate(){
         //draw stuff
-        float lrespx = _lrespx();
-        float lrespy = _lrespy();
+        float lrespx = _lpresp();
+        float lrespy = _lqresp();
 
         float qlim = (float)A / (float)(A + C);
-
         float plim = (float)D / (float)(B + D);
 
+        //graph arrows
         int dots = 11; //effectively 10
         for (int x = 0; x <= dots; x++){
             for (int y = 0; y <= dots; y++){
@@ -73,7 +73,14 @@ public class BRGraphGenerator implements GraphGenerator {
                 float xxf;
                 float yyf;
 
-                if (xf < qlim || Float.isNaN(qlim)){
+                if (Float.isNaN(qlim) || Float.isInfinite(qlim)){
+                    System.out.println("qlim is NaN");
+                    if (A < 0){
+                        yyf = 0f;
+                    } else {
+                        yyf = 1f;
+                    }
+                } else if (xf < qlim){
                     yyf = lrespy;
                 } else if (xf > qlim){
                     yyf = 1f - lrespy;
@@ -81,7 +88,15 @@ public class BRGraphGenerator implements GraphGenerator {
                     yyf = yf;
                 }
 
-                if (yf < plim || Float.isNaN(plim)){
+                if (Float.isNaN(plim) || Float.isInfinite(plim)){
+                    System.out.println("plim is NaN");
+                    if (D > 0){
+                        xxf = 1f;
+                    } else {
+                        xxf = 0f;
+                    }
+                } else if(yf < plim || Float.isNaN(plim))
+                {
                     xxf = lrespx;
                 } else if (yf > qlim){
                     xxf = 1f - lrespx;
@@ -94,7 +109,8 @@ public class BRGraphGenerator implements GraphGenerator {
             }
         }
 
-                    if (A + C > 0){
+        //row player response curve
+        if (A + C > 0){
             if (qlim <= 1f && qlim >= 0f){
                 ci.drawLine(0f, 1f, qlim, 1f, Color.red);
                 ci.drawLine(qlim, 0f, 1f, 0f, Color.red);
@@ -126,6 +142,7 @@ public class BRGraphGenerator implements GraphGenerator {
             ci.drawLine(0f, 0f, 1f, 0f, Color.red);
         }
 
+        //column player response curve
         if (B + D > 0){
             if (plim >= 0f && plim <= 1f){
                 ci.drawLine(0f, 1f, 0f, plim, Color.blue);
@@ -150,12 +167,12 @@ public class BRGraphGenerator implements GraphGenerator {
                 //play other
                 ci.drawLine(1f, 1f, 1f, 0f, Color.blue);
             }
-        } else if (0 >= D) {
+        } else if (D > 0) {
             //play this
-            ci.drawLine(0f, 1f, 0f, 0f, Color.blue);
+            ci.drawLine(1f, 0f, 1f, 1f, Color.blue);
         } else {
             //play other
-            ci.drawLine(1f, 1f, 1f, 0f, Color.blue);
+            ci.drawLine(0f, 0f, 0f, 1f, Color.blue);
         }
 
         return ci;

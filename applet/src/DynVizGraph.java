@@ -74,37 +74,42 @@ public class DynVizGraph extends JApplet {
             String pAS = getParameter("A");
             payoffA = Integer.parseInt(pAS);
         } catch (NumberFormatException e) {
-            payoffA = 0;
+            payoffA = -1;
         } catch (NullPointerException e) {
-            payoffA = 0;
+            payoffA = -1;
         }
 
         try {
             String pBS = getParameter("B");
             payoffB = Integer.parseInt(pBS);
         } catch (NumberFormatException e) {
-            payoffB = 0;
+            payoffB = -1;
         } catch (NullPointerException e) {
-            payoffB = 0;
+            payoffB = -1;
         }
 
         try {
             String pCS = getParameter("C");
             payoffC = Integer.parseInt(pCS);
         } catch (NumberFormatException e) {
-            payoffC = 0;
+            payoffC = 1;
         } catch (NullPointerException e) {
-            payoffC = 0;
+            payoffC = 1;
         }
 
         try {
             String pDS = getParameter("D");
             payoffD = Integer.parseInt(pDS);
         } catch (NumberFormatException e) {
-            payoffD = 0;
+            payoffD = 1;
         } catch (NullPointerException e) {
-            payoffD = 0;
+            payoffD = 1;
         }
+
+        System.out.println(payoffA);
+        System.out.println(payoffB);
+        System.out.println(payoffC);
+        System.out.println(payoffD);
 
         BRThread = new Thread(new GraphGeneratorRunner(new BRGraphGenerator(payoffA, payoffB, payoffC, payoffD, BRChart.getRealWidth(), BRChart.getRealHeight()), GraphGeneratorRunner.BR));
         DtRThread = new Thread(new GraphGeneratorRunner(new DtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, DtRChart.getRealWidth(), DtRChart.getRealHeight()), GraphGeneratorRunner.DTR));

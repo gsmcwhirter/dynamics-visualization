@@ -33,8 +33,8 @@ public class CanvasImage {
         Graphics2D g2d = _bi.createGraphics();
 
         float xx1, xx2, yy1, yy2;
-        xx1 = (float) Math.floor(_width * (1f - x1));
-        xx2 = (float) Math.floor(_width * (1f - x2));
+        xx1 = (float) Math.floor(_width * x1);
+        xx2 = (float) Math.floor(_width * x2);
         yy1 = (float) Math.floor(_height * (1f - y1));
         yy2 = (float) Math.floor(_height * (1f - y2));
 
@@ -57,8 +57,8 @@ public class CanvasImage {
         int _width = _bi.getWidth() - 1;
 
         float xx1, xx2, yy1, yy2;
-        xx1 = (float) Math.floor(_width * (1f - x1));
-        xx2 = (float) Math.floor(_width * (1f - x2));
+        xx1 = (float) Math.floor(_width * x1);
+        xx2 = (float) Math.floor(_width * x2);
         yy1 = (float) Math.floor(_height * (1f - y1));
         yy2 = (float) Math.floor(_height * (1f - y2));
 
