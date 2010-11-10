@@ -161,21 +161,21 @@ var app = $.sammy("#container2", function (){
         var new_game = $("<div />").addClass('game').attr('id','game-'+key);
         new_game.hide();
         new_game.haml(
-            ["%form"+(input ? ".editing" : ""), {action: "#/edit-game/"+key, method: "PUT", "accept-charset": "utf-8"},[
+            ["%form"+(input ? ".editing" : ""), {action: "#!/edit-game/"+key, method: "PUT", "accept-charset": "utf-8"},[
                 ["%fieldset.wide-fields",[
                     [".game-actions", [
                         ["%button.button.positive.save-button",{"type": "submit", style: !input ? "display: none;" : "", tabindex: tabindex + 11},"Save Game"],
-                        ["%a.button.positive.process-button",{href: "#/process/"+key, style: input ? "display: none;" : ""}, "Process Game"],
+                        ["%a.button.positive.process-button",{href: "#!/process/"+key, style: input ? "display: none;" : ""}, "Process Game"],
                         ["%br"],
-                        ["%a.button.edit-button",{href: "#/edit-game/"+key, style: input ? "display: none;" : ""},"Edit Game"],
+                        ["%a.button.edit-button",{href: "#!/edit-game/"+key, style: input ? "display: none;" : ""},"Edit Game"],
                         ["%br.edit-button", {style: input ? "display: none;" : ""}],
-                        ["%a.button.negative",{href: "#/delete-game/"+key, tabindex: tabindex + 12}, "Delete Game"]
+                        ["%a.button.negative",{href: "#!/delete-game/"+key, tabindex: tabindex + 12}, "Delete Game"]
                     ]],
                     [".game-header", [
-                        ["%a#/add-game/"+key, " "],
-                        ["%a#/edit-game/"+key, " "],
-                        ["%a#/view-game/"+key, " "],
-                        ["%a", {href: "#/toggle-game/"+key}, [
+                        ["%a#!/add-game/"+key, " "],
+                        ["%a#!/edit-game/"+key, " "],
+                        ["%a#!/view-game/"+key, " "],
+                        ["%a", {href: "#!/toggle-game/"+key}, [
                             ["%h1.label", {style: input ? "display: none;" : ""}, game.label]
                         ]]
                     ]],
@@ -244,7 +244,7 @@ var app = $.sammy("#container2", function (){
         $(".actions .permalink").remove();
         var games = this.session('games') || {};
 
-        var permalink = $("<a/>").text("permalink").attr("href","#/load/"+this.json(games)).addClass('permalink').addClass('button');
+        var permalink = $("<a/>").text("permalink").attr("href","#!/load/"+this.json(games)).addClass('permalink').addClass('button');
 
         $(".actions").prepend(permalink);
     });
@@ -435,21 +435,11 @@ var app = $.sammy("#container2", function (){
         this.trigger('permalinks');
     });
 
-    this.get("#/", function (){
-        //todo - directions or something?
-        return false;
-    });
+    this.bind('mingame', function (e, data){
+        var gamediv = data.gamediv;
 
-    this.get("#/view-game/:key", function (){
-        //todo - anything? (really a 404 fix)
-    });
-
-    this.get("#/toggle-game/:key", function (){
-        var key = this.params.key;
-
-        var gamediv = $("#game-"+key);
         var tmp = $(".game-actions:hidden", gamediv);
-        if(tmp && tmp.length){
+        if(tmp.length){
             $(".game-actions", gamediv).slideDown();
             $(".game-grid", gamediv).slideDown();
         }
@@ -457,11 +447,34 @@ var app = $.sammy("#container2", function (){
             $(".game-actions", gamediv).slideUp();
             $(".game-grid", gamediv).slideUp();
         }
-
-        this.redirect("#/");
     });
 
-    this.get("#/clear", function (){
+    this.get("#!/", function (){
+        //todo - directions or something?
+        return false;
+    });
+
+    this.get("#!/view-game/:key", function (){
+        //todo - anything? (really a 404 fix)
+    });
+
+    this.get("#!/toggle-all", function (){
+        $(".game").each(function (index, div){
+            this.trigger('mingame', {gamediv: $(div)});
+        });
+
+        this.redirect("#!/")
+    });
+
+    this.get("#!/toggle-game/:key", function (){
+        var key = this.params.key;
+
+        var gamediv = $("#game-"+key);
+        this.trigger("mingame", {gamediv: gamediv});
+        this.redirect("#!/");
+    });
+
+    this.get("#!/clear", function (){
         if (confirm("Are you sure you want to delete all data?")){
             this.session('games', {});
             this.session('applet_count', 0);
@@ -470,21 +483,21 @@ var app = $.sammy("#container2", function (){
             this.trigger('permalinks');
         }
 
-        this.redirect("#/");
+        this.redirect("#!/");
     });
 
-    this.get('#/add-game', function (){
+    this.get('#!/add-game', function (){
         var d = new Date();
         var key = hex_sha1(d.getTime() + ":" + d.getMilliseconds());
-        this.redirect('#/add-game/'+key);
+        this.redirect('#!/add-game/'+key);
     });
 
-    this.get("#/add-game/:key", function (){
+    this.get("#!/add-game/:key", function (){
         var games = this.session('games');
         var key = this.params.key;
 
         if (games[key]){
-            this.redirect("#/edit-game/"+key);
+            this.redirect("#!/edit-game/"+key);
         }
         else {
             this.trigger('loadgame', {key: key, add: true});
@@ -493,7 +506,7 @@ var app = $.sammy("#container2", function (){
         return false;
     });
 
-    this.get('#/edit-game/:key', function (context){
+    this.get('#!/edit-game/:key', function (context){
         var games = this.session('games');
         var key = this.params.key;
 
@@ -520,11 +533,11 @@ var app = $.sammy("#container2", function (){
 
         }
         else {
-            this.redirect("#/add-game/"+key);
+            this.redirect("#!/add-game/"+key);
         }
     });
 
-    this.put('#/edit-game/:key', function (context){
+    this.put('#!/edit-game/:key', function (context){
         var games = this.session('games');
         var key = this.params.key;
         
@@ -560,14 +573,14 @@ var app = $.sammy("#container2", function (){
             self.trigger("norowentry", {game: game, form: form});
             self.trigger("nocolentry", {game: game, form: form});
             form.slideDown(function (){
-                self.redirect("#/view-game/"+key);
+                self.redirect("#!/view-game/"+key);
             });
         });
 
         return false;
     });
 
-    this.get("#/delete-game/:key", function (){
+    this.get("#!/delete-game/:key", function (){
         var games = this.session('games');
         var key = this.params.key;
 
@@ -579,14 +592,14 @@ var app = $.sammy("#container2", function (){
             }
 
             var self = this;
-            $("#game-"+key).slideUp(function (){$("#game-"+key).remove();self.redirect("#/");});
+            $("#game-"+key).slideUp(function (){$("#game-"+key).remove();self.redirect("#!/");});
         }
         else {
-            this.redirect("#/");
+            this.redirect("#!/");
         }
     });
 
-    this.get("#/load/:games", function (){
+    this.get("#!/load/:games", function (){
         var games;
         try {
             games = this.json(this.params.games);
@@ -605,10 +618,10 @@ var app = $.sammy("#container2", function (){
             alert("Load data was not well formed.");
         }
 
-        this.redirect("#/");
+        this.redirect("#!/");
     });
 
-    this.get("#/process/:key", function (){
+    this.get("#!/process/:key", function (){
         var games = this.session('games');
         var count = this.session('applet_count');
         var key = this.params.key;
@@ -638,7 +651,7 @@ var app = $.sammy("#container2", function (){
             this.session('applet_count', count);
         }
 
-        this.redirect("#/");
+        this.redirect("#!/");
     });
 
 });
@@ -654,5 +667,5 @@ $(function (){
        }
     });
 
-   app.run("#/");
+   app.run("#!/");
 });
