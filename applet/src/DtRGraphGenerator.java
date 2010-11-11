@@ -64,32 +64,24 @@ public class DtRGraphGenerator implements GraphGenerator {
     @Override
     public CanvasImage generate(){
 
-        float xf, yf, xxf, yyf;
         float[] oldxy;
         float[] newxy;
 
         int dots = 5;
         for (int x = 0; x <= dots; x++){
             for (int y = 0; y <= dots; y++){
-                xf = (float)x / (float)dots;
-                yf = (float)y / (float)dots;
 
                 oldxy = new float[2];
                 newxy = new float[2];
-                newxy[0] = xf;
-                newxy[1] = yf;
+                newxy[0] = (float)x / (float)dots;
+                newxy[1] = (float)y / (float)dots;
 
                 do {
                     oldxy = newxy.clone();
                     newxy = genstep(oldxy);
 
-                    xf = oldxy[0];
-                    yf = oldxy[1];
-                    xxf = newxy[0];
-                    yyf = newxy[1];
-
-                    ci.drawArrow(xf, yf, xxf, yyf, Color.green, Color.black);
-                    ci.drawLine(xf, yf, xf, yf, Color.black);
+                    ci.drawArrow(oldxy[0], oldxy[1], newxy[0], newxy[1], Color.green, Color.black);
+                    ci.drawLine(oldxy[0], oldxy[1], oldxy[0], oldxy[1], Color.black);
                 } while (Math.abs(oldxy[0] - newxy[0]) > tolerance || Math.abs(oldxy[1] - newxy[1]) > tolerance);
             }
         }
@@ -123,11 +115,11 @@ public class DtRGraphGenerator implements GraphGenerator {
     }
 
     private float payoff(int typ, float[] pops) throws Exception{
-        return payoff(typ, typ, pops);
+        return payoff(1- typ, typ, pops);
     }
 
     private float payoff(int str, int typ, float[] pops) throws Exception{
-        //generate payoff for the top row or the right column
+        //typ 0  is the column and typ 1 is the row
         /*
          * The grid is:
          *      A, B    |   C, D
@@ -140,7 +132,7 @@ public class DtRGraphGenerator implements GraphGenerator {
         float score = 0f;
 
         switch (typ){
-            case 0:
+            case 1:
                 //row player
                 if (str == 0){
                     score = (float)A * opp1 + (float)C * opp0;
@@ -150,7 +142,7 @@ public class DtRGraphGenerator implements GraphGenerator {
                     throw new Exception("Invalid str parameter");
                 }
                 break;
-            case 1:
+            case 0:
                 //column player
                 if (str == 0){
                     score = (float)B * opp0 + (float)F * opp1;
@@ -176,7 +168,7 @@ public class DtRGraphGenerator implements GraphGenerator {
          *      E, F    |   G, H
          */
 
-        score = pops[typ] * payoff(typ, typ, pops) + (1f - pops[typ]) * payoff(1 - typ, typ, pops);
+        score = pops[typ] * payoff(1- typ, typ, pops) + (1f - pops[typ]) * payoff(typ, typ, pops);
 
         return score;
     }
