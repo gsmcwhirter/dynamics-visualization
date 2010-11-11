@@ -23,10 +23,19 @@ public class DynVizGraph extends JApplet {
     private CanvasPanel DtRChart;
     private CanvasPanel CtRChart;
 
+    /*
+     * The grid is:
+     *      A, B    |   C, D
+     *      E, F    |   G, H
+     */
     private int payoffA;
     private int payoffB;
     private int payoffC;
     private int payoffD;
+    private int payoffE;
+    private int payoffF;
+    private int payoffG;
+    private int payoffH;
 
     private Thread BRThread;
     private Thread DtRThread;
@@ -106,13 +115,59 @@ public class DynVizGraph extends JApplet {
             payoffD = 0;
         }
 
+        try {
+            String pES = getParameter("E");
+            payoffE = Integer.parseInt(pES);
+        } catch (NumberFormatException e) {
+            payoffE = 0;
+        } catch (NullPointerException e) {
+            payoffE = 0;
+        }
+
+        try {
+            String pFS = getParameter("F");
+            payoffF = Integer.parseInt(pFS);
+        } catch (NumberFormatException e) {
+            payoffF = 0;
+        } catch (NullPointerException e) {
+            payoffF = 0;
+        }
+
+        try {
+            String pGS = getParameter("G");
+            payoffG = Integer.parseInt(pGS);
+        } catch (NumberFormatException e) {
+            payoffG = 0;
+        } catch (NullPointerException e) {
+            payoffG = 0;
+        }
+
+        try {
+            String pHS = getParameter("H");
+            payoffH = Integer.parseInt(pHS);
+        } catch (NumberFormatException e) {
+            payoffH = 0;
+        } catch (NullPointerException e) {
+            payoffH = 0;
+        }
+
         System.out.println(payoffA);
         System.out.println(payoffB);
         System.out.println(payoffC);
         System.out.println(payoffD);
+        System.out.println(payoffE);
+        System.out.println(payoffF);
+        System.out.println(payoffG);
+        System.out.println(payoffH);
 
-        BRThread = new Thread(new GraphGeneratorRunner(new BRGraphGenerator(payoffA, payoffB, payoffC, payoffD, BRChart.getRealWidth(), BRChart.getRealHeight()), GraphGeneratorRunner.BR));
-        DtRThread = new Thread(new GraphGeneratorRunner(new DtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, DtRChart.getRealWidth(), DtRChart.getRealHeight()), GraphGeneratorRunner.DTR));
+        /*
+         * The grid is:
+         *      A, B    |   C, D
+         *      E, F    |   G, H
+         */
+
+        BRThread = new Thread(new GraphGeneratorRunner(new BRGraphGenerator(payoffA - payoffE, payoffB - payoffD, payoffG - payoffC, payoffH - payoffF, BRChart.getRealWidth(), BRChart.getRealHeight()), GraphGeneratorRunner.BR));
+        DtRThread = new Thread(new GraphGeneratorRunner(new DtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, payoffE, payoffF, payoffG, payoffH, DtRChart.getRealWidth(), DtRChart.getRealHeight()), GraphGeneratorRunner.DTR));
         CtRThread = new Thread(new GraphGeneratorRunner(new CtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, CtRChart.getRealWidth(), CtRChart.getRealHeight()), GraphGeneratorRunner.CTR));
     }
 
