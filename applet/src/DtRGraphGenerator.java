@@ -67,7 +67,7 @@ public class DtRGraphGenerator implements GraphGenerator {
         float[] oldxy;
         float[] newxy;
 
-        int dots = 11;
+        int dots = 5;
         for (int x = 0; x <= dots; x++){
             for (int y = 0; y <= dots; y++){
                 xf = (float)x / (float)dots;
