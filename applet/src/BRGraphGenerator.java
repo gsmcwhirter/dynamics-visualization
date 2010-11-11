@@ -78,7 +78,6 @@ public class BRGraphGenerator implements GraphGenerator {
                 float yyf;
 
                 if (Float.isNaN(qlim) || Float.isInfinite(qlim)){
-                    System.out.println("qlim is NaN");
                     if (A < 0){
                         yyf = 0f;
                     } else if (A > 0) {
@@ -97,7 +96,6 @@ public class BRGraphGenerator implements GraphGenerator {
                 }
 
                 if (Float.isNaN(plim) || Float.isInfinite(plim)){
-                    System.out.println("plim is NaN");
                     if (D > 0){
                         xxf = 1f;
                     } else if (D < 0) {

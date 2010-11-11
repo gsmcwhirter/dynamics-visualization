@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.GeneralPath;
+import java.awt.geom.Ellipse2D;
 
 /**
  *
@@ -50,6 +51,32 @@ public class CanvasImage {
     private AlphaComposite makeComposite(float alpha) {
         int type = AlphaComposite.SRC_OVER;
         return(AlphaComposite.getInstance(type, alpha));
+    }
+    
+    public void drawDot(float x, float y, float r, Color color){
+        Graphics2D g = _bi.createGraphics();
+        
+        int _height = _bi.getHeight() - 1;
+        int _width = _bi.getWidth() - 1;
+        
+        float xp = (float) Math.floor(_width * x) - r;
+        float yp = (float) Math.floor(_height * (1f - y)) - r;
+
+        g.setColor(color);
+        g.setPaint(color);
+        g.fill(new Ellipse2D.Float(xp, yp, 2 * r, 2 * r));
+    }
+
+    public void drawDot(float x, float y, Color color){
+        drawDot(x, y, 3f, color);
+    }
+
+    public void drawDot(float x, float y){
+        drawDot(x, y, Color.black);
+    }
+
+    public void drawDot(float x, float y, float r){
+        drawDot(x, y, r, Color.black);
     }
 
     public void drawArrow(float x1, float y1, float x2, float y2, Color lcolor, Color acolor){

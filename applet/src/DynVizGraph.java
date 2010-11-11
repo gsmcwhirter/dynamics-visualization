@@ -37,6 +37,15 @@ public class DynVizGraph extends JApplet {
     private int payoffG;
     private int payoffH;
 
+    private int payoffAd = 1;
+    private int payoffBd = -1;
+    private int payoffCd = -1;
+    private int payoffDd = 1;
+    private int payoffEd = -1;
+    private int payoffFd = 1;
+    private int payoffGd = 1;
+    private int payoffHd = -1;
+
     private Thread BRThread;
     private Thread DtRThread;
     private Thread CtRThread;
@@ -88,72 +97,72 @@ public class DynVizGraph extends JApplet {
             String pAS = getParameter("A");
             payoffA = Integer.parseInt(pAS);
         } catch (NumberFormatException e) {
-            payoffA = 0;
+            payoffA = payoffAd;
         } catch (NullPointerException e) {
-            payoffA = 0;
+            payoffA = payoffAd;
         }
 
         try {
             String pBS = getParameter("B");
             payoffB = Integer.parseInt(pBS);
         } catch (NumberFormatException e) {
-            payoffB = 0;
+            payoffB = payoffBd;
         } catch (NullPointerException e) {
-            payoffB = 0;
+            payoffB = payoffBd;
         }
 
         try {
             String pCS = getParameter("C");
             payoffC = Integer.parseInt(pCS);
         } catch (NumberFormatException e) {
-            payoffC = 0;
+            payoffC = payoffCd;
         } catch (NullPointerException e) {
-            payoffC = 0;
+            payoffC = payoffCd;
         }
 
         try {
             String pDS = getParameter("D");
             payoffD = Integer.parseInt(pDS);
         } catch (NumberFormatException e) {
-            payoffD = 0;
+            payoffD = payoffDd;
         } catch (NullPointerException e) {
-            payoffD = 0;
+            payoffD = payoffDd;
         }
 
         try {
             String pES = getParameter("E");
             payoffE = Integer.parseInt(pES);
         } catch (NumberFormatException e) {
-            payoffE = 0;
+            payoffE = payoffEd;
         } catch (NullPointerException e) {
-            payoffE = 0;
+            payoffE = payoffEd;
         }
 
         try {
             String pFS = getParameter("F");
             payoffF = Integer.parseInt(pFS);
         } catch (NumberFormatException e) {
-            payoffF = 0;
+            payoffF = payoffFd;
         } catch (NullPointerException e) {
-            payoffF = 0;
+            payoffF = payoffFd;
         }
 
         try {
             String pGS = getParameter("G");
             payoffG = Integer.parseInt(pGS);
         } catch (NumberFormatException e) {
-            payoffG = 0;
+            payoffG = payoffGd;
         } catch (NullPointerException e) {
-            payoffG = 0;
+            payoffG = payoffGd;
         }
 
         try {
             String pHS = getParameter("H");
             payoffH = Integer.parseInt(pHS);
         } catch (NumberFormatException e) {
-            payoffH = 0;
+            payoffH = payoffHd;
         } catch (NullPointerException e) {
-            payoffH = 0;
+            payoffH = payoffHd;
         }
 
         System.out.println(payoffA);

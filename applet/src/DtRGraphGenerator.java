@@ -17,7 +17,7 @@ public class DtRGraphGenerator implements GraphGenerator {
      */
     private int A, B, C, D, E, F, G, H;
 
-    private float tolerance = 1e-6f;
+    private float tolerance = 1e-5f;
 
     public DtRGraphGenerator(int Ap, int Bp, int Cp, int Dp, int Ep, int Fp, int Gp, int Hp, int width, int height){
         A = Ap;
@@ -48,6 +48,15 @@ public class DtRGraphGenerator implements GraphGenerator {
             H -= min;
         }
 
+        System.out.println(A);
+        System.out.println(B);
+        System.out.println(C);
+        System.out.println(D);
+        System.out.println(E);
+        System.out.println(F);
+        System.out.println(G);
+        System.out.println(H);
+
 
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice gs = ge.getDefaultScreenDevice();
@@ -66,23 +75,52 @@ public class DtRGraphGenerator implements GraphGenerator {
 
         float[] oldxy;
         float[] newxy;
+        float[] startxy;
 
-        int dots = 5;
-        for (int x = 0; x <= dots; x++){
-            for (int y = 0; y <= dots; y++){
+        Color[] colors = new Color[4];
+        colors[0] = Color.green;
+        colors[1] = Color.yellow;
+        colors[2] = Color.cyan;
+        colors[3] = Color.magenta;
+
+        int colorct = 0;
+
+        int dots = 11;
+        for (int x = 4; x <= dots - 4; x++){
+            for (int y = 4; y <= dots - 4; y++){
 
                 oldxy = new float[2];
                 newxy = new float[2];
                 newxy[0] = (float)x / (float)dots;
                 newxy[1] = (float)y / (float)dots;
 
+                startxy = new float[2];
+                startxy = newxy.clone();
+
+                System.out.println("new");
+
+                System.out.print(newxy[0]);
+                System.out.print(", ");
+                System.out.println(newxy[1]);
+
                 do {
                     oldxy = newxy.clone();
                     newxy = genstep(oldxy);
 
-                    ci.drawArrow(oldxy[0], oldxy[1], newxy[0], newxy[1], Color.green, Color.black);
-                    ci.drawLine(oldxy[0], oldxy[1], oldxy[0], oldxy[1], Color.black);
+                    System.out.print(newxy[0]);
+                    System.out.print(", ");
+                    System.out.println(newxy[1]);
+
+                    ci.drawLine(oldxy[0], oldxy[1], newxy[0], newxy[1], colors[colorct]);
                 } while (Math.abs(oldxy[0] - newxy[0]) > tolerance || Math.abs(oldxy[1] - newxy[1]) > tolerance);
+
+                ci.drawLine(startxy[0], startxy[1], startxy[0], startxy[1], Color.black);
+                ci.drawDot(newxy[0], newxy[1], 5f);
+
+                colorct++;
+                if (colorct >= 4){
+                    colorct = 0;
+                }
             }
         }
 
@@ -97,13 +135,13 @@ public class DtRGraphGenerator implements GraphGenerator {
             float avg1 = avg_payoff(1, oldxy);
 
             if (avg0 != 0f){
-                newxy[0] = (.1f + payoff(0, oldxy)) / (.1f + avg0);
+                newxy[0] = (.1f + payoff(0, oldxy)) * oldxy[0] / (.1f + avg0);
             } else {
                 newxy[0] = oldxy[0];
             }
 
             if (avg1 != 0f){
-                newxy[1] = (.1f + payoff(1, oldxy)) / (.1f + avg1);
+                newxy[1] = (.1f + payoff(1, oldxy)) * oldxy[1] / (.1f + avg1);
             } else {
                 newxy[1] = oldxy[1];
             }

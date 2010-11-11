@@ -48,11 +48,8 @@ public class CanvasPanel extends JPanel {
 
         if (_ci != null){
             BufferedImage bi = _ci.getImage();
-            System.out.println("adding buffered image");
             if (g2d.drawImage(bi, _chartPadding, _chartPadding, null)){
-                System.out.println("ret true");
             } else {
-                System.out.println("ret false");
             }
             
         }
