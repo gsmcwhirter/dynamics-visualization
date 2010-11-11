@@ -648,10 +648,14 @@ var app = $.sammy("#container2", function (){
                     ["%param", {name: "jnlp_href", value: "dynamics-visualization.jnlp"}],
                     ["%param", {name: "java_arguments", value: "-Djava.security.policy=applet.policy"}],
                     ["%param", {name: "boxborder", value: "false"}],
-                    ["%param", {name: "A", value: game['tl-r'] - game['bl-r']}],
-                    ["%param", {name: "B", value: game['tl-c'] - game['tr-c']}],
-                    ["%param", {name: "C", value: game['br-r'] - game['tr-r']}],
-                    ["%param", {name: "D", value: game['br-c'] - game['bl-c']}]
+                    ["%param", {name: "A", value: game['tl-r']}],
+                    ["%param", {name: "B", value: game['tl-c']}],
+                    ["%param", {name: "C", value: game['tr-r']}],
+                    ["%param", {name: "D", value: game['tr-c']}],
+                    ["%param", {name: "E", value: game['bl-r']}],
+                    ["%param", {name: "F", value: game['bl-c']}],
+                    ["%param", {name: "G", value: game['br-r']}],
+                    ["%param", {name: "H", value: game['br-c']}]
                 ]];
 
             if ($.browser.msie){
