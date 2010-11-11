@@ -40,6 +40,11 @@ public class DynVizGraph extends JApplet {
     private Thread BRThread;
     private Thread DtRThread;
     private Thread CtRThread;
+    private Thread RepaintThread;
+
+    private boolean BRThreadDone = false;
+    private boolean DtRThreadDone = false;
+    private boolean CtRThreadDone = false;
 
     @Override
     public void init(){
@@ -166,6 +171,7 @@ public class DynVizGraph extends JApplet {
          *      E, F    |   G, H
          */
 
+        RepaintThread = new Thread(new Repainter());
         BRThread = new Thread(new GraphGeneratorRunner(new BRGraphGenerator(payoffA - payoffE, payoffB - payoffD, payoffG - payoffC, payoffH - payoffF, BRChart.getRealWidth(), BRChart.getRealHeight()), GraphGeneratorRunner.BR));
         DtRThread = new Thread(new GraphGeneratorRunner(new DtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, payoffE, payoffF, payoffG, payoffH, DtRChart.getRealWidth(), DtRChart.getRealHeight()), GraphGeneratorRunner.DTR));
         CtRThread = new Thread(new GraphGeneratorRunner(new CtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, CtRChart.getRealWidth(), CtRChart.getRealHeight()), GraphGeneratorRunner.CTR));
@@ -176,10 +182,12 @@ public class DynVizGraph extends JApplet {
         BRThread.start();
         DtRThread.start();
         CtRThread.start();
+        RepaintThread.start();
     }
 
     @Override
     public void stop(){
+        RepaintThread.interrupt();
         BRThread.interrupt();
         DtRThread.interrupt();
         CtRThread.interrupt();
@@ -199,6 +207,44 @@ public class DynVizGraph extends JApplet {
         if (chart != null){
             chart.setCImage(ci);
             chart.flush();
+        }
+    }
+
+    private void DoneThread(int typ){
+
+        if (typ == GraphGeneratorRunner.BR){
+            BRThreadDone = true;
+        } else if (typ == GraphGeneratorRunner.DTR){
+            DtRThreadDone = true;
+        } else if (typ == GraphGeneratorRunner.CTR){
+            CtRThreadDone = true;
+        }
+    }
+
+    class Repainter implements Runnable{
+
+        @Override
+        public void run(){
+            while (!BRThreadDone || !DtRThreadDone || !CtRThreadDone){
+                if (!BRThreadDone){
+                    BRChart.repaint();
+                }
+
+                if (!DtRThreadDone){
+                    DtRChart.repaint();
+                }
+
+                if (!CtRThreadDone){
+                    CtRChart.repaint();
+                }
+
+                try{
+                    Thread.sleep(2000);
+                } catch(InterruptedException e){
+                    break;
+                }
+                
+            }
         }
     }
 
@@ -223,6 +269,7 @@ public class DynVizGraph extends JApplet {
 
             ci.flush();
             GraphInfo(ci, _typ);
+            DoneThread(_typ);
         }
     }
 }

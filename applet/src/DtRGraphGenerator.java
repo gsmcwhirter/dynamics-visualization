@@ -3,7 +3,6 @@ import java.awt.GraphicsEnvironment;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsConfiguration;
 import java.awt.Transparency;
-import java.util.Arrays;
 
 /**
  *
@@ -17,6 +16,8 @@ public class DtRGraphGenerator implements GraphGenerator {
      *      E, F    |   G, H
      */
     private int A, B, C, D, E, F, G, H;
+
+    private float tolerance = 1e-6f;
 
     public DtRGraphGenerator(int Ap, int Bp, int Cp, int Dp, int Ep, int Fp, int Gp, int Hp, int width, int height){
         A = Ap;
@@ -89,7 +90,7 @@ public class DtRGraphGenerator implements GraphGenerator {
 
                     ci.drawArrow(xf, yf, xxf, yyf, Color.green, Color.black);
                     ci.drawLine(xf, yf, xf, yf, Color.black);
-                } while (!Arrays.equals(oldxy, newxy));
+                } while (Math.abs(oldxy[0] - newxy[0]) > tolerance || Math.abs(oldxy[1] - newxy[1]) > tolerance);
             }
         }
 
