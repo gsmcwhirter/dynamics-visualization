@@ -237,7 +237,6 @@ var app = $.sammy("#container2", function (){
         $("select.presets", new_game).bind('change', function (e, data){
             self.trigger('restrictgame', {form: $(this).parents("form").first(), presets: $(this)});
         });
-        //$("#games").append(new_game);
         new_game.slideDown();
     });
 
@@ -518,7 +517,7 @@ var app = $.sammy("#container2", function (){
         return false;
     });
 
-    this.get('#!/edit-game/:key', function (context){
+    this.get('#!/edit-game/:key', function (){
         var games = this.session('games');
         var key = this.params.key;
 
@@ -639,14 +638,12 @@ var app = $.sammy("#container2", function (){
 
         if (games[key]){
             var game = games[key];
-            $("#game-"+key+" .game-grid .visualization").remove();
-            $("#game-"+key+" .game-grid").haml(
-                ["%object.visualization",  {width: "648",
+            var hml = ["%object.visualization",  {width: "648",
                                             height: "218",
                                             code: "DynVizGraph",
                                             archive: "dynamics-visualization.jar",
                                             type: "application/x-java-applet",
-                                            name: "game-applet-"+(count++),
+                                            name: "game-applet-"+(++count),
                                             id: "game-applet-"+(count)}, [
                     ["%param", {name: "jnlp_href", value: "dynamics-visualization.jnlp"}],
                     ["%param", {name: "java_arguments", value: "-Djava.security.policy=applet.policy"}],
@@ -655,8 +652,14 @@ var app = $.sammy("#container2", function (){
                     ["%param", {name: "B", value: game['tl-c'] - game['tr-c']}],
                     ["%param", {name: "C", value: game['br-r'] - game['tr-r']}],
                     ["%param", {name: "D", value: game['br-c'] - game['bl-c']}]
-                ]]
-            );
+                ]];
+
+            if ($.browser.msie){
+                hml[0] = "%applet.visualization";
+            }
+
+            $("#game-"+key+" .game-grid .visualization").remove();
+            $("#game-"+key+" .game-grid").haml(hml);
 
             this.session('applet_count', count);
         }
