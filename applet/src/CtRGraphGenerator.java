@@ -10,7 +10,6 @@ import java.awt.Transparency;
  */
 public class CtRGraphGenerator extends AbsGraphGenerator {
     private CanvasImage ci;
-    //private int A, B, C, D, E, F, G, H;
     private float RKTimestep = 1e-3f;
     private float RKDuration = 5e1f;
 
