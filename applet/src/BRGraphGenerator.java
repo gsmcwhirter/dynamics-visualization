@@ -67,6 +67,12 @@ public class BRGraphGenerator implements GraphGenerator {
         float qlim = (float)A / (float)(A + C);
         float plim = (float)D / (float)(B + D);
 
+        Color[] colors = new Color[2];
+        colors[0] = Color.green;
+        colors[1] = Color.yellow;
+
+        int colorct = 0;
+
         //graph arrows
         int dots = 11; //effectively 10
         for (int x = 0; x <= dots; x++){
@@ -113,8 +119,13 @@ public class BRGraphGenerator implements GraphGenerator {
                     xxf = xf;
                 }
 
-                ci.drawArrow(xf, yf, xxf, yyf, Color.green, Color.black);
+                ci.drawArrow(xf, yf, xxf, yyf, colors[colorct], Color.black);
                 ci.drawLine(xf, yf, xf, yf, Color.black);
+
+                colorct++;
+                if (colorct >= 2){
+                    colorct = 0;
+                }
             }
         }
 
