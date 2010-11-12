@@ -638,8 +638,8 @@ var app = $.sammy("#container2", function (){
 
         if (games[key]){
             var game = games[key];
-            var hml = ["%object.visualization",  {width: "648",
-                                            height: "218",
+            var hml = ["%object.visualization",  {width: "440", //648
+                                            height: "440", //281
                                             code: "DynVizGraph",
                                             archive: "dynamics-visualization.jar",
                                             type: "application/x-java-applet",

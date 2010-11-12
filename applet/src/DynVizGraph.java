@@ -22,6 +22,7 @@ public class DynVizGraph extends JApplet {
     private CanvasPanel BRChart;
     private CanvasPanel DtRChart;
     private CanvasPanel CtRChart;
+    private CanvasPanel VFChart;
 
     /*
      * The grid is:
@@ -49,11 +50,13 @@ public class DynVizGraph extends JApplet {
     private Thread BRThread;
     private Thread DtRThread;
     private Thread CtRThread;
+    private Thread VFThread;
     private Thread RepaintThread;
 
     private boolean BRThreadDone = false;
     private boolean DtRThreadDone = false;
     private boolean CtRThreadDone = false;
+    private boolean VFThreadDone = false;
 
     @Override
     public void init(){
@@ -75,10 +78,11 @@ public class DynVizGraph extends JApplet {
         setPreferredSize(new Dimension(chartWidth * 3 + 2, chartHeight));
         c.setPreferredSize(new Dimension(chartWidth * 3 + 2, chartHeight));
 
-        JPanel panel = new JPanel(new GridLayout(1,3));
+        JPanel panel = new JPanel(new GridLayout(2,2));
 
         BRChart = new CanvasPanel(chartWidth, chartHeight, chartPadding);
         DtRChart = new CanvasPanel(chartWidth, chartHeight, chartPadding);
+        VFChart = new CanvasPanel(chartWidth, chartHeight, chartPadding);
         CtRChart = new CanvasPanel(chartWidth, chartHeight, chartPadding);
 
         panel.setBorder(new LineBorder(Color.LIGHT_GRAY));
@@ -86,9 +90,12 @@ public class DynVizGraph extends JApplet {
 
         BRChart.setPreferredSize(new Dimension(chartWidth, chartHeight));
         DtRChart.setPreferredSize(new Dimension(chartWidth, chartHeight));
+        VFChart.setPreferredSize(new Dimension(chartWidth, chartHeight));
         CtRChart.setPreferredSize(new Dimension(chartWidth, chartHeight));
+
         panel.add(BRChart);
         panel.add(DtRChart);
+        panel.add(VFChart);
         panel.add(CtRChart);
 
         c.add(panel);
@@ -183,7 +190,8 @@ public class DynVizGraph extends JApplet {
         RepaintThread = new Thread(new Repainter());
         BRThread = new Thread(new GraphGeneratorRunner(new BRGraphGenerator(payoffA - payoffE, payoffB - payoffD, payoffG - payoffC, payoffH - payoffF, BRChart.getRealWidth(), BRChart.getRealHeight()), GraphGeneratorRunner.BR));
         DtRThread = new Thread(new GraphGeneratorRunner(new DtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, payoffE, payoffF, payoffG, payoffH, DtRChart.getRealWidth(), DtRChart.getRealHeight()), GraphGeneratorRunner.DTR));
-        CtRThread = new Thread(new GraphGeneratorRunner(new CtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, CtRChart.getRealWidth(), CtRChart.getRealHeight()), GraphGeneratorRunner.CTR));
+        CtRThread = new Thread(new GraphGeneratorRunner(new CtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, payoffE, payoffF, payoffG, payoffH, CtRChart.getRealWidth(), CtRChart.getRealHeight()), GraphGeneratorRunner.CTR));
+        VFThread = new Thread(new GraphGeneratorRunner(new VFGraphGenerator(payoffA, payoffB, payoffC, payoffD, payoffE, payoffF, payoffG, payoffH, VFChart.getRealWidth(), VFChart.getRealHeight()), GraphGeneratorRunner.VF));
     }
 
     @Override
@@ -191,6 +199,7 @@ public class DynVizGraph extends JApplet {
         BRThread.start();
         DtRThread.start();
         CtRThread.start();
+        VFThread.start();
         RepaintThread.start();
     }
 
@@ -200,6 +209,7 @@ public class DynVizGraph extends JApplet {
         BRThread.interrupt();
         DtRThread.interrupt();
         CtRThread.interrupt();
+        VFThread.interrupt();
     }
 
     private void GraphInfo(CanvasImage ci, int typ){
@@ -211,6 +221,8 @@ public class DynVizGraph extends JApplet {
             chart = DtRChart;
         } else if (typ == GraphGeneratorRunner.CTR){
             chart = CtRChart;
+        } else if (typ == GraphGeneratorRunner.VF){
+            chart = VFChart;
         }
 
         if (chart != null){
@@ -227,6 +239,8 @@ public class DynVizGraph extends JApplet {
             DtRThreadDone = true;
         } else if (typ == GraphGeneratorRunner.CTR){
             CtRThreadDone = true;
+        } else if (typ == GraphGeneratorRunner.VF){
+            VFThreadDone = true;
         }
     }
 
@@ -234,7 +248,7 @@ public class DynVizGraph extends JApplet {
 
         @Override
         public void run(){
-            while (!BRThreadDone || !DtRThreadDone || !CtRThreadDone){
+            while (!BRThreadDone || !DtRThreadDone || !CtRThreadDone || !VFThreadDone){
                 if (!BRThreadDone){
                     BRChart.repaint();
                 }
@@ -245,6 +259,10 @@ public class DynVizGraph extends JApplet {
 
                 if (!CtRThreadDone){
                     CtRChart.repaint();
+                }
+
+                if (!VFThreadDone){
+                    VFChart.repaint();
                 }
 
                 try{
@@ -264,6 +282,7 @@ public class DynVizGraph extends JApplet {
         final static int BR = 1;
         final static int DTR = 2;
         final static int CTR = 3;
+        final static int VF = 4;
 
         public GraphGeneratorRunner(GraphGenerator gen, int typ){
             _gen = gen;
