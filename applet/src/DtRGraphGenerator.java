@@ -83,9 +83,9 @@ public class DtRGraphGenerator implements GraphGenerator {
 
         int colorct = 0;
 
-        int dots = 11;
-        for (int x = 4; x <= dots - 4; x++){
-            for (int y = 4; y <= dots - 4; y++){
+        int dots = 9;
+        for (int x = 0; x <= dots; x++){
+            for (int y = 0; y <= dots; y++){
 
                 oldxy = new float[2];
                 newxy = new float[2];
