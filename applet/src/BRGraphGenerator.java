@@ -72,9 +72,13 @@ public class BRGraphGenerator implements GraphGenerator {
         colors[1] = Color.yellow;
 
         int colorct = 0;
+        int ptct = 0;
 
         //graph arrows
-        int dots = 11; //effectively 10
+        int dots = 9; //effectively 10
+        float[][] startpoints = new float[(dots + 1) * (dots + 1)][2];
+        float[] startpt;
+
         for (int x = 0; x <= dots; x++){
             for (int y = 0; y <= dots; y++){
                 float xf = (float)x / (float)dots;
@@ -82,6 +86,12 @@ public class BRGraphGenerator implements GraphGenerator {
 
                 float xxf;
                 float yyf;
+                
+                startpt = new float[2];
+                startpt[0] = xf;
+                startpt[1] = yf;
+
+                startpoints[ptct++] = startpt;
 
                 if (Float.isNaN(qlim) || Float.isInfinite(qlim)){
                     if (A < 0){
@@ -120,7 +130,6 @@ public class BRGraphGenerator implements GraphGenerator {
                 }
 
                 ci.drawArrow(xf, yf, xxf, yyf, colors[colorct], Color.black);
-                ci.drawLine(xf, yf, xf, yf, Color.black);
 
                 colorct++;
                 if (colorct >= 2){
@@ -193,6 +202,10 @@ public class BRGraphGenerator implements GraphGenerator {
         } else if (D < 0) {
             //play other
             ci.drawLine(0f, 0f, 0f, 1f, Color.blue);
+        }
+
+        for (int i = 0; i < (dots + 1) * (dots + 1); i++){
+            ci.drawLine(startpoints[i][0], startpoints[i][1], startpoints[i][0], startpoints[i][1], Color.black);
         }
 
         return ci;

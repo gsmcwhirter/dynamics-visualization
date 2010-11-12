@@ -75,15 +75,18 @@ public class DtRGraphGenerator implements GraphGenerator {
 
         float[] oldxy;
         float[] newxy;
-        float[] startxy;
 
         Color[] colors = new Color[2];
         colors[0] = Color.green;
         colors[1] = Color.yellow;
 
         int colorct = 0;
+        int ptct = 0;
 
         int dots = 9;
+        float[][] endpoints = new float[(dots + 1) * (dots + 1)][2];
+        float[][] startpoints = new float[(dots + 1) * (dots + 1)][2];
+
         for (int x = 0; x <= dots; x++){
             for (int y = 0; y <= dots; y++){
 
@@ -92,8 +95,7 @@ public class DtRGraphGenerator implements GraphGenerator {
                 newxy[0] = (float)x / (float)dots;
                 newxy[1] = (float)y / (float)dots;
 
-                startxy = new float[2];
-                startxy = newxy.clone();
+                startpoints[ptct] = newxy.clone();
 
                 System.out.println("new");
 
@@ -112,14 +114,20 @@ public class DtRGraphGenerator implements GraphGenerator {
                     ci.drawArrow(oldxy[0], oldxy[1], newxy[0], newxy[1], colors[colorct]);
                 } while (Math.abs(oldxy[0] - newxy[0]) > tolerance || Math.abs(oldxy[1] - newxy[1]) > tolerance);
 
-                ci.drawLine(startxy[0], startxy[1], startxy[0], startxy[1], Color.black);
-                ci.drawDot(newxy[0], newxy[1], 5f);
+                endpoints[ptct] = newxy;
+
+                ptct++;
 
                 colorct++;
                 if (colorct >= 2){
                     colorct = 0;
                 }
             }
+        }
+
+        for (int i = 0; i < (dots + 1) * (dots + 1); i++){
+            ci.drawLine(startpoints[i][0], startpoints[i][1], startpoints[i][0], startpoints[i][1], Color.black);
+            ci.drawDot(endpoints[i][0], endpoints[i][1], 5f, Color.black);
         }
 
         return ci;
