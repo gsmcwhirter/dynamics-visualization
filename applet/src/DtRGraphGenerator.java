@@ -77,11 +77,9 @@ public class DtRGraphGenerator implements GraphGenerator {
         float[] newxy;
         float[] startxy;
 
-        Color[] colors = new Color[4];
+        Color[] colors = new Color[2];
         colors[0] = Color.green;
         colors[1] = Color.yellow;
-        colors[2] = Color.cyan;
-        colors[3] = Color.magenta;
 
         int colorct = 0;
 
@@ -111,14 +109,14 @@ public class DtRGraphGenerator implements GraphGenerator {
                     System.out.print(", ");
                     System.out.println(newxy[1]);
 
-                    ci.drawLine(oldxy[0], oldxy[1], newxy[0], newxy[1], colors[colorct]);
+                    ci.drawArrow(oldxy[0], oldxy[1], newxy[0], newxy[1], colors[colorct]);
                 } while (Math.abs(oldxy[0] - newxy[0]) > tolerance || Math.abs(oldxy[1] - newxy[1]) > tolerance);
 
                 ci.drawLine(startxy[0], startxy[1], startxy[0], startxy[1], Color.black);
                 ci.drawDot(newxy[0], newxy[1], 5f);
 
                 colorct++;
-                if (colorct >= 4){
+                if (colorct >= 2){
                     colorct = 0;
                 }
             }
