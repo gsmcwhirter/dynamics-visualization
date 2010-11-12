@@ -55,7 +55,7 @@ public class CtRGraphGenerator extends AbsGraphGenerator {
                 xf = (float)x / (float)dots;
                 yf = (float)y / (float)dots;
 
-                for (float t = 0; t < RKDuration; t += RKTimestep){
+                for (float t = 0f; t < RKDuration; t += RKTimestep){
                     dxy = dxydt(xf, yf);
                     xk1 = dxy[0];
                     yk1 = dxy[1];
@@ -82,8 +82,8 @@ public class CtRGraphGenerator extends AbsGraphGenerator {
 
                     xxf = xf + RKTimestep * (xk1 + 2 * xk2 + 2 * xk3 + xk4) / 6f;
 
-                    if (t == 0f){
-                        ci.drawArrow(xf, yf, xxf, yyf, colors[colorct]);
+                    if (t < RKTimestep){
+                        ci.drawArrow(xf, yf, xxf, yyf, colors[colorct], Color.lightGray);
                     } else {
                         ci.drawLine(xf, yf, xxf, yyf, colors[colorct]);
                     }
