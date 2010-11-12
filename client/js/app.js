@@ -613,7 +613,7 @@ var app = $.sammy("#container2", function (){
     this.get("#!/load/:games", function (){
         var games;
         try {
-            games = this.json(this.params.games);
+            games = this.json(decodeURI(this.params.games));
             if ($.isPlainObject(games) && confirm("This will remove all games you have loaded. Do you wish to continue?")){
                 this.session('games', games);
                 this.trigger('reloadgames', {games: games});

@@ -130,7 +130,7 @@ public class BRGraphGenerator implements GraphGenerator {
                 }
 
                 ci.drawArrow(xf, yf, xxf, yyf, colors[colorct], Color.black);
-
+                
                 colorct++;
                 if (colorct >= 2){
                     colorct = 0;
