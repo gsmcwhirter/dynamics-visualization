@@ -1,0 +1,552 @@
+/* Font size chart:
+ * Pixels	Percent
+ * -----------------
+ * 10		77
+ * 11		85
+ * 12		93
+ * 13		100
+ * 14		108
+ * 15		116
+ * 16		123.1
+ * 17		131
+ * 18		138.5
+ * 19		146.5
+ * 20		153.9
+ * 21		161.6
+ * 22		167
+ * 23		174
+ * 24		182
+ * 25		189
+ * 26		197
+ */
+
+@link_color: #a75416;
+@background: #06a;
+@background2: #035;
+@lightbase: #fff;
+@lightbase2: #eee;
+@lightborder: #ccc;
+@medborder: #888;
+@medbase: #aaa;
+
+html, body {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+html{
+  background-color: @background2;
+}
+
+body{
+  margin-top: -15px;
+  height: 100%;
+  font-family: Verdana,Arial,Helvetica,sans-serif;
+  padding: 10px 0;
+
+  background: -moz-linear-gradient(top, @background, @background2);
+  background: -webkit-gradient(linear, 0 0, 0 90%, from(@background), to(@background2));
+
+  background-color: @background2;
+
+}
+
+span.link-sep{
+    margin: 0 5px;
+}
+
+p, ul, ol
+{
+    margin-bottom: 1.5em;
+}
+
+ul,
+ul>li,
+ol,
+ol>li
+{
+    list-style-position: outside;
+}
+
+ul.bullets,
+ul.bullets>li
+{
+    list-style-type: circle;
+}
+
+ul.bullets ul.bullets,
+ul.bullets ul.bullets>li
+{
+    list-style-type: square;
+}
+
+ul.bullets ul.bullets ul.bullets,
+ul.bullets ul.bullets ul.bullets>li
+{
+    list-style-type: disc;
+}
+
+ol,
+ol>li,
+ol.decimal,
+ol.decimal>li
+{
+    list-style-type: decimal;
+}
+
+ol ol,
+ol ol>li,
+ol.Alpha,
+ol.Alpha>li
+{
+    list-style-type: upper-alpha;
+}
+
+ol ol ol,
+ol ol ol>li,
+ol.roman,
+ol.roman>li
+{
+    list-style-type: lower-roman;
+}
+
+ol ol ol ol,
+ol ol ol ol>li,
+ol.alpha,
+ol.alpha>li
+{
+    list-style-type: lower-alpha;
+}
+
+strong,
+.bold
+{
+	font-weight: bold;
+}
+
+.center
+{
+    text-align: center;
+}
+
+#container {
+    margin: 0 auto;
+    text-align: left;
+    background-color: transparent !important;
+
+    a, a:link, a:active {
+        color: @link_color;
+        font-weight: bold;
+        text-decoration: none;
+    }
+    a:hover {
+        color: @link_color * 1.5;
+        text-decoration: underline;
+    }
+}
+
+#header {
+    a, a:link, a:active, a:hover {
+        color: #000;
+        text-decoration: none;
+    }
+
+    h1 {
+        font-family: 'FontinSansSmallCaps', sans-serif;
+        text-shadow: #000 1px 1px 5px;
+        font-size: 74px;
+        line-height: 1em;
+        color: #aaa;
+        padding: 0;
+        margin: 15px 0 5px;
+        text-align: center;
+    }
+
+    .tagline {
+        font-family: 'RalewayThin', sans-serif;
+        color: #ccc;
+        text-shadow: #000 1px 1px 3px;
+        margin: 5px 0 20px;
+        font-weight: bold;
+        font-size: 197%;
+        line-height: 1em;
+        padding: 0;
+    }
+}
+
+#container2 {
+    overflow: auto;
+    padding: 10px 0;
+    margin-bottom: 20px;
+
+    -moz-box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5);
+    background: -moz-linear-gradient(top, @lightbase, @lightbase2);
+    background: -webkit-gradient(linear, 0 0, 0 90%, from(@lightbase), to(@lightbase2));
+
+    background-color: @lightbase;
+
+    border: 1px solid #ccc;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+#main {
+    font-size: 108%;
+    line-height: 1.3em;
+    margin-top: 1em;
+
+    h1, h2, h3, h4, h5 {
+        font-family: 'FontinSansSmallCaps', sans-serif;
+        margin-bottom: .5em;
+    }
+    h1 {
+        color: #222;
+        font-size: 182%;
+    }
+
+    h2 {
+        padding-bottom: 5px;
+        line-height: 1em;
+        color: #444;
+        font-size: 167%;
+    }
+    h3 {
+        color: #666;
+        font-size: 153.9%;
+    }
+
+    h2.game-type {
+        color: #666;
+        font-size: 153.9%;
+    }
+
+    #flash{
+        .info, .error{
+            padding: 5px 20px;
+            margin-bottom: 5px;
+
+            border-radius: 10px;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+
+            .x
+            {
+                float: right;
+                font-weight: bold;
+                cursor: pointer;
+
+                opacity: 0.5;
+            }
+        }
+    }
+
+    .actions{
+        overflow: auto;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        background-color: #fff;
+        margin: 0 0 1.5em;
+
+        .add-game-link, .clear-all-link {
+            float: right;
+        }
+    }
+
+    button.button,
+    a.button
+    {
+        border-radius: 10px;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+    }
+
+    a.button{
+        text-decoration: none;
+        :hover {
+            text-decoration: none;
+        }
+    }
+
+    a.button.positive { color: #529214; }
+    a.button.negative { color: #D12F19; }
+
+    .game {
+        overflow: auto;
+
+        .game-grid {
+            width: 650px;
+            float: left;
+
+            .game-grid-actual {
+                width: 300px;
+                @game_bordercolor: #bbb;
+                border: 1px solid @game_bordercolor;
+
+                input[type=text],
+                input[type=password],
+                input[type=email],
+                input[type=url],
+                input[type=number],
+                input[type=date],
+                input[type=datetime],
+                input[type=month],
+                input[type=week],
+                input[type=time],
+                input[type=search],
+                input[type=color],
+                select,
+                textarea
+                {
+                    width: 100px;
+                }
+
+                .row {
+                    overflow: auto;
+                    border-bottom: 1px solid @game_bordercolor;
+
+                    .cell {
+                        float: left;
+                        width: 148px;
+                        border-right: 1px solid @game_bordercolor;
+                        overflow: auto;
+                        text-align: center;
+                        padding: 10px 0;
+
+                        .entry {
+                            width: 60px;
+                            padding: 5px;
+                            margin: 0.5em 0;
+                            font-size: 1.5em;
+                        }
+
+                        .entry-input {
+                            width: 50px;
+                        }
+
+                        .entry.left, .entry-input.left {
+                            text-align: right;
+                            float: left;
+                        }
+
+                        .entry-input.left { margin-left: 2px; }
+
+                        .entry.right, .entry-input.right {
+                            text-align: left;
+                            float: right;
+                        }
+
+                        .entry-input.right { margin-right: 2px; }
+
+                        .sep {
+                            padding: 5px 0;
+                            margin: 0.5em 0;
+                            display: block;
+                            font-size: 1.5em;
+                        }
+                    }
+                    .cell.last {
+                        border-right: none;
+                    }
+                }
+
+                .row.last{
+                    border-bottom: none;
+                }
+            }
+
+            .visualization {
+                margin-top: 1.5em;
+            }
+        }
+
+        .game-actions {
+            width: 172px;
+            float: right;
+        }
+    }
+
+    fieldset
+    {
+        background-color: @lightbase;
+        border-color: 1px solid @medborder;
+        clear: both;
+
+        border-radius: 10px;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+
+        .form-line
+        {
+            overflow: auto;
+            margin-bottom: .5em;
+        }
+
+        input[type=text],
+        input[type=password],
+        input[type=email],
+        input[type=url],
+        input[type=number],
+        input[type=date],
+        input[type=datetime],
+        input[type=month],
+        input[type=week],
+        input[type=time],
+        input[type=search],
+        input[type=color],
+        select,
+        textarea
+        {
+            width: 75%;
+            margin: 0.5em 0px;
+            padding: 5px;
+        }
+
+        textarea
+        {
+                height: 20em;
+        }
+
+        .field-status
+        {
+            display: inline-block;
+            width: 30px;
+            height: 26px;
+            vertical-align: top;
+            margin-top: 6px;
+            margin-left: 1em;
+            border: 1px solid #ccc;
+
+            border-radius: 10px;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+
+            .status-field-ok,
+            .status-field-not-ok,
+            .status-field-maybe
+            {
+                display: inline-block;
+                width: 30px;
+                height: 26px;
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+
+            .status-field-ok
+            {
+                background-image: url('../images/signup_ok.png');
+            }
+
+            .status-field-not-ok
+            {
+                background-image: url('../images/signup_notok.png');
+            }
+
+            .status-field-maybe
+            {
+                background-image: url('../images/signup_maybe.png');
+            }
+        }
+
+        input.title + .field-status {
+            margin-top: 13px;
+        }
+
+        ul.field-error
+        {
+            color: #f00;
+            margin: 0;
+            margin-bottom: 2px;
+            li{
+                color: #f00;
+            }
+        }
+	}
+
+	fieldset.narrow-fields
+	{
+	    input[type=text],
+            input[type=password],
+            input[type=email],
+            input[type=url],
+            input[type=number],
+            input[type=date],
+            input[type=datetime],
+            input[type=month],
+            input[type=week],
+            input[type=time],
+            input[type=search],
+            input[type=color],
+            select,
+            textarea
+            {
+                width: 50%;
+            }
+	}
+
+        fieldset.wide-fields
+        {
+            input[type=text],
+            input[type=password],
+            input[type=email],
+            input[type=url],
+            input[type=number],
+            input[type=date],
+            input[type=datetime],
+            input[type=month],
+            input[type=week],
+            input[type=time],
+            input[type=search],
+            input[type=color],
+            select,
+            textarea
+            {
+                width: 90%;
+            }
+        }
+
+    ul.form-error
+    {
+        color: #f00;
+        margin-bottom: 2px;
+        padding: 10px;
+        border: 2px solid #800;
+        background-color: #ddd;
+        display: block;
+        font-weight: bold;
+
+        li{
+            color: #f00;
+        }
+    }
+
+}
+
+#footer {
+    margin-top: 1em;
+    border-top: 1px solid #ccc;
+    font-size: 85%;
+}
+
+@font-face {
+	font-family: 'FontinSansSmallCaps';
+	src: url('../fonts/fontin_sans_sc_45b-webfont.eot');
+	src: local('☺'), url('../fonts/fontin_sans_sc_45b-webfont.woff') format('woff'), url('../fonts/fontin_sans_sc_45b-webfont.ttf') format('truetype'), url('../fonts/fontin_sans_sc_45b-webfont.svg#webfontFZcdVJKv') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'RalewayThin';
+	src: url('../fonts/raleway_thin-webfont.eot');
+	src: local('☺'), url('../fonts/raleway_thin-webfont.woff') format('woff'), url('../fonts/raleway_thin-webfont.ttf') format('truetype'), url('../fonts/raleway_thin-webfont.svg#webfontsVpRIgRb') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
