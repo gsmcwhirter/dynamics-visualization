@@ -1,7 +1,14 @@
+/**
+ * The application object. This runs everything
+ *
+ */
 var app = $.sammy("#container2", function (){
     var gamect = 0;
     var _setup = false;
 
+    /**
+     * Determines if the game is symmetric or not
+     */
     function is_symmetric(game){
         return  (game['tl-r'] || 0) == (game['tl-c'] || 0) &&
                 (game['tr-r'] || 0) == (game['bl-c'] || 0) &&
@@ -9,6 +16,10 @@ var app = $.sammy("#container2", function (){
                 (game['br-r'] || 0) == (game['br-c'] || 0);
     }
 
+    /**
+     * Classifies the game
+     *
+     */
     function identify_game(game){
         if (!is_symmetric(game)){
             return false;
@@ -34,6 +45,10 @@ var app = $.sammy("#container2", function (){
         }
     }
 
+    /**
+     * Get the name of the type of the game
+     *
+     */
     function get_game_type(game){
         var type = identify_game(game);
 
@@ -67,6 +82,10 @@ var app = $.sammy("#container2", function (){
         return game_type;
     }
 
+    /**
+     * Makes numbers appear correctly during symmetric entry
+     *
+     */
     function symmetric_input_binding(event){
         var data = event.data;
         var name = data.name;
@@ -90,9 +109,17 @@ var app = $.sammy("#container2", function (){
         }
     }
 
+    /**
+     * Includes
+     *
+     */
     this.use(Sammy.JSON);
     this.use(Sammy.Session);
 
+    /**
+     * This is triggered when the application is started
+     *
+     */
     this.bind('run', function (){
         if (!_setup){
             _setup = true;
@@ -105,6 +132,10 @@ var app = $.sammy("#container2", function (){
         }
     });
 
+    /**
+     * Reloads the games displayed
+     *
+     */
     this.bind('reloadgames', function (e, data){
         $("#games").empty();
         var games = data.games;
@@ -142,6 +173,9 @@ var app = $.sammy("#container2", function (){
         });
     });
 
+    /**
+     * Load a particular game
+     */
     this.bind('loadgame', function (e, data){
         var key = data.key;
 
@@ -240,6 +274,9 @@ var app = $.sammy("#container2", function (){
         new_game.slideDown();
     });
 
+    /**
+     * Reload the permalinks
+     */
     this.bind('permalinks', function (e, data){
         $(".actions .permalink").remove();
         var games = this.session('games') || {};
@@ -249,6 +286,9 @@ var app = $.sammy("#container2", function (){
         $(".actions").prepend(permalink);
     });
 
+    /**
+     * Bind the inputs for symmetric entry
+     */
     this.bind('symbind', function (e, data){
         var form = data.form;
 
@@ -263,6 +303,10 @@ var app = $.sammy("#container2", function (){
         $(".entry-input[name=tl-r]", form).focus();
     });
 
+    /**
+     * Unbind the inputs for symmetric entry
+     *
+     */
     this.bind('symunbind', function (e, data){
         var form = data.form;
 
@@ -272,6 +316,10 @@ var app = $.sammy("#container2", function (){
         $(".entry-input[name=br-r]", form).unbind('keyup.sym blur.sym focus.sym');
     });
 
+    /**
+     * Restricts entry and/or loads preset games
+     *
+     */
     this.bind('restrictgame', function (e, data){
         var presets = data.presets;
         var form = data.form;
@@ -363,6 +411,10 @@ var app = $.sammy("#container2", function (){
         
     });
 
+    /**
+     * Turns row player inputs on
+     *
+     */
     this.bind('rowentry', function (e, data){
         var form = data.form;
         var game = data.game;
@@ -377,6 +429,9 @@ var app = $.sammy("#container2", function (){
         $(".entry-input[name=br-r]", form).val(game ? game['br-r'] : $(".entry-input[name=br-r]", form).val()).show();
     });
 
+    /**
+     * Turns column player inputs on
+     */
     this.bind('colentry', function (e, data){
         var form = data.form;
         var game = data.game;
@@ -391,6 +446,9 @@ var app = $.sammy("#container2", function (){
         $(".entry-input[name=br-c]", form).val(game ? game['br-c'] : $(".entry-input[name=br-c]", form).val()).show();
     });
 
+    /**
+     * Turns row player inputs off
+     */
     this.bind('norowentry', function (e, data){
         var form = data.form;
         var game = data.game;
@@ -405,6 +463,10 @@ var app = $.sammy("#container2", function (){
         $(".entry-input[name=br-r]", form).hide();
     });
 
+    /**
+     * Turns column player inputs off
+     *
+     */
     this.bind('nocolentry', function (e, data){
         var form = data.form;
         var game = data.game;
@@ -419,6 +481,10 @@ var app = $.sammy("#container2", function (){
         $(".entry-input[name=br-c]", form).hide();
     });
 
+    /**
+     * Update the game sorting order
+     *
+     */
     this.bind('updatesort', function (e, data){
         var order = data.order;
         var games = this.session('games');
@@ -435,6 +501,10 @@ var app = $.sammy("#container2", function (){
         this.trigger('permalinks');
     });
 
+    /**
+     * Collapse the display of a game
+     *
+     */
     this.bind('mingame', function (e, data){
         var gamediv = data.gamediv;
         var force = data.force || "";
@@ -450,15 +520,24 @@ var app = $.sammy("#container2", function (){
         }
     });
 
+    /**
+     * Default route. Doesn't do anything special
+     */
     this.get("#!/", function (){
         //todo - directions or something?
         return false;
     });
 
+    /**
+     * Just a fix for a 404. Doesn't do anything either
+     */
     this.get("#!/view-game/:key", function (){
         //todo - anything? (really a 404 fix)
     });
 
+    /**
+     * Collapses all games
+     */
     this.get("#!/collapse-all", function (){
         var self = this;
         $(".game").each(function (index, div){
@@ -468,6 +547,10 @@ var app = $.sammy("#container2", function (){
         this.redirect("#!/")
     });
 
+    /**
+     * Expands all games
+     *
+     */
     this.get("#!/expand-all", function (){
         var self = this;
         $(".game").each(function (index, div){
@@ -477,6 +560,9 @@ var app = $.sammy("#container2", function (){
         this.redirect("#!/")
     });
 
+    /**
+     * Collapse or expand a particular game
+     */
     this.get("#!/toggle-game/:key", function (){
         var key = this.params.key;
 
@@ -485,6 +571,9 @@ var app = $.sammy("#container2", function (){
         this.redirect("#!/");
     });
 
+    /**
+     * Delete all games
+     */
     this.get("#!/clear", function (){
         if (confirm("Are you sure you want to delete all data?")){
             this.session('games', {});
@@ -497,12 +586,20 @@ var app = $.sammy("#container2", function (){
         this.redirect("#!/");
     });
 
+    /**
+     * Add a new game
+     *
+     */
     this.get('#!/add-game', function (){
         var d = new Date();
         var key = hex_sha1(d.getTime() + ":" + d.getMilliseconds());
         this.redirect('#!/add-game/'+key);
     });
 
+    /**
+     * Actually do the work of adding a new game
+     *
+     */
     this.get("#!/add-game/:key", function (){
         var games = this.session('games');
         var key = this.params.key;
@@ -517,6 +614,9 @@ var app = $.sammy("#container2", function (){
         return false;
     });
 
+    /**
+     * Show the edit form for a game
+     */
     this.get('#!/edit-game/:key', function (){
         var games = this.session('games');
         var key = this.params.key;
@@ -548,6 +648,10 @@ var app = $.sammy("#container2", function (){
         }
     });
 
+    /**
+     * Process the edit form for a game
+     *
+     */
     this.post('#!/edit-game/:key', function (context){
         var games = this.session('games');
         var key = this.params.key;
@@ -591,6 +695,10 @@ var app = $.sammy("#container2", function (){
         return false;
     });
 
+    /**
+     * Delete a particular game
+     *
+     */
     this.get("#!/delete-game/:key", function (){
         var games = this.session('games');
         var key = this.params.key;
@@ -610,6 +718,10 @@ var app = $.sammy("#container2", function (){
         }
     });
 
+    /**
+     * Load a permalink
+     *
+     */
     this.get("#!/load/:games", function (){
         var games;
         try {
@@ -631,6 +743,10 @@ var app = $.sammy("#container2", function (){
         this.redirect("#!/");
     });
 
+    /**
+     * Display graphs for a game via loading a java applet
+     *
+     */
     this.get("#!/process/:key", function (){
         var games = this.session('games');
         var count = this.session('applet_count');
@@ -673,6 +789,10 @@ var app = $.sammy("#container2", function (){
 
 });
 
+/**
+ * $(document).ready() shorthand. Makes game list sortable and sets everything in motion.
+ *
+ */
 $(function (){
     $("#games").sortable({
        distance: 25,

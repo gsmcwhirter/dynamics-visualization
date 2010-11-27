@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 /**
- *
+ * JPanel holding CanvasImage pictures
  * @author gmcwhirt
  */
 public class CanvasPanel extends JPanel {
@@ -15,7 +15,12 @@ public class CanvasPanel extends JPanel {
     private CanvasImage _ci;
     private int _chartWidth, _chartHeight, _chartPadding, _realWidth, _realHeight;
 
-    // Constructor
+    /**
+     * Constructor
+     * @param chartWidth The width of the chart
+     * @param chartHeight The height of the chart
+     * @param chartPadding The spacing around the chart
+     */
     public CanvasPanel(int chartWidth, int chartHeight, int chartPadding){
         _chartWidth = chartWidth;
         _chartHeight = chartHeight;
@@ -28,14 +33,28 @@ public class CanvasPanel extends JPanel {
         setVisible( true );   // Make the window visible
     }
 
+    /**
+     * Gets the real chart height
+     * @return The real picture height
+     */
     public int getRealHeight(){
         return _realHeight;
     }
 
+    /**
+     * Gets the real chart width
+     *
+     * @return The real picture width
+     */
     public int getRealWidth(){
         return _realWidth;
     }
 
+    /**
+     * Sets the image shown on this panel
+     *
+     * @param ci The image to display
+     */
     public void setCImage(CanvasImage ci){
         _ci = ci;
     }
@@ -55,6 +74,10 @@ public class CanvasPanel extends JPanel {
         }
     }
 
+    /**
+     * Flush the displayed picture
+     *
+     */
     public void flush(){
         if (_ci != null){
             _ci.flush();

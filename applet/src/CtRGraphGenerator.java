@@ -5,14 +5,34 @@ import java.awt.GraphicsConfiguration;
 import java.awt.Transparency;
 
 /**
- *
+ * Continuous-time replicator graph generator
  * @author gmcwhirt
  */
 public class CtRGraphGenerator extends AbsGraphGenerator {
-    private CanvasImage ci;
+    /**
+     * Runge-Kutta timestep
+     */
     private float RKTimestep = 1e-3f;
+
+    /**
+     * Runge-Kutta duration
+     */
     private float RKDuration = 5e1f;
 
+    /**
+     * Constructor
+     *
+     * @param Ap Payoff A
+     * @param Bp Payoff B
+     * @param Cp Payoff C
+     * @param Dp Payoff D
+     * @param Ep Payoff E
+     * @param Fp Payoff F
+     * @param Gp Payoff G
+     * @param Hp Payoff H
+     * @param width The width of the image
+     * @param height The height of the image
+     */
     public CtRGraphGenerator(int Ap, int Bp, int Cp, int Dp, int Ep, int Fp, int Gp, int Hp, int width, int height){
         A = Ap;
         B = Bp;
@@ -30,11 +50,19 @@ public class CtRGraphGenerator extends AbsGraphGenerator {
         ci = new CanvasImage(gc.createCompatibleImage(width, height, Transparency.BITMASK));
     }
 
+    /**
+     * Get the generated image
+     * @return The generated image
+     */
     @Override
     public CanvasImage getCImage(){
         return ci;
     }
 
+    /**
+     * Generate the image
+     * @return The generated image
+     */
     @Override
     public CanvasImage generate(){
         //we use RK4 for both populations
@@ -101,25 +129,5 @@ public class CtRGraphGenerator extends AbsGraphGenerator {
         return ci;
     }
 
-    private float[] dxydt(float xf, float yf){
-        float[] pops = new float[2];
-        pops[0] = xf;
-        pops[1] = yf;
-
-        float[] dxy = new float[2];
-
-        try{
-            dxy[0] = pops[0] * (payoff(1, 0, pops) - avg_payoff(0, pops));
-        } catch (Exception e){
-            dxy[0] = 0f;
-        }
-
-        try{
-            dxy[1] = pops[1] * (payoff(0, 1, pops) - avg_payoff(1, pops));
-        } catch (Exception e){
-            dxy[1] = 0f;
-        }
-
-        return dxy;
-    }
+    
 }

@@ -5,13 +5,20 @@ import java.awt.GraphicsConfiguration;
 import java.awt.Transparency;
 
 /**
- *
+ * Generate a best-response graph
  * @author gmcwhirt
  */
-public class BRGraphGenerator implements GraphGenerator {
-    private CanvasImage ci;
-    private int A, B, C, D;
+public class BRGraphGenerator extends AbsGraphGenerator {
 
+    /**
+     * Constructor
+     * @param Ap Normalized payoff A
+     * @param Bp Normalized payoff B
+     * @param Cp Normalized payoff C
+     * @param Dp Normalized payoff D
+     * @param width The width of the picture
+     * @param height The height of the picture
+     */
     public BRGraphGenerator(int Ap, int Bp, int Cp, int Dp, int width, int height){
         A = Ap;
         B = Bp;
@@ -25,6 +32,10 @@ public class BRGraphGenerator implements GraphGenerator {
         ci = new CanvasImage(gc.createCompatibleImage(width, height, Transparency.BITMASK));
     }
 
+    /**
+     * Get the q-border (q for player 2)
+     * @return The q-border
+     */
     private float _lqresp(){
         if (A + C > 0){
             return 1f;
@@ -39,6 +50,10 @@ public class BRGraphGenerator implements GraphGenerator {
         }
     }
 
+    /**
+     * Get the p-border (p for player 1)
+     * @return The p-border
+     */
     private float _lpresp(){
         if (B + D > 0){
             return 1f;
@@ -53,11 +68,19 @@ public class BRGraphGenerator implements GraphGenerator {
         }
     }
 
+    /**
+     * Get the generated image
+     * @return The generated image
+     */
     @Override
     public CanvasImage getCImage(){
         return ci;
     }
 
+    /**
+     * Generates the picture
+     * @return The generated picture
+     */
     @Override
     public CanvasImage generate(){
         //draw stuff
