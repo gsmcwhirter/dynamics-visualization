@@ -310,6 +310,10 @@ public class DynVizGraph extends JApplet {
                 try{
                     Thread.sleep(2000);
                 } catch(InterruptedException e){
+                	BRChart.interrupt();
+                	DtRChart.interrupt();
+                	CtRChart.interrupt();
+                	VFChart.interrupt();
                     break;
                 }
                 

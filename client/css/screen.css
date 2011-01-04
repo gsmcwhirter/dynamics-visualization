@@ -310,6 +310,7 @@ strong, .bold {font-weight:bold;}
 #main h2.game-type {color:#666;font-size:153.9%;}
 #main #flash .info, #main #flash .error {padding:5px 20px;margin-bottom:5px;border-radius:10px;-moz-border-radius:10px;-webkit-border-radius:10px;}
 #main #flash .info .x, #main #flash .error .x {float:right;font-weight:bold;cursor:pointer;opacity:0.5;}
+#main #walkthrough, #main #requirements {display:none;}
 #main .actions {overflow:auto;padding:5px;border:1px solid #ccc;border-radius:10px;-moz-border-radius:10px;-webkit-border-radius:10px;background-color:#fff;margin:0 0 1.5em;}
 #main .actions .add-game-link, #main .actions .clear-all-link {float:right;}
 #main button.button, #main a.button {border-radius:10px;-moz-border-radius:10px;-webkit-border-radius:10px;}
@@ -333,6 +334,7 @@ strong, .bold {font-weight:bold;}
 #main .game .game-grid .game-grid-actual .row .cell.last {border-right:none;}
 #main .game .game-grid .game-grid-actual .row.last {border-bottom:none;}
 #main .game .game-grid .visualization {margin-top:1.5em;}
+#main .game .game-grid .legend {float:right;width:190px;margin-top:1.5em;border:1px solid #ccc;padding:5px;display:none;}
 #main .game .game-actions {width:172px;float:right;}
 #main fieldset {background-color:#ffffff;border-color:1px solid #888888;clear:both;border-radius:10px;-webkit-border-radius:10px;-moz-border-radius:10px;}
 #main fieldset .form-line {overflow:auto;margin-bottom:.5em;}
@@ -351,6 +353,7 @@ strong, .bold {font-weight:bold;}
 #main ul.form-error {color:#f00;margin-bottom:2px;padding:10px;border:2px solid #800;background-color:#ddd;display:block;font-weight:bold;}
 #main ul.form-error li {color:#f00;}
 #footer {margin-top:1em;border-top:1px solid #ccc;font-size:85%;}
+#subheader {margin-bottom:1em;border-bottom:1px solid #ccc;font-size:85%;}
 @font-face {font-family:'FontinSansSmallCaps';src:url('../fonts/fontin_sans_sc_45b-webfont.eot');src:local('☺'), url('../fonts/fontin_sans_sc_45b-webfont.woff') format('woff'), url('../fonts/fontin_sans_sc_45b-webfont.ttf') format('truetype'), url('../fonts/fontin_sans_sc_45b-webfont.svg#webfontFZcdVJKv') format('svg');font-weight:normal;font-style:normal;}
 @font-face {font-family:'RalewayThin';src:url('../fonts/raleway_thin-webfont.eot');src:local('☺'), url('../fonts/raleway_thin-webfont.woff') format('woff'), url('../fonts/raleway_thin-webfont.ttf') format('truetype'), url('../fonts/raleway_thin-webfont.svg#webfontsVpRIgRb') format('svg');font-weight:normal;font-style:normal;}
 
@@ -363,3 +366,4 @@ strong, .bold {font-weight:bold;}
 #main {float:left;margin-right:10px;width:590px;padding-right:40px;padding-left:40px;}
 #header {margin-right:0;padding-right:0;float:left;margin-right:10px;margin-right:0;width:950px;margin-right:0;}
 #container {width:950px;margin:0 auto;display:block;margin:0 auto;text-align:left;background-color:transparent !important;}
+#subheader {margin-right:0;padding-right:0;float:left;margin-right:10px;margin-right:0;width:870px;padding-right:40px;padding-left:40px;}

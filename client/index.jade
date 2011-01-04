@@ -24,6 +24,12 @@ html
       #header
         h1 Dynamics Visualization
       #container2
+        #subheader
+          a(href="#!/") Games
+          span.link-sep
+          a(href="#!/walkthrough") Demonstration
+          span.link-sep
+          a(href="#!/requirements") System Requirements
         #main.wide
           .actions
             a.button.negative.clear-all-link(href="#!/clear") delete all
@@ -31,12 +37,54 @@ html
             a.button.collapse-all-link(href="#!/collapse-all") collapse all
             a.button.expand-all-link(href="#!/expand-all") expand all
           #games
+          #walkthrough
+            h2 System Demonstration
+            p
+              | Coming soon...
+          #requirements
+            h2 System Requirements
+            p
+              | This website has been tested and verified to work under the following
+              | operating systems, web browsers, and Java versions. Other versions may
+              | work, but are not guaranteed to do so.
+            p
+              | Most problems users experience are caused by out of date versions of Java.
+            h3 Operating Systems
+            ul
+              li Microsoft Windows XP and later
+              li Apple OS X 10.5.8 and later
+              li Ubuntu Linux 10.04 and later
+            h3 Web Browsers
+            ul
+              li 
+                a(href="http://www.mozilla.com/en-US/firefox/") Mozilla Firefox 3.5 and later
+              li
+                a(href="http://www.apple.com/safari/") Apple Safari 5 and later
+              li 
+                a(href="http://www.google.com/chrome/") Google Chrome 9 and later
+              li
+                a(href="http://www.opera.com/browser/") Opera 11 and later
+              li
+                a(href="http://www.microsoft.com/windows/internet-explorer/default.aspx") Microsoft Internet Explorer 8 and later
+            h3 Java Versions
+            ul
+              li
+                a(href="http://www.java.com/en/download/") Java Version 6 and later
           .actions
             a.button.negative.clear-all-link(href="#!/clear") delete all
             a.button.add-game-link(href="#!/add-game") add game
             a.button.collapse-all-link(href="#!/collapse-all") collapse all
             a.button.expand-all-link(href="#!/expand-all") expand all
         #footer
+          a(href="#!/") Games
+          span.link-sep
+          a(href="#!/walkthrough") Demonstration
+          span.link-sep
+          a(href="#!/requirements") System Requirements
+          span.link-sep
+          | Written by&#32;
+          a(href="https://webfiles.uci.edu/gmcwhirt/www") Gregory McWhirter
+
           //| Copyright &copy; 2010 Gregory McWhirter, released under the&#32;
           //a(href="http://www.opensource.org/licenses/mit-license.php") MIT License
           //| . Code is available at the&#32;

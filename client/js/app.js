@@ -22,9 +22,9 @@ var app = $.sammy("#container2", function (){
      */
     function identify_game(game){
         if (!is_symmetric(game)){
-            return false;
+            return is_battleofthesexes(game) || is_matchingpennies(game) || is_zerosum(game) || false;
         }
-
+        
         var a = (game['tl-r'] || 0) - (game['bl-r'] || 0);
         var b = (game['br-r'] || 0) - (game['tr-r'] || 0);
 
@@ -46,6 +46,62 @@ var app = $.sammy("#container2", function (){
     }
 
     /**
+     * Determines if the game is a Battle of the Sexes
+     *
+     */
+    function is_battleofthesexes(game){
+        var min = Math.min(game['tl-r'], game['tl-c'], game['tr-r'], game['tl-c'],
+                game['bl-r'], game['bl-c'], game['br-r'], game['br-c']);
+
+        var game2 = {};
+
+        game2['tl-r'] = game['tl-r'] - min;
+        game2['tr-r'] = game['tr-r'] - min;
+        game2['bl-r'] = game['bl-r'] - min;
+        game2['br-r'] = game['br-r'] - min;
+        game2['tl-c'] = game['tl-c'] - min;
+        game2['tr-c'] = game['tr-c'] - min;
+        game2['bl-c'] = game['bl-c'] - min;
+        game2['br-c'] = game['br-c'] - min;
+
+        if (Math.min(game2['tr-r'], game2['tr-c'], game2['bl-r'], game2['bl-c']) == 0 &&
+            Math.max(game2['tr-r'], game2['tr-c'], game2['bl-r'], game2['bl-c']) == 0 &&
+            (game2['tl-r'] - game2['tl-c']) * (game2['br-r'] - game2['br-c']) < 0){
+                return 'bos';
+        }
+
+        if (Math.min(game2['tl-r'], game2['tl-c'], game2['br-r'], game2['br-c']) == 0 &&
+            Math.max(game2['tl-r'], game2['tl-c'], game2['br-r'], game2['br-c']) == 0 &&
+            (game2['tr-r'] - game2['tr-c']) * (game2['bl-r'] - game2['bl-c']) < 0){
+                return 'bos';
+        }
+
+        return false;
+    }
+
+    /**
+     * Determines if the game is a Matching Pennies
+     *
+     */
+    function is_matchingpennies(game){
+        return  is_zerosum(game) &&
+                (game['tl-r'] + game['tr-r'] == 0) &&
+                (game['tl-r'] + game['bl-r'] == 0) &&
+                (game['bl-r'] + game['br-r'] == 0) ? 'mp' : false;
+    }
+
+    /**
+     * Determines if the game is zero-sum
+     *
+     */
+    function is_zerosum(game){
+        return  (game['tl-r'] + game['tl-c'] == 0) &&
+                (game['tr-r'] + game['tr-c'] == 0) &&
+                (game['bl-r'] + game['bl-c'] == 0) &&
+                (game['br-r'] + game['br-c'] == 0) ? 'zsum' : false;
+    }
+
+    /**
      * Get the name of the type of the game
      *
      */
@@ -53,30 +109,34 @@ var app = $.sammy("#container2", function (){
         var type = identify_game(game);
 
         var game_type;
-        if (type){
-            game_type = "Symmetric";
-            switch(type){
-                case "hd":
-                    game_type += ", Hawk-Dove";
-                    break;
-                case "pd":
-                    game_type += ", Prisoner's Dilemma";
-                    break;
-                case "pl":
-                    game_type += ", Prisoner's Delight";
-                    break;
-                case "sh":
-                    game_type += ", Stag Hunt";
-                    break;
-                case "edge":
-                    game_type += ", Edge Case";
-                    break;
-                default:
-                    game_type += "";
-            }
-        }
-        else {
-            game_type = "Asymmetric";
+        
+        switch(type){
+            case "hd":
+                game_type = "Symmetric, Hawk-Dove";
+                break;
+            case "pd":
+                game_type = "Symmetric, Prisoner's Dilemma";
+                break;
+            case "pl":
+                game_type = "Symmetric, Prisoner's Delight";
+                break;
+            case "sh":
+                game_type = "Symmetric, Stag Hunt";
+                break;
+            case "edge":
+                game_type = "Symmetric, Edge Case";
+                break;
+            case "mp":
+                game_type = "Asymmetric, Matching Pennies";
+                break;
+            case "bos":
+                game_type = "Asymmetric, Battle of the Sexes";
+                break;
+            case "zsum":
+                game_type = "Asymmetric, Zero-Sum";
+                break;
+            default:
+                game_type = "Asymmetric";
         }
 
         return game_type;
@@ -103,7 +163,28 @@ var app = $.sammy("#container2", function (){
             target += "c";
 
             $(".entry-input[name="+target+"]", form).val(val);
-            $(".entry."+target).text(val || 0);
+            $(".entry."+target, form).text(val || 0);
+        } else {
+            console.log("error");
+        }
+    }
+
+    /**
+     * Makes numbers appear correctly during zero-sum entry
+     *
+     */
+    function zerosum_input_binding(event){
+        var data = event.data;
+        var name = data.name;
+        var form = $(data.form);
+        var val = $(this).val();
+
+        if (name){
+            var target = name.substring(0, name.length - 1);
+            target += "c";
+
+            $(".entry-input[name="+target+"]", form).val(val * -1);
+            $(".entry."+target, form).text(val * -1 || 0);
         } else {
             console.log("error");
         }
@@ -200,7 +281,7 @@ var app = $.sammy("#container2", function (){
                 ["%fieldset.wide-fields",[
                     [".game-actions", [
                         ["%button.button.positive.save-button",{style: !input ? "display: none;" : "", tabindex: tabindex + 11},"save game"],
-                        ["%a.button.positive.process-button",{href: "#!/process/"+key, style: input ? "display: none;" : ""}, "process game"],
+                        ["%a.button.positive.process-button",{href: "#!/process/"+key, style: input ? "display: none;" : ""}, "generate graphs"],
                         ["%br"],
                         ["%a.button.edit-button",{href: "#!/edit-game/"+key, style: input ? "display: none;" : ""},"edit game"],
                         ["%br.edit-button", {style: input ? "display: none;" : ""}],
@@ -225,6 +306,11 @@ var app = $.sammy("#container2", function (){
                                 ["%option", {value: "pd"}, "Prisoner's Dilemma"],
                                 ["%option", {value: "hd"}, "Hawk-Dove"],
                                 ["%option", {value: "pl"}, "Prisoner's Delight"]
+                            ]],
+                            ["%optgroup", {label: "Asymmetric Games"}, [
+                                ["%option", {value: "zsum"}, "Free Zero-sum Game"],
+                                ["%option", {value: "mp"}, "Matching Pennies"],
+                                ["%option", {value: "bos"}, "Battle of the Sexes"]
                             ]]
                         ]],
                         [".game-grid-actual", [
@@ -260,6 +346,20 @@ var app = $.sammy("#container2", function (){
                                     ["%span.sep", ","]
                                 ]]
                             ]]
+                        ]],
+                        [".legend", [
+                            ["%h4", "Graph Axes"],
+                            ["%p", "The graph axes in each graph correspond directly to the upper/lower and \
+                                        left/right strategies available to the Row Player and Column Player."],
+                            ["%h4", "Top Left"],
+                            ["%p", "This graph shows the Best Response Dynamics. \
+                                        Row Player's best response curve is in red, and Column Player's is in blue."],
+                            ["%h4", "Top Right"],
+                            ["%p", "This graph shows solution trajectories of the discrete time replicator dynamics."],
+                            ["%h4", "Bottom Left"],
+                            ["%p", "This graph shows the continuous time replicator dynamics differential vector field."],
+                            ["%h4", "Bottom Right"],
+                            ["%p", "This graph shows solution trajectories of the continuous time replicator dynamics."],
                         ]]
                     ]]
 
@@ -317,6 +417,36 @@ var app = $.sammy("#container2", function (){
     });
 
     /**
+     * Bind the inputs for zero-sum entry
+     */
+    this.bind('zsumbind', function (e, data){
+        var form = data.form;
+
+        $(".entry-input[name=tl-r]", form).bind('keyup.zsum blur.zsum focus.zsum', {name: 'tl-r', form: form}, zerosum_input_binding);
+        $(".entry-input[name=tr-r]", form).bind('keyup.zsum blur.zsum focus.zsum', {name: 'tr-r', form: form}, zerosum_input_binding);
+        $(".entry-input[name=bl-r]", form).bind('keyup.zsum blur.zsum focus.zsum', {name: 'bl-r', form: form}, zerosum_input_binding);
+        $(".entry-input[name=br-r]", form).bind('keyup.zsum blur.zsum focus.zsum', {name: 'br-r', form: form}, zerosum_input_binding);
+
+        $(".entry-input[name=br-r]", form).focus();
+        $(".entry-input[name=bl-r]", form).focus();
+        $(".entry-input[name=tr-r]", form).focus();
+        $(".entry-input[name=tl-r]", form).focus();
+    });
+
+    /**
+     * Unbind the inputs for symmetric entry
+     *
+     */
+    this.bind('zsumunbind', function (e, data){
+        var form = data.form;
+
+        $(".entry-input[name=tl-r]", form).unbind('keyup.zsum blur.zsum focus.zsum');
+        $(".entry-input[name=tr-r]", form).unbind('keyup.zsum blur.zsum focus.zsum');
+        $(".entry-input[name=bl-r]", form).unbind('keyup.zsum blur.zsum focus.zsum');
+        $(".entry-input[name=br-r]", form).unbind('keyup.zsum blur.zsum focus.zsum');
+    });
+//here
+    /**
      * Restricts entry and/or loads preset games
      *
      */
@@ -330,11 +460,19 @@ var app = $.sammy("#container2", function (){
             switch(preset){
                 case "f":
                     this.trigger('symunbind', {form: form});
+                    this.trigger('zsumunbind', {form: form});
                     this.trigger("rowentry", {form: form});
                     this.trigger("colentry", {form: form});
                     break;
                 case "s":
+                    this.trigger('zsumunbind', {form: form});
                     this.trigger('symbind', {form: form});
+                    this.trigger("rowentry", {form: form});
+                    this.trigger("nocolentry", {form: form});
+                    break;
+                case "zsum":
+                    this.trigger('symunbind', {form: form});
+                    this.trigger('zsumbind', {form: form});
                     this.trigger("rowentry", {form: form});
                     this.trigger("nocolentry", {form: form});
                     break;
@@ -350,6 +488,7 @@ var app = $.sammy("#container2", function (){
                         'br-c': 1
                     };
                     this.trigger('symunbind', {form: form});
+                    this.trigger('zsumunbind', {form: form});
                     this.trigger("rowentry", {form: form, game: game});
                     this.trigger("colentry", {form: form, game: game});
                     this.trigger("norowentry", {form: form});
@@ -367,6 +506,7 @@ var app = $.sammy("#container2", function (){
                         'br-c': 0
                     };
                     this.trigger('symunbind', {form: form});
+                    this.trigger('zsumunbind', {form: form});
                     this.trigger("rowentry", {form: form, game: game});
                     this.trigger("colentry", {form: form, game: game});
                     this.trigger("norowentry", {form: form});
@@ -384,6 +524,7 @@ var app = $.sammy("#container2", function (){
                         'br-c': 2
                     };
                     this.trigger('symunbind', {form: form});
+                    this.trigger('zsumunbind', {form: form});
                     this.trigger("rowentry", {form: form, game: game});
                     this.trigger("colentry", {form: form, game: game});
                     this.trigger("norowentry", {form: form});
@@ -401,6 +542,43 @@ var app = $.sammy("#container2", function (){
                         'br-c': 0
                     };
                     this.trigger('symunbind', {form: form});
+                    this.trigger('zsumunbind', {form: form});
+                    this.trigger("rowentry", {form: form, game: game});
+                    this.trigger("colentry", {form: form, game: game});
+                    this.trigger("norowentry", {form: form});
+                    this.trigger("nocolentry", {form: form});
+                    break;
+                case "mp":
+                    game = {
+                        'tl-r': 1,
+                        'tr-r': -1,
+                        'bl-r': -1,
+                        'br-r': 1,
+                        'tl-c': -1,
+                        'tr-c': 1,
+                        'bl-c': 1,
+                        'br-c': -1
+                    };
+                    this.trigger('symunbind', {form: form});
+                    this.trigger('zsumunbind', {form: form});
+                    this.trigger("rowentry", {form: form, game: game});
+                    this.trigger("colentry", {form: form, game: game});
+                    this.trigger("norowentry", {form: form});
+                    this.trigger("nocolentry", {form: form});
+                    break;
+                case "bos":
+                    game = {
+                        'tl-r': 3,
+                        'tr-r': 0,
+                        'bl-r': 0,
+                        'br-r': 2,
+                        'tl-c': 2,
+                        'tr-c': 0,
+                        'bl-c': 0,
+                        'br-c': 3
+                    };
+                    this.trigger('symunbind', {form: form});
+                    this.trigger('zsumunbind', {form: form});
                     this.trigger("rowentry", {form: form, game: game});
                     this.trigger("colentry", {form: form, game: game});
                     this.trigger("norowentry", {form: form});
@@ -524,7 +702,10 @@ var app = $.sammy("#container2", function (){
      * Default route. Doesn't do anything special
      */
     this.get("#!/", function (){
-        //todo - directions or something?
+        $("#walkthrough").hide();
+        $("#requirements").hide();
+        $(".actions").show();
+        $("#games").show();
         return false;
     });
 
@@ -533,6 +714,28 @@ var app = $.sammy("#container2", function (){
      */
     this.get("#!/view-game/:key", function (){
         //todo - anything? (really a 404 fix)
+    });
+
+    /**
+     * Shows the walkthrough
+     *
+     */
+    this.get("#!/walkthrough", function (){
+       $(".actions").hide();
+       $("#games").hide();
+       $("#requirements").hide();
+       $("#walkthrough").show();
+    });
+
+    /**
+     * Shows the system requirements
+     *
+     */
+    this.get("#!/requirements", function (){
+       $(".actions").hide();
+       $("#games").hide();
+       $("#walkthrough").hide();
+       $("#requirements").show();
     });
 
     /**
@@ -628,6 +831,7 @@ var app = $.sammy("#container2", function (){
             form.addClass('editing');
             var self = this;
             $(".game-grid .visualization", form).remove();
+            $(".game-grid .legend", form).hide();
             form.slideUp(function (){
                 $("input[name=label]", form).val(game.label).show();
                 $("select.presets", form).show();
@@ -666,7 +870,9 @@ var app = $.sammy("#container2", function (){
         game['bl-c'] = parseInt(this.params['bl-c'] || 0);
         game['br-r'] = parseInt(this.params['br-r'] || 0);
         game['br-c'] = parseInt(this.params['br-c'] || 0);
-        game['pics'] = {};
+
+        this.log(this.params);
+        this.log(game);
 
         games[key] = game;
         this.session('games', games);
@@ -779,6 +985,7 @@ var app = $.sammy("#container2", function (){
             }
 
             $("#game-"+key+" .game-grid .visualization").remove();
+            $("#game-"+key+" .game-grid .legend").show();
             $("#game-"+key+" .game-grid").haml(hml);
 
             this.session('applet_count', count);
