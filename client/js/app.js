@@ -717,28 +717,6 @@ var app = $.sammy("#container2", function (){
     });
 
     /**
-     * Shows the walkthrough
-     *
-     */
-    this.get("#!/walkthrough", function (){
-       $(".actions").hide();
-       $("#games").hide();
-       $("#requirements").hide();
-       $("#walkthrough").show();
-    });
-
-    /**
-     * Shows the system requirements
-     *
-     */
-    this.get("#!/requirements", function (){
-       $(".actions").hide();
-       $("#games").hide();
-       $("#walkthrough").hide();
-       $("#requirements").show();
-    });
-
-    /**
      * Collapses all games
      */
     this.get("#!/collapse-all", function (){
@@ -994,6 +972,46 @@ var app = $.sammy("#container2", function (){
         this.redirect("#!/");
     });
 
+    /**
+     * Shows the system requirements
+     *
+     */
+    this.get("#!/requirements", function (){
+       $(".actions").hide();
+       $("#games").hide();
+       $("#walkthrough").hide();
+       $("#requirements").show();
+    });
+    
+    /**
+     * Shows the walkthrough
+     *
+     */
+    this.get("#!/walkthrough", function (){
+       this.redirect("#!/walkthrough/step0");
+    });
+
+    this.get("#!/walkthrough/:step", function(){
+        $(".actions").hide();
+        $("#games").hide();
+        $("#requirements").hide();
+        $("#walkthrough").show();
+
+        var step = this.params.step;
+
+        if (!step){
+            step = "step0";
+        }
+
+        if ($("#walkthrough ."+step).length || step == "step0"){
+            $("#walkthrough .step").hide();
+            $("#walkthrough ."+step).show();
+        }
+        else {
+            this.redirect("#!/walkthrough/step0");
+        }
+    });
+
 });
 
 /**
@@ -1010,6 +1028,8 @@ $(function (){
            app.trigger("updatesort", {order: $("#games").sortable("toArray")});
        }
     });
+
+    $("a.lightbox").lightBox({fixedNavigation: true});
 
    app.run("#!/");
 });
