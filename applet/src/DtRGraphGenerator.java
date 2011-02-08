@@ -63,16 +63,6 @@ public class DtRGraphGenerator extends AbsGraphGenerator {
             H -= min;
         }
 
-        System.out.println(A);
-        System.out.println(B);
-        System.out.println(C);
-        System.out.println(D);
-        System.out.println(E);
-        System.out.println(F);
-        System.out.println(G);
-        System.out.println(H);
-
-
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice gs = ge.getDefaultScreenDevice();
         GraphicsConfiguration gc = gs.getDefaultConfiguration();
@@ -120,19 +110,9 @@ public class DtRGraphGenerator extends AbsGraphGenerator {
 
                 startpoints[ptct] = newxy.clone();
 
-                System.out.println("new");
-
-                System.out.print(newxy[0]);
-                System.out.print(", ");
-                System.out.println(newxy[1]);
-
                 do {
                     oldxy = newxy.clone();
                     newxy = genstep(oldxy);
-
-                    System.out.print(newxy[0]);
-                    System.out.print(", ");
-                    System.out.println(newxy[1]);
 
                     ci.drawArrow(oldxy[0], oldxy[1], newxy[0], newxy[1], colors[colorct]);
                 } while (Math.abs(oldxy[0] - newxy[0]) > tolerance || Math.abs(oldxy[1] - newxy[1]) > tolerance);
