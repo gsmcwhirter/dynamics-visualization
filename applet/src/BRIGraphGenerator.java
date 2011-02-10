@@ -77,8 +77,52 @@ public class BRIGraphGenerator extends AbsGraphGenerator {
         return ci;
     }
 
-    protected void _drawFrom(float xf, float yf, Color color){
+    protected float getTargetQY(float xf, float yf, float qlim, float lrespy){
+        float yyf;
 
+        if (Float.isNaN(qlim) || Float.isInfinite(qlim)){
+            if (A < 0){
+                yyf = 0f;
+            } else if (A > 0) {
+                yyf = 1f;
+            } else {
+                yyf = yf;
+            }
+        } else if (Float.isNaN(lrespy)) {
+            yyf = yf;
+        } else if (xf < qlim){
+            yyf = lrespy;
+        } else if (xf > qlim){
+            yyf = 1f - lrespy;
+        } else {
+            yyf = yf;
+        }
+
+        return yyf;
+    }
+
+    protected float getTargetPX(float xf, float yf, float plim, float lrespx){
+        float xxf;
+
+        if (Float.isNaN(plim) || Float.isInfinite(plim)){
+            if (D > 0){
+                xxf = 1f;
+            } else if (D < 0) {
+                xxf = 0f;
+            } else {
+                xxf = xf;
+            }
+        } else if (Float.isNaN(lrespx)) {
+            xxf = xf;
+        } else if (yf < plim){
+            xxf = lrespx;
+        } else if (yf > plim){
+            xxf = 1f - lrespx;
+        } else {
+            xxf = xf;
+        }
+
+        return xxf;
     }
 
     /**
@@ -96,7 +140,8 @@ public class BRIGraphGenerator extends AbsGraphGenerator {
 
         Color[] colors = new Color[2];
         colors[0] = Color.green;
-        colors[1] = Color.yellow;
+        //colors[1] = Color.yellow;
+        colors[1] = Color.green;
 
         int colorct = 0;
         int ptct = 0;
@@ -105,8 +150,11 @@ public class BRIGraphGenerator extends AbsGraphGenerator {
         boolean done, skipdraw;
         float m, b;
         float hitpx, hitpy, hitqx, hitqy;
-        float pdist, qdist;
+        float pdist, qdist, targetdist;
         float xfl, yfl;
+        float targetx, targety;
+        int iterations;
+        boolean samedirectionp, samedirectionq;
 
         //graph arrows
         int dots = 9; //effectively 10
@@ -126,13 +174,7 @@ public class BRIGraphGenerator extends AbsGraphGenerator {
 
                 done = false;
 
-                int iterations = 0;
-
-                System.out.println("");
-                System.out.print("Starting at ");
-                System.out.print(xf);
-                System.out.print(",");
-                System.out.println(yf);
+                iterations = 0;
 
                 xfl = xf;
                 yfl = yf;
@@ -140,14 +182,12 @@ public class BRIGraphGenerator extends AbsGraphGenerator {
                 do {
                     skipdraw = false;
                     iterations++;
-                    System.out.print("iteration ");
-                    System.out.println(iterations);
-                    if (xf == qlim && yf == plim){
+
+                    if(xf == qlim && yf == plim){
                         xxf = xf;
                         yyf = yf;
                     }
-                    else if(xf == qlim)
-                    {
+                    else if(xf == qlim){
                         if (xfl < qlim){
                             //moving left to right
                             xxf = xf + 0.00001f;
@@ -162,8 +202,10 @@ public class BRIGraphGenerator extends AbsGraphGenerator {
                         }
                         else {
                             //stayed on the line -- stay put on x
-                            xxf = qlim;
+                            xxf = xf;
                             yyf = yf;
+                            skipdraw = true;
+                            done = true;
                         }
                     }
                     else if (yf == plim){
@@ -182,134 +224,77 @@ public class BRIGraphGenerator extends AbsGraphGenerator {
                         else {
                             //stayed on the line -- stay put on y
                             xxf = xf;
-                            yyf = plim;
-                        }
-                    }
-                    else if(xf < qlim && yf < plim)
-                    {
-                        if (lrespx > qlim || lrespy > plim){
-                            m = (lrespy - yf) / (lrespx - xf);
-                            b = yf - m * xf;
-
-                            hitpx = (plim - b) / m;
-                            hitpy = plim;
-
-                            hitqx = qlim;
-                            hitqy = m * qlim + b;
-
-                            pdist = (float)Math.pow(xf - hitpx, 2) + (float)Math.pow(yf - hitpy, 2);
-                            qdist = (float)Math.pow(xf - hitqx, 2) + (float)Math.pow(yf - hitqy, 2);
-
-                            if (pdist < qdist){
-                                xxf = hitpx;
-                                yyf = hitpy;
-                            }
-                            else {
-                                xxf = hitqx;
-                                yyf = hitqy;
-                            }
-                        }
-                        else {
-                            xxf = lrespx;
-                            yyf = lrespy;
-                        }
-                    }
-                    else if (xf < qlim && yf > plim){
-                        if (1f - lrespx > qlim || lrespy < plim){
-                            m = (lrespy - yf) / (1f - lrespx - xf);
-                            b = yf - m * xf;
-
-                            hitpx = (plim - b) / m;
-                            hitpy = plim;
-
-                            hitqx = qlim;
-                            hitqy = m * qlim + b;
-
-                            pdist = (float)Math.pow(xf - hitpx, 2) + (float)Math.pow(yf - hitpy, 2);
-                            qdist = (float)Math.pow(xf - hitqx, 2) + (float)Math.pow(yf - hitqy, 2);
-
-                            if (pdist < qdist){
-                                xxf = hitpx;
-                                yyf = hitpy;
-                            }
-                            else {
-                                xxf = hitqx;
-                                yyf = hitqy;
-                            }
-                        }
-                        else {
-                            xxf = 1f - lrespx;
-                            yyf = lrespy;
-                        }
-                    }
-                    else if (xf > qlim && yf < plim){
-                        if (lrespx < qlim || 1f - lrespy > plim){
-                            m = (1f - lrespy - yf) / (lrespx - xf);
-                            b = yf - m * xf;
-
-                            hitpx = (plim - b) / m;
-                            hitpy = plim;
-
-                            hitqx = qlim;
-                            hitqy = m * qlim + b;
-
-                            pdist = (float)Math.pow(xf - hitpx, 2) + (float)Math.pow(yf - hitpy, 2);
-                            qdist = (float)Math.pow(xf - hitqx, 2) + (float)Math.pow(yf - hitqy, 2);
-
-                            if (pdist < qdist){
-                                xxf = hitpx;
-                                yyf = hitpy;
-                            }
-                            else {
-                                xxf = hitqx;
-                                yyf = hitqy;
-                            }
-                        }
-                        else {
-                            xxf = lrespx;
-                            yyf = 1f - lrespy;
-                        }
-                    }
-                    else if (xf > qlim && yf > plim){
-                        if (1f - lrespx < qlim || 1f - lrespy < plim){
-                            m = (1f - lrespy - yf) / (1f - lrespx - xf);
-                            b = yf - m * xf;
-
-                            hitpx = (plim - b) / m;
-                            hitpy = plim;
-
-                            hitqx = qlim;
-                            hitqy = m * qlim + b;
-
-                            pdist = (float)Math.pow(xf - hitpx, 2) + (float)Math.pow(yf - hitpy, 2);
-                            qdist = (float)Math.pow(xf - hitqx, 2) + (float)Math.pow(yf - hitqy, 2);
-
-                            if (pdist < qdist){
-                                xxf = hitpx;
-                                yyf = hitpy;
-                            }
-                            else {
-                                xxf = hitqx;
-                                yyf = hitqy;
-                            }
-                        }
-                        else {
-                            xxf = 1f - lrespx;
-                            yyf = 1f - lrespy;
+                            yyf = yf;
+                            skipdraw = true;
+                            done = true;
                         }
                     }
                     else {
-                        xxf = xf;
-                        yyf = yf;
+                        targetx = getTargetPX(xf, yf, plim, lrespx);
+                        targety = getTargetQY(xf, yf, qlim, lrespy);
+
+                        if ((xf < qlim && targetx > qlim) ||
+                            (xf > qlim && targetx < qlim) ||
+                            (yf < plim && targety > plim) ||
+                            (yf > plim && targety < plim)){
+
+                            if (targetx == xf){
+                                //we must be crossing the y
+                                xxf = xf;
+                                yyf = plim;
+                            }
+                            else {
+                                m = (targety - yf) / (targetx - xf);
+                                b = yf - m * xf;
+
+                                samedirectionp = false;
+                                samedirectionq = false;
+
+                                hitpx = (plim - b) / m;
+                                hitpy = plim;
+
+                                hitqx = qlim;
+                                hitqy = m * qlim + b;
+
+                                pdist = (float)Math.pow(xf - hitpx, 2) + (float)Math.pow(yf - hitpy, 2);
+                                qdist = (float)Math.pow(xf - hitqx, 2) + (float)Math.pow(yf - hitqy, 2);
+                                targetdist = (float)Math.pow(xf - targetx, 2) + (float)Math.pow(yf - targety, 2);
+
+                                //we use an abbreviated version of the dot-product angle calculation between vectors
+                                samedirectionp = ((targetx - xf) * (hitpx - xf) + (targety - yf) * (hitpy - yf)) > 0;
+                                samedirectionq = ((targetx - xf) * (hitqx - xf) + (targety - yf) * (hitqy - yf)) > 0;
+
+                                if (samedirectionp && samedirectionq){
+                                    if (pdist < qdist){
+                                        xxf = hitpx;
+                                        yyf = hitpy;
+                                    }
+                                    else {
+                                        xxf = hitqx;
+                                        yyf = hitqy;
+                                    }
+                                }
+                                else if (samedirectionp){
+                                    xxf = hitpx;
+                                    yyf = hitpy;
+                                }
+                                else {
+                                    xxf = hitqx;
+                                    yyf = hitqy;
+                                }
+                            }
+                        }
+                        else {
+                            xxf = targetx;
+                            yyf = targety;
+                        }
+
                     }
 
                     System.out.print("iterating at ");
                     System.out.print(xxf);
                     System.out.print(",");
                     System.out.println(yyf);
-
-                    //temp
-                    //done = true;
 
                     xfl = xf;
                     yfl = yf;
@@ -326,7 +311,7 @@ public class BRIGraphGenerator extends AbsGraphGenerator {
                         ci.drawArrow(xfl, yfl, xxf, yyf, colors[colorct], Color.black);
                     }
                     
-                } while (!done);
+                } while (!done && iterations < 20);
 
                 colorct++;
                 if (colorct >= 2){

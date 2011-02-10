@@ -54,14 +54,14 @@ public class DynVizGraph extends JApplet {
     /**
      * Default payoff values should none be passed in.
      */
-    private int payoffAd = 3;
-    private int payoffBd = 3;
-    private int payoffCd = 2;
-    private int payoffDd = 4;
-    private int payoffEd = 4;
-    private int payoffFd = 2;
-    private int payoffGd = 0;
-    private int payoffHd = 0;
+    private int payoffAd = 1;
+    private int payoffBd = -1;
+    private int payoffCd = -1;
+    private int payoffDd = 1;
+    private int payoffEd = -1;
+    private int payoffFd = 1;
+    private int payoffGd = 1;
+    private int payoffHd = -1;
 
     /**
      * Worker threads to draw the pictures and repaint to show progress.
@@ -216,7 +216,6 @@ public class DynVizGraph extends JApplet {
          */
 
         RepaintThread = new Thread(new Repainter());
-        //BRThread = new Thread(new GraphGeneratorRunner(new BRGraphGenerator(payoffA - payoffE, payoffB - payoffD, payoffG - payoffC, payoffH - payoffF, BRChart.getRealWidth(), BRChart.getRealHeight()), GraphGeneratorRunner.BR));
         BRThread = new Thread(new GraphGeneratorRunner(new BRIGraphGenerator(payoffA - payoffE, payoffB - payoffD, payoffG - payoffC, payoffH - payoffF, BRChart.getRealWidth(), BRChart.getRealHeight()), GraphGeneratorRunner.BR));
         DtRThread = new Thread(new GraphGeneratorRunner(new DtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, payoffE, payoffF, payoffG, payoffH, DtRChart.getRealWidth(), DtRChart.getRealHeight()), GraphGeneratorRunner.DTR));
         CtRThread = new Thread(new GraphGeneratorRunner(new CtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, payoffE, payoffF, payoffG, payoffH, CtRChart.getRealWidth(), CtRChart.getRealHeight()), GraphGeneratorRunner.CTR));
