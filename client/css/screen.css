@@ -317,7 +317,7 @@ strong, .bold {font-weight:bold;}
 #main a.button :hover {text-decoration:none;}
 #main a.button.positive {color:#529214;}
 #main a.button.negative {color:#D12F19;}
-#main #walkthrough, #main #requirements {display:none;background-color:#ffffff;border:1px solid #cccccc;clear:both;border-radius:10px;-webkit-border-radius:10px;-moz-border-radius:10px;padding:1.4em;}
+#main #walkthrough, #main #requirements {background-color:#ffffff;border:1px solid #cccccc;clear:both;border-radius:10px;-webkit-border-radius:10px;-moz-border-radius:10px;padding:1.4em;}
 #main .game {overflow:auto;}
 #main .game .game-grid {width:650px;float:left;}
 #main .game .game-grid .game-grid-actual {width:300px;border:1px solid #bbbbbb;}
