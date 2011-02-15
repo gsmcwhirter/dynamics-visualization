@@ -5,7 +5,7 @@ import java.awt.GraphicsConfiguration;
 import java.awt.Transparency;
 
 /**
- *
+ * Generates a vector field picture
  * @author gmcwhirt
  */
 public class VFGraphGenerator extends AbsGraphGenerator {
@@ -14,9 +14,20 @@ public class VFGraphGenerator extends AbsGraphGenerator {
      *      A, B    |   C, D
      *      E, F    |   G, H
      */
-    private CanvasImage ci;
-    //private int A, B, C, D, E, F, G, H;
 
+    /**
+     * Constructor
+     * @param Ap Payoff A
+     * @param Bp Payoff B
+     * @param Cp Payoff C
+     * @param Dp Payoff D
+     * @param Ep Payoff E
+     * @param Fp Payoff F
+     * @param Gp Payoff G
+     * @param Hp Payoff H
+     * @param width The width of the image to generate
+     * @param height The height of the image to generate
+     */
     public VFGraphGenerator(int Ap, int Bp, int Cp, int Dp, int Ep, int Fp, int Gp, int Hp, int width, int height){
         A = Ap;
         B = Bp;
@@ -34,11 +45,19 @@ public class VFGraphGenerator extends AbsGraphGenerator {
         ci = new CanvasImage(gc.createCompatibleImage(width, height, Transparency.BITMASK));
     }
 
+    /**
+     * Gets the image generated
+     * @return the image generated
+     */
     @Override
     public CanvasImage getCImage(){
         return ci;
     }
 
+    /**
+     * Generates the image
+     * @return The image generated
+     */
     @Override
     public CanvasImage generate(){
 
@@ -67,16 +86,4 @@ public class VFGraphGenerator extends AbsGraphGenerator {
         return ci;
     }
 
-    private float[] dxydt(float xf, float yf) throws Exception{
-        float[] pops = new float[2];
-        pops[0] = xf;
-        pops[1] = yf;
-
-        float[] dxy = new float[2];
-
-        dxy[0] = pops[0] * (payoff(1, 0, pops) - avg_payoff(0, pops));
-        dxy[1] = pops[1] * (payoff(0, 1, pops) - avg_payoff(1, pops));
-
-        return dxy;
-    }
 }

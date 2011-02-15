@@ -5,20 +5,35 @@ import java.awt.GraphicsConfiguration;
 import java.awt.Transparency;
 
 /**
- *
+ * Discrete-time replicator graph generator
  * @author gmcwhirt
  */
 public class DtRGraphGenerator extends AbsGraphGenerator {
-    private CanvasImage ci;
     /*
      * The grid is:
      *      A, B    |   C, D
      *      E, F    |   G, H
      */
-    //private int A, B, C, D, E, F, G, H;
 
+    /**
+     * Tolerance for fixation
+     */
     private float tolerance = 1e-5f;
 
+    /**
+     * Constructor
+     *
+     * @param Ap Payoff A
+     * @param Bp Payoff B
+     * @param Cp Payoff C
+     * @param Dp Payoff D
+     * @param Ep Payoff E
+     * @param Fp Payoff F
+     * @param Gp Payoff G
+     * @param Hp Payoff H
+     * @param width The width of the picture
+     * @param height The height of the picture
+     */
     public DtRGraphGenerator(int Ap, int Bp, int Cp, int Dp, int Ep, int Fp, int Gp, int Hp, int width, int height){
         A = Ap;
         B = Bp;
@@ -48,16 +63,6 @@ public class DtRGraphGenerator extends AbsGraphGenerator {
             H -= min;
         }
 
-        System.out.println(A);
-        System.out.println(B);
-        System.out.println(C);
-        System.out.println(D);
-        System.out.println(E);
-        System.out.println(F);
-        System.out.println(G);
-        System.out.println(H);
-
-
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice gs = ge.getDefaultScreenDevice();
         GraphicsConfiguration gc = gs.getDefaultConfiguration();
@@ -65,11 +70,19 @@ public class DtRGraphGenerator extends AbsGraphGenerator {
         ci = new CanvasImage(gc.createCompatibleImage(width, height, Transparency.BITMASK));
     }
 
+    /**
+     * Get the generated image
+     * @return The generated image
+     */
     @Override
     public CanvasImage getCImage(){
         return ci;
     }
 
+    /**
+     * Generate the image
+     * @return The generated image
+     */
     @Override
     public CanvasImage generate(){
 
@@ -97,19 +110,9 @@ public class DtRGraphGenerator extends AbsGraphGenerator {
 
                 startpoints[ptct] = newxy.clone();
 
-                System.out.println("new");
-
-                System.out.print(newxy[0]);
-                System.out.print(", ");
-                System.out.println(newxy[1]);
-
                 do {
                     oldxy = newxy.clone();
                     newxy = genstep(oldxy);
-
-                    System.out.print(newxy[0]);
-                    System.out.print(", ");
-                    System.out.println(newxy[1]);
 
                     ci.drawArrow(oldxy[0], oldxy[1], newxy[0], newxy[1], colors[colorct]);
                 } while (Math.abs(oldxy[0] - newxy[0]) > tolerance || Math.abs(oldxy[1] - newxy[1]) > tolerance);
@@ -133,6 +136,11 @@ public class DtRGraphGenerator extends AbsGraphGenerator {
         return ci;
     }
 
+    /**
+     * Calculate the next population proportions
+     * @param oldxy The old population proportions
+     * @return The new population proportions
+     */
     private float[] genstep(float[] oldxy){
         float[] newxy = new float[2];
 

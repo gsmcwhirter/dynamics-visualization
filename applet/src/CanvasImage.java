@@ -7,12 +7,17 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Ellipse2D;
 
 /**
- *
+ * Wrapper around a buffered image to allow for easier drawing
+ * 
  * @author gmcwhirt
  */
 public class CanvasImage {
     private BufferedImage _bi;
 
+    /**
+     * Constructor
+     * @param bi The buffered image to wrap.
+     */
     public CanvasImage(BufferedImage bi){
         _bi = bi;
         Graphics2D g2d = _bi.createGraphics();
@@ -20,14 +25,30 @@ public class CanvasImage {
         g2d.drawRect(0, 0, _bi.getWidth() - 1, _bi.getHeight() - 1);
     }
 
+    /**
+     * Get the buffered image being wrapped
+     * @return The buffered image
+     */
     public BufferedImage getImage(){
         return _bi;
     }
 
+    /**
+     * Flush the buffered image
+     */
     public void flush(){
         _bi.flush();
     }
 
+    /**
+     * Draw a line from and to the specified coordinates with the specified color
+     *
+     * @param x1 Starting x in (0,1)
+     * @param y1 Starting y in (0,1)
+     * @param x2 Ending x in (0,1)
+     * @param y2 Ending y in (0,1)
+     * @param color The color of the line
+     */
     public void drawLine(float x1, float y1, float x2, float y2, Color color){
         int _height = _bi.getHeight() - 1;
         int _width = _bi.getWidth() - 1;
@@ -44,6 +65,14 @@ public class CanvasImage {
         g2d.draw(new Line2D.Float(xx1, yy1, xx2, yy2));
     }
 
+    /**
+     * Draw a black line from and to the specified coordinates
+     *
+     * @param x1 Starting x in (0,1)
+     * @param y1 Starting y in (0,1)
+     * @param x2 Ending x in (0,1)
+     * @param y2 Ending y in (0,1)
+     */
     public void drawLine(float x1, float y1, float x2, float y2){
         drawLine(x1, y1, x2, y2, Color.black);
     }
@@ -52,7 +81,16 @@ public class CanvasImage {
         int type = AlphaComposite.SRC_OVER;
         return(AlphaComposite.getInstance(type, alpha));
     }
-    
+
+    /**
+     * Draw a dot at the specified location with the specified radius in the
+     * specified color
+     *
+     * @param x Coordinate x in (0,1)
+     * @param y Coordinate y in (0,1)
+     * @param r Radius of the dot (in raw units, not just (0,1))
+     * @param color Color of the dot
+     */
     public void drawDot(float x, float y, float r, Color color){
         Graphics2D g = _bi.createGraphics();
         
@@ -67,18 +105,48 @@ public class CanvasImage {
         g.fill(new Ellipse2D.Float(xp, yp, 2 * r, 2 * r));
     }
 
+    /**
+     * Draw a r=3px dot at the specified location in the specified color
+     *
+     * @param x Coordinate x in (0,1)
+     * @param y Coordinate y in (0,1)
+     * @param color Color of the dot
+     */
     public void drawDot(float x, float y, Color color){
         drawDot(x, y, 3f, color);
     }
 
+    /**
+     * Draw a black r=3px dot at the specified location
+     *
+     * @param x Coordinate x in (0,1)
+     * @param y Coordinate y in (0,1)
+     */
     public void drawDot(float x, float y){
         drawDot(x, y, Color.black);
     }
 
+    /**
+     * Draw a black dot at the specified location with the specified radius
+     *
+     * @param x Coordinate x in (0,1)
+     * @param y Coordinate y in (0,1)
+     * @param r Radius of the dot (in raw units, not just (0,1))
+     */
     public void drawDot(float x, float y, float r){
         drawDot(x, y, r, Color.black);
     }
 
+    /**
+     * Draw an arrow from one point to another with the specified body and head colors
+     *
+     * @param x1 Starting x in (0,1)
+     * @param y1 Starting y in (0,1)
+     * @param x2 Ending x in (0,1)
+     * @param y2 Ending y in (0,1)
+     * @param lcolor The color of the line
+     * @param acolor The color of the arrow head
+     */
     public void drawArrow(float x1, float y1, float x2, float y2, Color lcolor, Color acolor){
         int _height = _bi.getHeight() - 1;
         int _width = _bi.getWidth() - 1;
@@ -92,14 +160,41 @@ public class CanvasImage {
         _drawArrow(xx1, yy1, xx2, yy2, lcolor, acolor);
     }
 
+    /**
+     * Draw an arrow from one point to another with the specified body and head color
+     *
+     * @param x1 Starting x in (0,1)
+     * @param y1 Starting y in (0,1)
+     * @param x2 Ending x in (0,1)
+     * @param y2 Ending y in (0,1)
+     * @param color The color of the line and arrow head
+     */
     public void drawArrow(float x1, float y1, float x2, float y2, Color color){
         drawArrow(x1, y1, x2, y2, color, color);
     }
 
+    /**
+     * Draw a black arrow from one point to another
+     *
+     * @param x1 Starting x in (0,1)
+     * @param y1 Starting y in (0,1)
+     * @param x2 Ending x in (0,1)
+     * @param y2 Ending y in (0,1)
+     */
     public void drawArrow(float x1, float y1, float x2, float y2){
         drawArrow(x1, y1, x2, y2, Color.black, Color.black);
     }
 
+    /**
+     * Draw the actual arrows from the drawArrow functions
+     *
+     * @param x Corrected starting x coordinate
+     * @param y Corrected starting y coordinate
+     * @param xx Corrected ending x coordinate
+     * @param yy Corrected ending y coordinate
+     * @param lcolor The color of the line
+     * @param acolor The color of the arrow head
+     */
     private void _drawArrow(float x, float y, float xx, float yy, Color lcolor, Color acolor )
     {
         Graphics2D g = _bi.createGraphics();

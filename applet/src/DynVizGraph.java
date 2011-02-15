@@ -10,15 +10,24 @@ import java.awt.GridLayout;
 
 
 /**
+ * Main class of the applet. It kicks off everything else.
  *
  * @author gmcwhirt
  */
 public class DynVizGraph extends JApplet {
 
+    /**
+     * Width, height, and spacing for the pictures
+     *
+     */
     private int chartWidth = 210;  // The width of the canvas panel
     private int chartHeight = 210; // The height of the canvas panel
     private int chartPadding = 5;
 
+    /**
+     * The widgets on which the pictures are drawn
+     *
+     */
     private CanvasPanel BRChart;
     private CanvasPanel DtRChart;
     private CanvasPanel CtRChart;
@@ -29,6 +38,10 @@ public class DynVizGraph extends JApplet {
      *      A, B    |   C, D
      *      E, F    |   G, H
      */
+
+    /**
+     * Payoff values
+     */
     private int payoffA;
     private int payoffB;
     private int payoffC;
@@ -38,6 +51,9 @@ public class DynVizGraph extends JApplet {
     private int payoffG;
     private int payoffH;
 
+    /**
+     * Default payoff values should none be passed in.
+     */
     private int payoffAd = 1;
     private int payoffBd = -1;
     private int payoffCd = -1;
@@ -47,12 +63,20 @@ public class DynVizGraph extends JApplet {
     private int payoffGd = 1;
     private int payoffHd = -1;
 
+    /**
+     * Worker threads to draw the pictures and repaint to show progress.
+     *
+     */
     private Thread BRThread;
     private Thread DtRThread;
     private Thread CtRThread;
     private Thread VFThread;
     private Thread RepaintThread;
 
+    /**
+     * Flags for the worker threads being done so that we can stop the repainter
+     *
+     */
     private boolean BRThreadDone = false;
     private boolean DtRThreadDone = false;
     private boolean CtRThreadDone = false;
@@ -72,6 +96,10 @@ public class DynVizGraph extends JApplet {
         }
     }
 
+    /**
+     * Grabs the parameter values and kicks everything off
+     *
+     */
     public void goBabyGo(){
         Container c = getContentPane();
 
@@ -188,7 +216,7 @@ public class DynVizGraph extends JApplet {
          */
 
         RepaintThread = new Thread(new Repainter());
-        BRThread = new Thread(new GraphGeneratorRunner(new BRGraphGenerator(payoffA - payoffE, payoffB - payoffD, payoffG - payoffC, payoffH - payoffF, BRChart.getRealWidth(), BRChart.getRealHeight()), GraphGeneratorRunner.BR));
+        BRThread = new Thread(new GraphGeneratorRunner(new BRIGraphGenerator(payoffA - payoffE, payoffB - payoffD, payoffG - payoffC, payoffH - payoffF, BRChart.getRealWidth(), BRChart.getRealHeight()), GraphGeneratorRunner.BR));
         DtRThread = new Thread(new GraphGeneratorRunner(new DtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, payoffE, payoffF, payoffG, payoffH, DtRChart.getRealWidth(), DtRChart.getRealHeight()), GraphGeneratorRunner.DTR));
         CtRThread = new Thread(new GraphGeneratorRunner(new CtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, payoffE, payoffF, payoffG, payoffH, CtRChart.getRealWidth(), CtRChart.getRealHeight()), GraphGeneratorRunner.CTR));
         VFThread = new Thread(new GraphGeneratorRunner(new VFGraphGenerator(payoffA, payoffB, payoffC, payoffD, payoffE, payoffF, payoffG, payoffH, VFChart.getRealWidth(), VFChart.getRealHeight()), GraphGeneratorRunner.VF));
@@ -212,6 +240,12 @@ public class DynVizGraph extends JApplet {
         VFThread.interrupt();
     }
 
+    /**
+     * Sets the pictures onto their respective panes
+     *
+     * @param ci The picture to set
+     * @param typ Indicator for which pane to place it on
+     */
     private void GraphInfo(CanvasImage ci, int typ){
         CanvasPanel chart = null;
 
@@ -231,6 +265,11 @@ public class DynVizGraph extends JApplet {
         }
     }
 
+    /**
+     * Tell the repainter that one of the workers is done
+     *
+     * @param typ Indicator for which worker is done
+     */
     private void DoneThread(int typ){
 
         if (typ == GraphGeneratorRunner.BR){
@@ -244,6 +283,9 @@ public class DynVizGraph extends JApplet {
         }
     }
 
+    /**
+     * Repainter thread class
+     */
     class Repainter implements Runnable{
 
         @Override
@@ -268,6 +310,10 @@ public class DynVizGraph extends JApplet {
                 try{
                     Thread.sleep(2000);
                 } catch(InterruptedException e){
+                	BRThread.interrupt();
+                	DtRThread.interrupt();
+                	CtRThread.interrupt();
+                	VFThread.interrupt();
                     break;
                 }
                 
@@ -275,15 +321,28 @@ public class DynVizGraph extends JApplet {
         }
     }
 
+    /**
+     * Picture worker thread class
+     *
+     */
     class GraphGeneratorRunner implements Runnable {
         private GraphGenerator _gen;
         private int _typ;
 
+        /**
+         * Indicator types
+         */
         final static int BR = 1;
         final static int DTR = 2;
         final static int CTR = 3;
         final static int VF = 4;
 
+        /**
+         * Constructor
+         *
+         * @param gen A picture generator instance
+         * @param typ Indicator for which type of generator it is
+         */
         public GraphGeneratorRunner(GraphGenerator gen, int typ){
             _gen = gen;
             _typ = typ;

@@ -6,3 +6,5 @@ client/css/site.css
 server/static
 build
 dist
+applet/master-applet.jnlp
+applet/preview-applet.html
