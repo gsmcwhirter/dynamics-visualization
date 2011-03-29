@@ -295,6 +295,7 @@ ol ol ol, ol ol ol > li, ol.roman, ol.roman > li {list-style-type:lower-roman;}
 ol ol ol ol, ol ol ol ol > li, ol.alpha, ol.alpha > li {list-style-type:lower-alpha;}
 strong, .bold {font-weight:bold;}
 .center {text-align:center;}
+.text-right {text-align:right;}
 #container {margin:0 auto;text-align:left;background-color:transparent !important;}
 #container a, #container a:link, #container a:active {color:#a75416;font-weight:bold;text-decoration:none;}
 #container a:hover {color:#fb7e21;text-decoration:underline;}
@@ -320,19 +321,27 @@ strong, .bold {font-weight:bold;}
 #main #walkthrough, #main #requirements {background-color:#ffffff;border:1px solid #cccccc;clear:both;border-radius:10px;-webkit-border-radius:10px;-moz-border-radius:10px;padding:1.4em;}
 #main .game {overflow:auto;}
 #main .game .game-grid {width:650px;float:left;}
-#main .game .game-grid .game-grid-actual {width:300px;border:1px solid #bbbbbb;}
+#main .game .game-grid .game-grid-actual .game-grid-actual-inner {width:300px;border:1px solid #bbbbbb;}
 #main .game .game-grid .game-grid-actual input[type=text], #main .game .game-grid .game-grid-actual input[type=password], #main .game .game-grid .game-grid-actual input[type=email], #main .game .game-grid .game-grid-actual input[type=url], #main .game .game-grid .game-grid-actual input[type=number], #main .game .game-grid .game-grid-actual input[type=date], #main .game .game-grid .game-grid-actual input[type=datetime], #main .game .game-grid .game-grid-actual input[type=month], #main .game .game-grid .game-grid-actual input[type=week], #main .game .game-grid .game-grid-actual input[type=time], #main .game .game-grid .game-grid-actual input[type=search], #main .game .game-grid .game-grid-actual input[type=color], #main .game .game-grid .game-grid-actual select, #main .game .game-grid .game-grid-actual textarea {width:100px;}
 #main .game .game-grid .game-grid-actual .row {overflow:auto;border-bottom:1px solid #bbbbbb;}
 #main .game .game-grid .game-grid-actual .row .cell {float:left;width:148px;border-right:1px solid #bbbbbb;overflow:auto;text-align:center;padding:10px 0;}
 #main .game .game-grid .game-grid-actual .row .cell .entry {width:60px;padding:5px;margin:0.5em 0;font-size:1.5em;}
+#main .game .game-grid .game-grid-actual .row .cell .entry.header {width:auto;}
+#main .game .game-grid .game-grid-actual .row .cell .entry.header.text-right {width:auto;margin-right:30px;}
 #main .game .game-grid .game-grid-actual .row .cell .entry-input {width:50px;}
+#main .game .game-grid .game-grid-actual .row .cell .entry-input.header {width:100px;}
+#main .game .game-grid .game-grid-actual .row .cell .entry-input.header.text-right {margin-right:30px;}
 #main .game .game-grid .game-grid-actual .row .cell .entry.left, #main .game .game-grid .game-grid-actual .row .cell .entry-input.left {text-align:right;float:left;}
 #main .game .game-grid .game-grid-actual .row .cell .entry-input.left {margin-left:2px;}
 #main .game .game-grid .game-grid-actual .row .cell .entry.right, #main .game .game-grid .game-grid-actual .row .cell .entry-input.right {text-align:left;float:right;}
 #main .game .game-grid .game-grid-actual .row .cell .entry-input.right {margin-right:2px;}
 #main .game .game-grid .game-grid-actual .row .cell .sep {padding:5px 0;margin:0.5em 0;display:block;font-size:1.5em;}
+#main .game .game-grid .game-grid-actual .row .cell.double {width:302px;}
+#main .game .game-grid .game-grid-actual .row .cell.header {border:none;}
+#main .game .game-grid .game-grid-actual .row .cell.header.vert {padding-top:11px;padding-bottom:15px;text-align:right;}
+#main .game .game-grid .game-grid-actual .row .cell.header.horiz {padding-top:none;padding-bottom:5px;text-align:center;}
 #main .game .game-grid .game-grid-actual .row .cell.last {border-right:none;}
-#main .game .game-grid .game-grid-actual .row.last {border-bottom:none;}
+#main .game .game-grid .game-grid-actual .row.last, #main .game .game-grid .game-grid-actual row.header {border-bottom:none;}
 #main .game .game-grid .visualization {margin-top:1.5em;}
 #main .game .game-grid .legend {float:right;width:190px;margin-top:1.5em;border:1px solid #ccc;padding:5px;display:none;}
 #main .game .game-actions {width:172px;float:right;}

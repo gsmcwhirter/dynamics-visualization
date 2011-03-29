@@ -133,6 +133,10 @@ strong,
     text-align: center;
 }
 
+.text-right {
+    text-align: right;
+}
+
 #container {
     margin: 0 auto;
     text-align: left;
@@ -301,9 +305,13 @@ strong,
             float: left;
 
             .game-grid-actual {
-                width: 300px;
+                
                 @game_bordercolor: #bbb;
-                border: 1px solid @game_bordercolor;
+
+                .game-grid-actual-inner {
+                    width: 300px;
+                    border: 1px solid @game_bordercolor;
+                }
 
                 input[type=text],
                 input[type=password],
@@ -342,8 +350,25 @@ strong,
                             font-size: 1.5em;
                         }
 
+                        .entry.header {
+                            width: auto;
+                        }
+
+                        .entry.header.text-right {
+                            width: auto;
+                            margin-right: 30px;
+                        }
+
                         .entry-input {
                             width: 50px;
+                        }
+
+                        .entry-input.header {
+                            width: 100px;
+                        }
+
+                        .entry-input.header.text-right {
+                            margin-right: 30px;
                         }
 
                         .entry.left, .entry-input.left {
@@ -367,12 +392,33 @@ strong,
                             font-size: 1.5em;
                         }
                     }
+
+                    .cell.double {
+                        width: 302px;
+                    }
+
+                    .cell.header {
+                        border: none;
+                    }
+
+                    .cell.header.vert {
+                        padding-top: 11px;
+                        padding-bottom: 15px;
+                        text-align: right;
+                    }
+
+                    .cell.header.horiz {
+                        padding-top: none;
+                        padding-bottom: 5px;
+                        text-align: center;
+                    }
+
                     .cell.last {
                         border-right: none;
                     }
                 }
 
-                .row.last{
+                .row.last, row.header{
                     border-bottom: none;
                 }
             }

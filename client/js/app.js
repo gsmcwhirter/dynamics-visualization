@@ -196,6 +196,7 @@ var app = $.sammy("#container2", function (){
      */
     this.use(Sammy.JSON);
     this.use(Sammy.Session);
+    this.use(Sammy.GoogleAnalytics);
 
     /**
      * This is triggered when the application is started
@@ -270,7 +271,7 @@ var app = $.sammy("#container2", function (){
             game = data.game;
         }
 
-        var tabindex = (gamect * 12);
+        var tabindex = (gamect * 16);
         gamect++;
         
         var new_game = $("<div />").addClass('game').attr('id','game-'+key);
@@ -280,12 +281,12 @@ var app = $.sammy("#container2", function (){
             ["%form"+(input ? ".editing" : ""), {action: "#!/edit-game/"+key, method: "POST", "accept-charset": "utf-8"},[
                 ["%fieldset.wide-fields",[
                     [".game-actions", [
-                        ["%button.button.positive.save-button",{style: !input ? "display: none;" : "", tabindex: tabindex + 11},"save game"],
+                        ["%button.button.positive.save-button",{style: !input ? "display: none;" : "", tabindex: tabindex + 15},"save game"],
                         ["%a.button.positive.process-button",{href: "#!/process/"+key, style: input ? "display: none;" : ""}, "generate graphs"],
                         ["%br"],
                         ["%a.button.edit-button",{href: "#!/edit-game/"+key, style: input ? "display: none;" : ""},"edit game"],
                         ["%br.edit-button", {style: input ? "display: none;" : ""}],
-                        ["%a.button.negative",{href: "#!/delete-game/"+key, tabindex: tabindex + 12}, "delete game"]
+                        ["%a.button.negative",{href: "#!/delete-game/"+key, tabindex: tabindex + 16}, "delete game"]
                     ]],
                     [".game-header", [
                         ["%a#!/add-game/"+key, " "],
@@ -314,36 +315,67 @@ var app = $.sammy("#container2", function (){
                             ]]
                         ]],
                         [".game-grid-actual", [
-                            [".row", [
-                                [".cell", [
-                                    ["%input.entry-input.right.text", {type: "text", name: "tl-c", placeholder: "Col TL", style: !input ? "display: none;" : "", tabindex: ++tabindex + 1}],
-                                    [".entry.right.tl-c", {style: input ? "display: none;" : ""}, game['tl-c'] || 0],
-                                    ["%input.entry-input.left.text", {type: "text", name: "tl-r", placeholder: "Row TL", style: !input ? "display: none;" : "", tabindex: ++tabindex - 1}],
-                                    [".entry.left.tl-r", {style: input ? "display: none;" : ""}, game['tl-r'] || 0],
-                                    ["%span.sep", ","]
+                            [".row.last", [
+                                [".cell.header.horiz", ""],
+                                [".cell.header.horiz", [
+                                    ["%input.entry-input.header.center.text", {type: "text", name: "h1-c", placeholder: "Act 1", style: !input ? "display: none;" : "", tabindex: tabindex + 11}, game['h1-c'] || "C"],
+                                    [".entry.header.center.h1-c", {style: input ? "display: none;" : ""}, game['h1-c'] || "C"]
                                 ]],
-                                [".cell.last", [
-                                    ["%input.entry-input.right.text", {type: "text", name: "tr-c", placeholder: "Col TR", style: !input ? "display: none;" : "", tabindex: ++tabindex + 1}],
-                                    [".entry.right.tr-c", {style: input ? "display: none;" : ""}, game['tr-c'] || 0],
-                                    ["%input.entry-input.left.text", {type: "text", name: "tr-r", placeholder: "Row TR", style: !input ? "display: none;" : "", tabindex: ++tabindex - 1}],
-                                    [".entry.left.tr-r", {style: input ? "display: none;" : ""}, game['tr-r'] || 0],
-                                    ["%span.sep", ","]
+                                [".cell.header.horiz", [
+                                    ["%input.entry-input.header.center.text", {type: "text", name: "h2-c", placeholder: "Act 2", style: !input ? "display: none;" : "", tabindex: tabindex + 12}, game['h2-c'] || "D"],
+                                    [".entry.header.center.h2-c", {style: input ? "display: none;" : ""}, game['h2-c'] || "D"]
                                 ]]
                             ]],
                             [".row.last", [
-                                [".cell", [
-                                    ["%input.entry-input.right.text", {type: "text", name: "bl-c", placeholder: "Col BL", style: !input ? "display: none;" : "", tabindex: ++tabindex + 1}],
-                                    [".entry.right.bl-c", {style: input ? "display: none;" : ""}, game['bl-c'] || 0],
-                                    ["%input.entry-input.left.text", {type: "text", name: "bl-r", placeholder: "Row BL", style: !input ? "display: none;" : "", tabindex: ++tabindex - 1}],
-                                    [".entry.left.bl-r", {style: input ? "display: none;" : ""}, game['bl-r'] || 0],
-                                    ["%span.sep", ","]
+                                [".cell.header", [
+                                    [".row.last", [
+                                        [".cell.header.vert", [
+                                            ["%input.entry-input.header.text-right.text", {type: "text", name: "h1-r", placeholder: "Act 1", style: !input ? "display: none;" : "", tabindex: tabindex + 9}, game['h1-r'] || "C"],
+                                            [".entry.header.text-right.h1-r", {style: input ? "display: none;" : ""}, game['h1-r'] || "C"]
+                                        ]]
+                                    ]],
+                                    [".row.last", [
+                                        [".cell.header.vert", [
+                                            ["%input.entry-input.header.text-right.text", {type: "text", name: "h2-r", placeholder: "Act 2", style: !input ? "display: none;" : "", tabindex: tabindex + 10}, game['h2-r'] || "D"],
+                                            [".entry.header.text-right.h2-r", {style: input ? "display: none;" : ""}, game['h2-r'] || "D"]
+                                        ]]
+                                    ]]
                                 ]],
-                                [".cell.last", [
-                                    ["%input.entry-input.right.text", {type: "text", name: "br-c", placeholder: "Col BR", style: !input ? "display: none;" : "", tabindex: ++tabindex + 1}],
-                                    [".entry.right.br-c", {style: input ? "display: none;" : ""}, game['br-c'] || 0],
-                                    ["%input.entry-input.left.text", {type: "text", name: "br-r", placeholder: "Row BR", style: !input ? "display: none;" : "", tabindex: ++tabindex - 1}],
-                                    [".entry.left.br-r", {style: input ? "display: none;" : ""}, game['br-r'] || 0],
-                                    ["%span.sep", ","]
+                                [".cell.double.last", [
+                                    [".game-grid-actual-inner", [
+                                        [".row", [
+                                            [".cell", [
+                                                ["%input.entry-input.right.text", {type: "text", name: "tl-c", placeholder: "Col TL", style: !input ? "display: none;" : "", tabindex: ++tabindex + 1}],
+                                                [".entry.right.tl-c", {style: input ? "display: none;" : ""}, game['tl-c'] || 0],
+                                                ["%input.entry-input.left.text", {type: "text", name: "tl-r", placeholder: "Row TL", style: !input ? "display: none;" : "", tabindex: ++tabindex - 1}],
+                                                [".entry.left.tl-r", {style: input ? "display: none;" : ""}, game['tl-r'] || 0],
+                                                ["%span.sep", ","]
+                                            ]],
+                                            [".cell.last", [
+                                                ["%input.entry-input.right.text", {type: "text", name: "tr-c", placeholder: "Col TR", style: !input ? "display: none;" : "", tabindex: ++tabindex + 1}],
+                                                [".entry.right.tr-c", {style: input ? "display: none;" : ""}, game['tr-c'] || 0],
+                                                ["%input.entry-input.left.text", {type: "text", name: "tr-r", placeholder: "Row TR", style: !input ? "display: none;" : "", tabindex: ++tabindex - 1}],
+                                                [".entry.left.tr-r", {style: input ? "display: none;" : ""}, game['tr-r'] || 0],
+                                                ["%span.sep", ","]
+                                            ]]
+                                        ]],
+                                        [".row.last", [
+                                            [".cell", [
+                                                ["%input.entry-input.right.text", {type: "text", name: "bl-c", placeholder: "Col BL", style: !input ? "display: none;" : "", tabindex: ++tabindex + 1}],
+                                                [".entry.right.bl-c", {style: input ? "display: none;" : ""}, game['bl-c'] || 0],
+                                                ["%input.entry-input.left.text", {type: "text", name: "bl-r", placeholder: "Row BL", style: !input ? "display: none;" : "", tabindex: ++tabindex - 1}],
+                                                [".entry.left.bl-r", {style: input ? "display: none;" : ""}, game['bl-r'] || 0],
+                                                ["%span.sep", ","]
+                                            ]],
+                                            [".cell.last", [
+                                                ["%input.entry-input.right.text", {type: "text", name: "br-c", placeholder: "Col BR", style: !input ? "display: none;" : "", tabindex: ++tabindex + 1}],
+                                                [".entry.right.br-c", {style: input ? "display: none;" : ""}, game['br-c'] || 0],
+                                                ["%input.entry-input.left.text", {type: "text", name: "br-r", placeholder: "Row BR", style: !input ? "display: none;" : "", tabindex: ++tabindex - 1}],
+                                                [".entry.left.br-r", {style: input ? "display: none;" : ""}, game['br-r'] || 0],
+                                                ["%span.sep", ","]
+                                            ]]
+                                        ]]
+                                    ]]
                                 ]]
                             ]]
                         ]],
@@ -463,18 +495,21 @@ var app = $.sammy("#container2", function (){
                     this.trigger('zsumunbind', {form: form});
                     this.trigger("rowentry", {form: form});
                     this.trigger("colentry", {form: form});
+                    this.trigger("noautolabel", {form: form});
                     break;
                 case "s":
                     this.trigger('zsumunbind', {form: form});
                     this.trigger('symbind', {form: form});
                     this.trigger("rowentry", {form: form});
                     this.trigger("nocolentry", {form: form});
+                    this.trigger("noautolabel", {form: form});
                     break;
                 case "zsum":
                     this.trigger('symunbind', {form: form});
                     this.trigger('zsumbind', {form: form});
                     this.trigger("rowentry", {form: form});
                     this.trigger("nocolentry", {form: form});
+                    this.trigger("noautolabel", {form: form});
                     break;
                 case "pd":
                     game = {
@@ -485,7 +520,11 @@ var app = $.sammy("#container2", function (){
                         'tl-c': 3,
                         'tr-c': 4,
                         'bl-c': 0,
-                        'br-c': 1
+                        'br-c': 1,
+                        'h1-c': 'C',
+                        'h2-c': 'D',
+                        'h1-r': 'C',
+                        'h2-r': 'D'
                     };
                     this.trigger('symunbind', {form: form});
                     this.trigger('zsumunbind', {form: form});
@@ -493,6 +532,7 @@ var app = $.sammy("#container2", function (){
                     this.trigger("colentry", {form: form, game: game});
                     this.trigger("norowentry", {form: form});
                     this.trigger("nocolentry", {form: form});
+                    this.trigger("autolabel", {form: form, game: game});
                     break;
                 case "pl":
                     game = {
@@ -503,7 +543,11 @@ var app = $.sammy("#container2", function (){
                         'tl-c': 4,
                         'tr-c': 3,
                         'bl-c': 1,
-                        'br-c': 0
+                        'br-c': 0,
+                        'h1-c': 'C',
+                        'h2-c': 'D',
+                        'h1-r': 'C',
+                        'h2-r': 'D'
                     };
                     this.trigger('symunbind', {form: form});
                     this.trigger('zsumunbind', {form: form});
@@ -511,6 +555,7 @@ var app = $.sammy("#container2", function (){
                     this.trigger("colentry", {form: form, game: game});
                     this.trigger("norowentry", {form: form});
                     this.trigger("nocolentry", {form: form});
+                    this.trigger("autolabel", {form: form, game: game});
                     break;
                 case "sh":
                     game = {
@@ -521,7 +566,11 @@ var app = $.sammy("#container2", function (){
                         'tl-c': 4,
                         'tr-c': 3,
                         'bl-c': 0,
-                        'br-c': 2
+                        'br-c': 2,
+                        'h1-c': 'S',
+                        'h2-c': 'H',
+                        'h1-r': 'S',
+                        'h2-r': 'H'
                     };
                     this.trigger('symunbind', {form: form});
                     this.trigger('zsumunbind', {form: form});
@@ -529,6 +578,7 @@ var app = $.sammy("#container2", function (){
                     this.trigger("colentry", {form: form, game: game});
                     this.trigger("norowentry", {form: form});
                     this.trigger("nocolentry", {form: form});
+                    this.trigger("autolabel", {form: form, game: game});
                     break;
                 case "hd":
                     game = {
@@ -539,7 +589,11 @@ var app = $.sammy("#container2", function (){
                         'tl-c': 3,
                         'tr-c': 4,
                         'bl-c': 2,
-                        'br-c': 0
+                        'br-c': 0,
+                        'h1-c': 'D',
+                        'h2-c': 'H',
+                        'h1-r': 'D',
+                        'h2-r': 'H'
                     };
                     this.trigger('symunbind', {form: form});
                     this.trigger('zsumunbind', {form: form});
@@ -547,6 +601,7 @@ var app = $.sammy("#container2", function (){
                     this.trigger("colentry", {form: form, game: game});
                     this.trigger("norowentry", {form: form});
                     this.trigger("nocolentry", {form: form});
+                    this.trigger("autolabel", {form: form, game: game});
                     break;
                 case "mp":
                     game = {
@@ -557,7 +612,11 @@ var app = $.sammy("#container2", function (){
                         'tl-c': -1,
                         'tr-c': 1,
                         'bl-c': 1,
-                        'br-c': -1
+                        'br-c': -1,
+                        'h1-c': 'H',
+                        'h2-c': 'T',
+                        'h1-r': 'H',
+                        'h2-r': 'T'
                     };
                     this.trigger('symunbind', {form: form});
                     this.trigger('zsumunbind', {form: form});
@@ -565,6 +624,7 @@ var app = $.sammy("#container2", function (){
                     this.trigger("colentry", {form: form, game: game});
                     this.trigger("norowentry", {form: form});
                     this.trigger("nocolentry", {form: form});
+                    this.trigger("autolabel", {form: form, game: game});
                     break;
                 case "bos":
                     game = {
@@ -575,7 +635,11 @@ var app = $.sammy("#container2", function (){
                         'tl-c': 2,
                         'tr-c': 0,
                         'bl-c': 0,
-                        'br-c': 3
+                        'br-c': 3,
+                        'h1-c': 'A',
+                        'h2-c': 'B',
+                        'h1-r': 'A',
+                        'h2-r': 'B'
                     };
                     this.trigger('symunbind', {form: form});
                     this.trigger('zsumunbind', {form: form});
@@ -583,6 +647,7 @@ var app = $.sammy("#container2", function (){
                     this.trigger("colentry", {form: form, game: game});
                     this.trigger("norowentry", {form: form});
                     this.trigger("nocolentry", {form: form});
+                    this.trigger("autolabel", {form: form, game: game});
                     break;
             }
         }
@@ -657,6 +722,42 @@ var app = $.sammy("#container2", function (){
         $(".entry-input[name=tr-c]", form).hide();
         $(".entry-input[name=bl-c]", form).hide();
         $(".entry-input[name=br-c]", form).hide();
+    });
+
+    /**
+     * Turns auto-labeling on
+     *
+     */
+    this.bind('autolabel', function (e, data){
+        var form = data.form;
+        var game = data.game;
+
+        $(".entry.h1-c", form).text((game ? game['h1-c'] : $(".entry-input[name=h1-c]", form).val()) || "C").show();
+        $(".entry.h2-c", form).text((game ? game['h2-c'] : $(".entry-input[name=h2-c]", form).val()) || "D").show();
+        $(".entry.h1-r", form).text((game ? game['h1-r'] : $(".entry-input[name=h1-r]", form).val()) || "C").show();
+        $(".entry.h2-r", form).text((game ? game['h2-r'] : $(".entry-input[name=h2-r]", form).val()) || "D").show();
+        $(".entry-input[name=h1-c]", form).val((game ? game['h1-c'] : $(".entry-input[name=h1-c]", form).val()) || "C").hide();
+        $(".entry-input[name=h2-c]", form).val((game ? game['h2-c'] : $(".entry-input[name=h2-c]", form).val()) || "D").hide();
+        $(".entry-input[name=h1-r]", form).val((game ? game['h1-r'] : $(".entry-input[name=h1-r]", form).val()) || "C").hide();
+        $(".entry-input[name=h2-r]", form).val((game ? game['h2-r'] : $(".entry-input[name=h2-r]", form).val()) || "D").hide();
+    });
+
+    /**
+     * Turns auto-labeling off
+     *
+     */
+    this.bind('noautolabel', function (e, data){
+        var form = data.form;
+        var game = data.game;
+
+        $(".entry.h1-c", form).hide();
+        $(".entry.h2-c", form).hide();
+        $(".entry.h1-r", form).hide();
+        $(".entry.h2-r", form).hide();
+        $(".entry-input[name=h1-c]", form).val((game ? game['h1-c'] : $(".entry-input[name=h1-c]", form).val())).show();
+        $(".entry-input[name=h2-c]", form).val((game ? game['h2-c'] : $(".entry-input[name=h2-c]", form).val())).show();
+        $(".entry-input[name=h1-r]", form).val((game ? game['h1-r'] : $(".entry-input[name=h1-r]", form).val())).show();
+        $(".entry-input[name=h2-r]", form).val((game ? game['h2-r'] : $(".entry-input[name=h2-r]", form).val())).show();
     });
 
     /**
@@ -848,6 +949,10 @@ var app = $.sammy("#container2", function (){
         game['bl-c'] = parseInt(this.params['bl-c'] || 0);
         game['br-r'] = parseInt(this.params['br-r'] || 0);
         game['br-c'] = parseInt(this.params['br-c'] || 0);
+        game['h1-c'] = this.params['h1-c'] || "C";
+        game['h2-c'] = this.params['h2-c'] || "D";
+        game['h1-r'] = this.params['h1-r'] || "C";
+        game['h2-r'] = this.params['h2-r'] || "D";
 
         this.log(this.params);
         this.log(game);
@@ -871,6 +976,7 @@ var app = $.sammy("#container2", function (){
             $("a.edit-button, br.edit-button", form).show();
             self.trigger("norowentry", {game: game, form: form});
             self.trigger("nocolentry", {game: game, form: form});
+            self.trigger("autolabel", {game: game, form: form});
             form.slideDown(function (){
                 self.redirect("#!/view-game/"+key);
             });
@@ -955,7 +1061,11 @@ var app = $.sammy("#container2", function (){
                     ["%param", {name: "E", value: game['bl-r']}],
                     ["%param", {name: "F", value: game['bl-c']}],
                     ["%param", {name: "G", value: game['br-r']}],
-                    ["%param", {name: "H", value: game['br-c']}]
+                    ["%param", {name: "H", value: game['br-c']}],
+                    ["%param", {name: "CL1", value: game['h1-c']}],
+                    ["%param", {name: "CL2", value: game['h2-c']}],
+                    ["%param", {name: "RL1", value: game['h1-r']}],
+                    ["%param", {name: "RL2", value: game['h2-r']}],
                 ]];
 
             if ($.browser.msie){
@@ -1031,5 +1141,7 @@ $(function (){
 
     $("a.lightbox").lightBox({fixedNavigation: true});
 
-   app.run("#!/");
+    $("#walkthrough,#requirements").hide();
+
+    app.run("#!/");
 });
