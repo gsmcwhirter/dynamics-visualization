@@ -149,7 +149,7 @@ public class DtRGraphGenerator extends AbsGraphGenerator {
 
         for (int i = 0; i < (dots + 1) * (dots + 1); i++){
             ci.drawLine(startpoints[i][0], startpoints[i][1], startpoints[i][0], startpoints[i][1], Color.black);
-            ci.drawDot(endpoints[i][0], endpoints[i][1], 5f, Color.black);
+            //ci.drawDot(endpoints[i][0], endpoints[i][1], 5f, Color.black);
         }
 
         return ci;

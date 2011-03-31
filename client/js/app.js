@@ -380,9 +380,9 @@ var app = $.sammy("#container2", function (){
                             ]]
                         ]],
                         [".legend", [
-                            ["%h4", "Graph Axes"],
+                            /*["%h4", "Graph Axes"],
                             ["%p", "The graph axes in each graph correspond directly to the upper/lower and \
-                                        left/right strategies available to the Row Player and Column Player."],
+                                        left/right strategies available to the Row Player and Column Player."],*/
                             ["%h4", "Top Left"],
                             ["%p", "This graph shows the Best Response Dynamics. \
                                         Row Player's best response curve is in red, and Column Player's is in blue."],
@@ -921,6 +921,7 @@ var app = $.sammy("#container2", function (){
                 $("a.edit-button, br.edit-button", form).hide();
                 self.trigger("rowentry", {game: game, form: form});
                 self.trigger("colentry", {game: game, form: form});
+                self.trigger("noautolabel", {game: game, form: form});
                 self.trigger("restrictgame", {form: form, presets: $("select.presets", form)});
                 form.slideDown();
             });
@@ -1044,8 +1045,8 @@ var app = $.sammy("#container2", function (){
 
         if (games[key]){
             var game = games[key];
-            var hml = ["%object.visualization",  {width: "440", //648
-                                            height: "440", //281
+            var hml = ["%object.visualization",  {width: "480",//"440", //648
+                                            height: "480", //"440", //281
                                             code: "DynVizGraph",
                                             archive: "dynamics-visualization.jar",
                                             type: "application/x-java-applet",

@@ -343,7 +343,7 @@ strong, .bold {font-weight:bold;}
 #main .game .game-grid .game-grid-actual .row .cell.last {border-right:none;}
 #main .game .game-grid .game-grid-actual .row.last, #main .game .game-grid .game-grid-actual row.header {border-bottom:none;}
 #main .game .game-grid .visualization {margin-top:1.5em;}
-#main .game .game-grid .legend {float:right;width:190px;margin-top:1.5em;border:1px solid #ccc;padding:5px;display:none;}
+#main .game .game-grid .legend {float:right;width:150px;margin-top:1.5em;border:1px solid #ccc;padding:5px;display:none;}
 #main .game .game-actions {width:172px;float:right;}
 #main fieldset {background-color:#ffffff;border:1px solid #cccccc;clear:both;border-radius:10px;-webkit-border-radius:10px;-moz-border-radius:10px;}
 #main fieldset .form-line {overflow:auto;margin-bottom:.5em;}
