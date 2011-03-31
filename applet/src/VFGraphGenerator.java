@@ -27,8 +27,16 @@ public class VFGraphGenerator extends AbsGraphGenerator {
      * @param Hp Payoff H
      * @param width The width of the image to generate
      * @param height The height of the image to generate
+     * @param labelPaddingXL Left-X label padding
+     * @param labelPaddingXR Right-X label padding
+     * @param labelPaddingYT Top-Y label padding
+     * @param labelPaddingYB Bottom-Y label padding
+     * @param CL1 Label for column left
+     * @param CL2 Label for column right
+     * @param RL1 Label for row top
+     * @param RL2 Label for row bottom
      */
-    public VFGraphGenerator(int Ap, int Bp, int Cp, int Dp, int Ep, int Fp, int Gp, int Hp, int width, int height){
+    public VFGraphGenerator(int Ap, int Bp, int Cp, int Dp, int Ep, int Fp, int Gp, int Hp, int width, int height, int labelPaddingXL, int labelPaddingXR, int labelPaddingYT, int labelPaddingYB, String CL1, String CL2, String RL1, String RL2){
         A = Ap;
         B = Bp;
         C = Cp;
@@ -38,11 +46,20 @@ public class VFGraphGenerator extends AbsGraphGenerator {
         G = Gp;
         H = Hp;
 
+        _CL1 = CL1;
+        _CL2 = CL2;
+        _RL1 = RL1;
+        _RL2 = RL2;
+
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice gs = ge.getDefaultScreenDevice();
         GraphicsConfiguration gc = gs.getDefaultConfiguration();
 
-        ci = new CanvasImage(gc.createCompatibleImage(width, height, Transparency.BITMASK));
+        ci = new CanvasImage(gc.createCompatibleImage(width, height, Transparency.BITMASK),
+                             (width - labelPaddingXL - labelPaddingXR),
+                             (height - labelPaddingYT - labelPaddingYB),
+                             labelPaddingXL,
+                             labelPaddingYT);
     }
 
     /**
@@ -60,6 +77,8 @@ public class VFGraphGenerator extends AbsGraphGenerator {
      */
     @Override
     public CanvasImage generate(){
+
+        drawLabels();
 
         float xf;
         float yf;

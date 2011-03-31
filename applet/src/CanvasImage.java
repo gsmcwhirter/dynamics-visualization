@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Ellipse2D;
+import java.awt.Font;
+import java.awt.FontMetrics;
 
 /**
  * Wrapper around a buffered image to allow for easier drawing
@@ -12,7 +14,13 @@ import java.awt.geom.Ellipse2D;
  * @author gmcwhirt
  */
 public class CanvasImage {
+    public static final int FontTL = 1;
+    public static final int FontTR = 2;
+    public static final int FontBL = 3;
+    public static final int FontBR = 4;
+
     private BufferedImage _bi;
+    private int _xpad, _ypad, _boxh, _boxw;
 
     /**
      * Constructor
@@ -23,6 +31,26 @@ public class CanvasImage {
         Graphics2D g2d = _bi.createGraphics();
         g2d.setColor(Color.lightGray);
         g2d.drawRect(0, 0, _bi.getWidth() - 1, _bi.getHeight() - 1);
+        _xpad = 0;
+        _ypad = 0;
+        _boxh = _bi.getWidth();
+        _boxw = _bi.getHeight();
+    }
+
+    public CanvasImage(BufferedImage bi, int boxh, int boxw, int xpad, int ypad){
+        _bi = bi;
+        Graphics2D g2d = _bi.createGraphics();
+        g2d.setColor(Color.lightGray);
+        g2d.drawRect(xpad, ypad, boxw - 1, boxh - 1);
+        _xpad = xpad;
+        _ypad = ypad;
+        _boxw = boxw;
+        _boxh = boxh;
+
+        System.out.print("Box Width: ");
+        System.out.print(boxw);
+        System.out.print(" / ");
+        System.out.println(_bi.getWidth());
     }
 
     /**
@@ -50,15 +78,15 @@ public class CanvasImage {
      * @param color The color of the line
      */
     public void drawLine(float x1, float y1, float x2, float y2, Color color){
-        int _height = _bi.getHeight() - 1;
-        int _width = _bi.getWidth() - 1;
+        int _height = _boxh - 1;//_bi.getHeight() - 1;
+        int _width = _boxw - 1;//_bi.getWidth() - 1;
         Graphics2D g2d = _bi.createGraphics();
 
         float xx1, xx2, yy1, yy2;
-        xx1 = (float) Math.floor(_width * x1);
-        xx2 = (float) Math.floor(_width * x2);
-        yy1 = (float) Math.floor(_height * (1f - y1));
-        yy2 = (float) Math.floor(_height * (1f - y2));
+        xx1 = (float) Math.floor(_width * x1) + _xpad;
+        xx2 = (float) Math.floor(_width * x2) + _xpad;
+        yy1 = (float) Math.floor(_height * (1f - y1)) + _ypad;
+        yy2 = (float) Math.floor(_height * (1f - y2)) + _ypad;
 
         g2d.setComposite(makeComposite(1f));
         g2d.setColor(color);
@@ -94,11 +122,11 @@ public class CanvasImage {
     public void drawDot(float x, float y, float r, Color color){
         Graphics2D g = _bi.createGraphics();
         
-        int _height = _bi.getHeight() - 1;
-        int _width = _bi.getWidth() - 1;
+        int _height = _boxh - 1;//_bi.getHeight() - 1;
+        int _width = _boxw - 1;//_bi.getWidth() - 1;
         
-        float xp = (float) Math.floor(_width * x) - r;
-        float yp = (float) Math.floor(_height * (1f - y)) - r;
+        float xp = (float) Math.floor(_width * x) - r + _xpad;
+        float yp = (float) Math.floor(_height * (1f - y)) - r + _ypad;
 
         g.setColor(color);
         g.setPaint(color);
@@ -148,14 +176,46 @@ public class CanvasImage {
      * @param acolor The color of the arrow head
      */
     public void drawArrow(float x1, float y1, float x2, float y2, Color lcolor, Color acolor){
-        int _height = _bi.getHeight() - 1;
-        int _width = _bi.getWidth() - 1;
+        int _height = _boxh - 1;//_bi.getHeight() - 1;
+        int _width = _boxw - 1;//_bi.getWidth() - 1;
+
+        if (x1 > 1f){
+            x1 = 1f;
+        }
+        else if(x1 < 0f)
+        {
+            x1 = 0f;
+        }
+
+        if (x2 > 1f){
+            x2 = 1f;
+        }
+        else if(x2 < 0f)
+        {
+            x2 = 0f;
+        }
+
+        if (y1 > 1f){
+            y1 = 1f;
+        }
+        else if(y1 < 0f)
+        {
+            y1 = 0f;
+        }
+
+        if (y2 > 1f){
+            y2 = 1f;
+        }
+        else if(y2 < 0f)
+        {
+            y2 = 0f;
+        }
 
         float xx1, xx2, yy1, yy2;
-        xx1 = (float) Math.floor(_width * x1);
-        xx2 = (float) Math.floor(_width * x2);
-        yy1 = (float) Math.floor(_height * (1f - y1));
-        yy2 = (float) Math.floor(_height * (1f - y2));
+        xx1 = (float) Math.floor(_width * x1) + _xpad;
+        xx2 = (float) Math.floor(_width * x2) + _xpad;
+        yy1 = (float) Math.floor(_height * (1f - y1)) + _ypad;
+        yy2 = (float) Math.floor(_height * (1f - y2)) + _ypad;
 
         _drawArrow(xx1, yy1, xx2, yy2, lcolor, acolor);
     }
@@ -210,12 +270,12 @@ public class CanvasImage {
         float ta;
         float baseX, baseY ;
 
-        xPoints[ 0 ] = xx ;
-        yPoints[ 0 ] = yy ;
+        xPoints[ 0 ] = xx;
+        yPoints[ 0 ] = yy;
 
         // build the line vector
-        vecLine[ 0 ] = (float)xPoints[ 0 ] - x ;
-        vecLine[ 1 ] = (float)yPoints[ 0 ] - y ;
+        vecLine[ 0 ] = (float)xPoints[ 0 ] - x;
+        vecLine[ 1 ] = (float)yPoints[ 0 ] - y;
 
         // build the arrow base vector - normal to the line
         vecLeft[ 0 ] = -vecLine[ 1 ] ;
@@ -251,5 +311,79 @@ public class CanvasImage {
         tri.append(new Line2D.Float(xPoints[1], yPoints[1], xPoints[2], yPoints[2]), true);
         tri.append(new Line2D.Float(xPoints[2], yPoints[2], xPoints[0], yPoints[0]), true);
         g.fill(tri);
+    }
+
+    /**
+     * Draw a string (usually a label) on the graph
+     * @param x The x coordinate in [0,1]x[0,1]
+     * @param y The y coordinate in [0,1]x[0,1]
+     * @param s The string
+     * @param font The font to use
+     * @param color The color of the text
+     */
+    public void drawString(float x, float y, String s, int posref, int pad, Font font, Color color){
+        Graphics2D g = _bi.createGraphics();
+
+        int _height = _boxh - 1;//_bi.getHeight() - 1;
+        int _width = _boxw - 1;//_bi.getWidth() - 1;
+
+        float xp = (float) Math.floor(_width * x) + _xpad;
+        float yp = (float) Math.floor(_height * (1f - y)) + _ypad;
+
+        g.setColor(color);
+        g.setPaint(color);
+
+        g.setFont(font);
+
+        FontMetrics fm = g.getFontMetrics();
+
+        if (posref == CanvasImage.FontBR || posref == CanvasImage.FontTR) {
+            xp = xp - fm.stringWidth(s) - pad;
+        }
+        else {
+            xp = xp + pad;
+        }
+
+        if (posref == CanvasImage.FontTL || posref == CanvasImage.FontTR) {
+            yp = yp + (float)fm.getHeight() + pad;
+        }
+        else {
+            yp = yp - pad;
+        }
+
+        g.drawString(s, xp, yp);
+
+    }
+
+    /**
+     * Draw a string (usually a label) on the graph
+     * @param x The x coordinate in [0,1]x[0,1]
+     * @param y The y coordinate in [0,1]x[0,1]
+     * @param s The string
+     */
+    public void drawString(float x, float y, String s, int posref, int pad){
+        drawString(x, y, s, posref, pad, new Font("SansSerif", Font.PLAIN, 12), Color.black);
+    }
+
+    /**
+     * Draw a string (usually a label) on the graph
+     * @param x The x coordinate in [0,1]x[0,1]
+     * @param y The y coordinate in [0,1]x[0,1]
+     * @param s The string
+     * @param font The font to use
+     */
+    public void drawString(float x, float y, String s, int posref, int pad, Font font){
+        drawString(x, y, s, posref, pad, font, Color.black);
+    }
+
+    /**
+     * Draw a string (usually a label) on the graph
+     * @param x The x coordinate in [0,1]x[0,1]
+     * @param y The y coordinate in [0,1]x[0,1]
+     * @param s The string
+     * @param color The color to use
+     */
+    public void drawString(float x, float y, String s, int posref, int pad, Color color){
+        drawString(x, y, s, posref, pad, new Font("SansSerif", Font.PLAIN, 12), color);
     }
 }

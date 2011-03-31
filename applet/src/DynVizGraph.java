@@ -23,6 +23,10 @@ public class DynVizGraph extends JApplet {
     private int chartWidth = 210;  // The width of the canvas panel
     private int chartHeight = 210; // The height of the canvas panel
     private int chartPadding = 5;
+    private int labelPaddingXL = 20;
+    private int labelPaddingXR = 0;
+    private int labelPaddingYT = 0;
+    private int labelPaddingYB = 20;
 
     /**
      * The widgets on which the pictures are drawn
@@ -64,6 +68,24 @@ public class DynVizGraph extends JApplet {
     private int payoffHd = -1;
 
     /**
+     * Values for the labels
+     *
+     */
+    private String CL1;
+    private String CL2;
+    private String RL1;
+    private String RL2;
+
+    /**
+     * Default values for the labels
+     *
+     */
+    private String CL1d = "C";
+    private String CL2d = "D";
+    private String RL1d = "C";
+    private String RL2d = "D";
+
+    /**
      * Worker threads to draw the pictures and repaint to show progress.
      *
      */
@@ -103,23 +125,23 @@ public class DynVizGraph extends JApplet {
     public void goBabyGo(){
         Container c = getContentPane();
 
-        setPreferredSize(new Dimension(chartWidth * 3 + 2, chartHeight));
-        c.setPreferredSize(new Dimension(chartWidth * 3 + 2, chartHeight));
+        setPreferredSize(new Dimension((chartWidth + labelPaddingXL + labelPaddingXR) * 2 + 2, (chartHeight + labelPaddingYT + labelPaddingYB) * 2 + 2));
+        c.setPreferredSize(new Dimension((chartWidth + labelPaddingXL + labelPaddingXR) * 2 + 2, (chartHeight + labelPaddingYT + labelPaddingYB) * 2 + 2));
 
         JPanel panel = new JPanel(new GridLayout(2,2));
 
-        BRChart = new CanvasPanel(chartWidth, chartHeight, chartPadding);
-        DtRChart = new CanvasPanel(chartWidth, chartHeight, chartPadding);
-        VFChart = new CanvasPanel(chartWidth, chartHeight, chartPadding);
-        CtRChart = new CanvasPanel(chartWidth, chartHeight, chartPadding);
+        BRChart = new CanvasPanel(chartWidth + labelPaddingXL + labelPaddingXR, chartHeight + labelPaddingYT + labelPaddingYB, chartPadding);
+        DtRChart = new CanvasPanel(chartWidth + labelPaddingXL + labelPaddingXR, chartHeight + labelPaddingYT + labelPaddingYB, chartPadding);
+        VFChart = new CanvasPanel(chartWidth + labelPaddingXL + labelPaddingXR, chartHeight + labelPaddingYT + labelPaddingYB, chartPadding);
+        CtRChart = new CanvasPanel(chartWidth + labelPaddingXL + labelPaddingXR, chartHeight + labelPaddingYT + labelPaddingYB, chartPadding);
 
         panel.setBorder(new LineBorder(Color.LIGHT_GRAY));
-        panel.setPreferredSize(new Dimension(chartWidth * 3 + 2, chartHeight));
+        panel.setPreferredSize(new Dimension((chartWidth + labelPaddingXL + labelPaddingXR) * 2 + 2, (chartHeight + labelPaddingYT + labelPaddingYB) * 2 + 2));
 
-        BRChart.setPreferredSize(new Dimension(chartWidth, chartHeight));
-        DtRChart.setPreferredSize(new Dimension(chartWidth, chartHeight));
-        VFChart.setPreferredSize(new Dimension(chartWidth, chartHeight));
-        CtRChart.setPreferredSize(new Dimension(chartWidth, chartHeight));
+        BRChart.setPreferredSize(new Dimension(chartWidth + labelPaddingXL + labelPaddingXR, chartHeight + labelPaddingYT + labelPaddingYB));
+        DtRChart.setPreferredSize(new Dimension(chartWidth + labelPaddingXL + labelPaddingXR, chartHeight + labelPaddingYT + labelPaddingYB));
+        VFChart.setPreferredSize(new Dimension(chartWidth + labelPaddingXL + labelPaddingXR, chartHeight + labelPaddingYT + labelPaddingYB));
+        CtRChart.setPreferredSize(new Dimension(chartWidth + labelPaddingXL + labelPaddingXR, chartHeight + labelPaddingYT + labelPaddingYB));
 
         panel.add(BRChart);
         panel.add(DtRChart);
@@ -200,6 +222,42 @@ public class DynVizGraph extends JApplet {
             payoffH = payoffHd;
         }
 
+        try {
+            CL1 = getParameter("CL1");
+            if (CL1 == null) {
+                CL1 = CL1d;
+            }
+        } catch (NullPointerException e) {
+            CL1 = CL1d;
+        }
+
+        try {
+            CL2 = getParameter("CL2");
+            if (CL2 == null) {
+                CL2 = CL2d;
+            }
+        } catch (NullPointerException e) {
+            CL2 = CL2d;
+        }
+
+        try {
+            RL1 = getParameter("RL1");
+            if (RL1 == null) {
+                RL1 = RL1d;
+            }
+        } catch (NullPointerException e) {
+            RL1 = RL1d;
+        }
+
+        try {
+            RL2 = getParameter("RL2");
+            if (RL2 == null) {
+                RL2 = RL2d;
+            }
+        } catch (NullPointerException e) {
+            RL2 = RL2d;
+        }
+
         System.out.println(payoffA);
         System.out.println(payoffB);
         System.out.println(payoffC);
@@ -216,10 +274,66 @@ public class DynVizGraph extends JApplet {
          */
 
         RepaintThread = new Thread(new Repainter());
-        BRThread = new Thread(new GraphGeneratorRunner(new BRIGraphGenerator(payoffA - payoffE, payoffB - payoffD, payoffG - payoffC, payoffH - payoffF, BRChart.getRealWidth(), BRChart.getRealHeight()), GraphGeneratorRunner.BR));
-        DtRThread = new Thread(new GraphGeneratorRunner(new DtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, payoffE, payoffF, payoffG, payoffH, DtRChart.getRealWidth(), DtRChart.getRealHeight()), GraphGeneratorRunner.DTR));
-        CtRThread = new Thread(new GraphGeneratorRunner(new CtRGraphGenerator(payoffA, payoffB, payoffC, payoffD, payoffE, payoffF, payoffG, payoffH, CtRChart.getRealWidth(), CtRChart.getRealHeight()), GraphGeneratorRunner.CTR));
-        VFThread = new Thread(new GraphGeneratorRunner(new VFGraphGenerator(payoffA, payoffB, payoffC, payoffD, payoffE, payoffF, payoffG, payoffH, VFChart.getRealWidth(), VFChart.getRealHeight()), GraphGeneratorRunner.VF));
+        BRThread = new Thread(new GraphGeneratorRunner(new BRIGraphGenerator(payoffA - payoffE, 
+                                                                             payoffB - payoffD,
+                                                                             payoffG - payoffC,
+                                                                             payoffH - payoffF,
+                                                                             BRChart.getRealWidth(),
+                                                                             BRChart.getRealHeight(),
+                                                                             labelPaddingXL,
+                                                                             labelPaddingXR,
+                                                                             labelPaddingYT,
+                                                                             labelPaddingYB,
+                                                                             CL1, CL2, RL1, RL2
+                                                                             ), GraphGeneratorRunner.BR));
+        DtRThread = new Thread(new GraphGeneratorRunner(new DtRGraphGenerator(payoffA, 
+                                                                              payoffB,
+                                                                              payoffC,
+                                                                              payoffD,
+                                                                              payoffE,
+                                                                              payoffF,
+                                                                              payoffG,
+                                                                              payoffH,
+                                                                              DtRChart.getRealWidth(),
+                                                                              DtRChart.getRealHeight(),
+                                                                              labelPaddingXL,
+                                                                              labelPaddingXR,
+                                                                              labelPaddingYT,
+                                                                              labelPaddingYB,
+                                                                              CL1, CL2, RL1, RL2
+                                                                              ), GraphGeneratorRunner.DTR));
+        CtRThread = new Thread(new GraphGeneratorRunner(new CtRGraphGenerator(payoffA, 
+                                                                              payoffB,
+                                                                              payoffC,
+                                                                              payoffD,
+                                                                              payoffE,
+                                                                              payoffF,
+                                                                              payoffG,
+                                                                              payoffH,
+                                                                              CtRChart.getRealWidth(),
+                                                                              CtRChart.getRealHeight(),
+                                                                              labelPaddingXL,
+                                                                              labelPaddingXR,
+                                                                              labelPaddingYT,
+                                                                              labelPaddingYB,
+                                                                              CL1, CL2, RL1, RL2
+                                                                              ), GraphGeneratorRunner.CTR));
+        VFThread = new Thread(new GraphGeneratorRunner(new VFGraphGenerator(payoffA, 
+                                                                            payoffB,
+                                                                            payoffC,
+                                                                            payoffD,
+                                                                            payoffE,
+                                                                            payoffF,
+                                                                            payoffG,
+                                                                            payoffH,
+                                                                            VFChart.getRealWidth(),
+                                                                            VFChart.getRealHeight(),
+                                                                            labelPaddingXL,
+                                                                            labelPaddingXR,
+                                                                            labelPaddingYT,
+                                                                            labelPaddingYB,
+                                                                            CL1, CL2, RL1, RL2
+                                                                            ), GraphGeneratorRunner.VF));
     }
 
     @Override

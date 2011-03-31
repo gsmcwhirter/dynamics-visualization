@@ -16,6 +16,26 @@ abstract class AbsGraphGenerator implements GraphGenerator {
     protected int A, B, C, D, E, F, G, H;
 
     /**
+     * Labels
+     */
+    protected String _CL1, _CL2, _RL1, _RL2;
+
+    /**
+     * Draw labels on the graph
+     *
+     * @param CL1 Column player left col
+     * @param CL2 Column player right col
+     * @param RL1 Row player top row
+     * @param RL2 Row player bottom row
+     */
+    protected void drawLabels(){
+        ci.drawString(0f, 0f, _CL1, CanvasImage.FontTL, 2);
+        ci.drawString(0f, 0f, _RL2, CanvasImage.FontBR, 2);
+        ci.drawString(0f, 1f, _RL1, CanvasImage.FontTR, 2);
+        ci.drawString(1f, 0f, _CL2, CanvasImage.FontTR, 2);
+    }
+
+    /**
      * Calculates the payoff for a type against the populations
      *
      * @param typ The type (index of pops)

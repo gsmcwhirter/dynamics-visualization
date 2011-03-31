@@ -19,7 +19,7 @@ public class BRGraphGenerator extends AbsGraphGenerator {
      * @param width The width of the picture
      * @param height The height of the picture
      */
-    public BRGraphGenerator(int Ap, int Bp, int Cp, int Dp, int width, int height){
+    public BRGraphGenerator(int Ap, int Bp, int Cp, int Dp, int width, int height, int labelPaddingXL, int labelPaddingXR, int labelPaddingYT, int labelPaddingYB){
         A = Ap;
         B = Bp;
         C = Cp;
@@ -29,7 +29,11 @@ public class BRGraphGenerator extends AbsGraphGenerator {
         GraphicsDevice gs = ge.getDefaultScreenDevice();
         GraphicsConfiguration gc = gs.getDefaultConfiguration();
 
-        ci = new CanvasImage(gc.createCompatibleImage(width, height, Transparency.BITMASK));
+        ci = new CanvasImage(gc.createCompatibleImage(width, height, Transparency.BITMASK),
+                             (width - labelPaddingXL - labelPaddingXR),
+                             (height - labelPaddingYT - labelPaddingYB),
+                             labelPaddingXL,
+                             labelPaddingYT);
     }
 
     /**

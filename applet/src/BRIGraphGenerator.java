@@ -18,18 +18,35 @@ public class BRIGraphGenerator extends AbsGraphGenerator {
      * @param Dp Normalized payoff D
      * @param width The width of the picture
      * @param height The height of the picture
+     * @param labelPaddingXL Left-X label padding
+     * @param labelPaddingXR Right-X label padding
+     * @param labelPaddingYT Top-Y label padding
+     * @param labelPaddingYB Bottom-Y label padding
+     * @param CL1 Label for column left
+     * @param CL2 Label for column right
+     * @param RL1 Label for row top
+     * @param RL2 Label for row bottom
      */
-    public BRIGraphGenerator(int Ap, int Bp, int Cp, int Dp, int width, int height){
+    public BRIGraphGenerator(int Ap, int Bp, int Cp, int Dp, int width, int height, int labelPaddingXL, int labelPaddingXR, int labelPaddingYT, int labelPaddingYB, String CL1, String CL2, String RL1, String RL2){
         A = Ap;
         B = Bp;
         C = Cp;
         D = Dp;
 
+        _CL1 = CL1;
+        _CL2 = CL2;
+        _RL1 = RL1;
+        _RL2 = RL2;
+
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice gs = ge.getDefaultScreenDevice();
         GraphicsConfiguration gc = gs.getDefaultConfiguration();
 
-        ci = new CanvasImage(gc.createCompatibleImage(width, height, Transparency.BITMASK));
+        ci = new CanvasImage(gc.createCompatibleImage(width, height, Transparency.BITMASK),
+                             (width - labelPaddingXL - labelPaddingXR),
+                             (height - labelPaddingYT - labelPaddingYB),
+                             labelPaddingXL,
+                             labelPaddingYT);
     }
 
     /**
@@ -131,6 +148,8 @@ public class BRIGraphGenerator extends AbsGraphGenerator {
      */
     @Override
     public CanvasImage generate(){
+
+        drawLabels();
 
         float lrespx = _lpresp();
         float lrespy = _lqresp();
@@ -291,10 +310,10 @@ public class BRIGraphGenerator extends AbsGraphGenerator {
 
                     }
 
-                    System.out.print("iterating at ");
-                    System.out.print(xxf);
-                    System.out.print(",");
-                    System.out.println(yyf);
+                    //System.out.print("iterating at ");
+                    //System.out.print(xxf);
+                    //System.out.print(",");
+                    //System.out.println(yyf);
 
                     xfl = xf;
                     yfl = yf;
