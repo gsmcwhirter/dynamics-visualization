@@ -174,8 +174,9 @@ public class CanvasImage {
      * @param y2 Ending y in (0,1)
      * @param lcolor The color of the line
      * @param acolor The color of the arrow head
+     * @param minLen The minimum length of the line before drawing an arrow head
      */
-    public void drawArrow(float x1, float y1, float x2, float y2, Color lcolor, Color acolor){
+    public void drawArrow(float x1, float y1, float x2, float y2, Color lcolor, Color acolor, float minLen){
         int _height = _boxh - 1;//_bi.getHeight() - 1;
         int _width = _boxw - 1;//_bi.getWidth() - 1;
 
@@ -217,7 +218,28 @@ public class CanvasImage {
         yy1 = (float) Math.floor(_height * (1f - y1)) + _ypad;
         yy2 = (float) Math.floor(_height * (1f - y2)) + _ypad;
 
-        _drawArrow(xx1, yy1, xx2, yy2, lcolor, acolor);
+        if (minLen <= (float)Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))){
+            _drawArrow(xx1, yy1, xx2, yy2, lcolor, acolor);
+        }
+        else {
+            drawLine(x1, y1, x2, y2, lcolor);
+        }
+
+        
+    }
+
+    /**
+     * Draw an arrow from one point to another with the specified body and head colors
+     *
+     * @param x1 Starting x in (0,1)
+     * @param y1 Starting y in (0,1)
+     * @param x2 Ending x in (0,1)
+     * @param y2 Ending y in (0,1)
+     * @param lcolor The color of the line
+     * @param acolor The color of the arrow head
+     */
+    public void drawArrow(float x1, float y1, float x2, float y2, Color lcolor, Color acolor){
+        drawArrow(x1, y1, x2, y2, lcolor, acolor, 0.035f);
     }
 
     /**

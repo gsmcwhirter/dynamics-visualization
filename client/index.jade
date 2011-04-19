@@ -99,10 +99,10 @@ html
             p.step.step1
               | Clicking the "add game" button will reveal an&#32;
               a.lightbox(href="./images/Screenshot2.png") interface for entering game information
-              | . The entry defaults to allowing you to enter all game parameters.
+              | . By default, you are free to enter all parameters for the game.
               | However, there is a&#32;
               a.lightbox(href="./images/Screenshot3.png") drop-down available
-              | &#32;with which you can select to use one of many common games
+              | &#32;with which you can select to use one of several common games
               | instead of entering your own.
             p.step.step1
               a.lightbox(href="./images/Screenshot4.png") Selecting "Stag Hunt" from the drop-down
@@ -133,15 +133,13 @@ html
               | .
             p.step.step2
               | The top-left graph shows the best-response dynamics for the game.
-              | The axes in each graph correspond to the cells of the normal form.
-              | For example, the top-left corner of the graph is the point where the
-              | row player always chooses the upper row and the column player
-              | chooses the left column.
+              | The axes in each graph correspond to the cells of the normal form
+              | and they should be appropriately labeled.
             p.step.step2
               | The bottom-left graph shows a differential vector field according
               | to the replicator dynamics. The upper-right graph shows trajectories
-              | of the discrete-time replicator dynamics, and the bottom-right graph
-              | shows trajectories of the continuous-time replicator dynamics.
+              | of the continuous-time replicator dynamics, and the bottom-right graph
+              | shows trajectories of the discrete-time replicator dynamics.
             p.step.step2
               a(href="#!/walkthrough/step1") &laquo; Back to Basic Controls and Adding Games
               span.link-sep |
@@ -153,9 +151,8 @@ html
               a.lightbox(href="./images/Screenshot8.png") the game editing interface
               | . Changing the drop-down selector to "Free Entry" will&#32;
               a.lightbox(href="./images/Screenshot9.png") let us change the values of the game parameters
-              | &#32;to anything we would like. For example, we might enter the
-              | payoffs show in&#32;
-              a.lightbox(href="./images/Screenshot9.png") this screenshot
+              | &#32;to anything we would like. For example, we might enter&#32;
+              a.lightbox(href="./images/Screenshot10.png") these payoff values
               | .
             p.step.step3
               | When we are done editing the parameters, we can again click the
@@ -212,19 +209,14 @@ html
           | Written by&#32;
           a(href="https://webfiles.uci.edu/gmcwhirt/www") Gregory McWhirter
 
-          //| Copyright &copy; 2010 Gregory McWhirter, released under the&#32;
-          //a(href="http://www.opensource.org/licenses/mit-license.php") MIT License
-          //| . Code is available at the&#32;
-          //a(href="https://www.github.com/gsmcwhirter/dynamics-visualization") GitHub repository
-          //| .
       #subfooter
 
-    :javascript
-      | var _gaq = _gaq || [];
-      | _gaq.push(['_setAccount', 'UA-20562400-1']);
-      | _gaq.push(['_trackPageview']);
-      | (function() {
-      |   var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      |   ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      |   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      | })();
+    script(type="text/javascript")
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-20562400-1']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();

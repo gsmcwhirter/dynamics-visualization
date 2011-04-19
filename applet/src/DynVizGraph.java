@@ -144,9 +144,9 @@ public class DynVizGraph extends JApplet {
         CtRChart.setPreferredSize(new Dimension(chartWidth + labelPaddingXL + labelPaddingXR, chartHeight + labelPaddingYT + labelPaddingYB));
 
         panel.add(BRChart);
-        panel.add(DtRChart);
-        panel.add(VFChart);
         panel.add(CtRChart);
+        panel.add(VFChart);
+        panel.add(DtRChart);
 
         c.add(panel);
 

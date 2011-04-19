@@ -380,18 +380,15 @@ var app = $.sammy("#container2", function (){
                             ]]
                         ]],
                         [".legend", [
-                            /*["%h4", "Graph Axes"],
-                            ["%p", "The graph axes in each graph correspond directly to the upper/lower and \
-                                        left/right strategies available to the Row Player and Column Player."],*/
                             ["%h4", "Top Left"],
                             ["%p", "This graph shows the Best Response Dynamics. \
                                         Row Player's best response curve is in red, and Column Player's is in blue."],
                             ["%h4", "Top Right"],
-                            ["%p", "This graph shows solution trajectories of the discrete time replicator dynamics."],
+                            ["%p", "This graph shows solution trajectories of the continuous time replicator dynamics."],
                             ["%h4", "Bottom Left"],
                             ["%p", "This graph shows the continuous time replicator dynamics differential vector field."],
                             ["%h4", "Bottom Right"],
-                            ["%p", "This graph shows solution trajectories of the continuous time replicator dynamics."],
+                            ["%p", "This graph shows solution trajectories of the discrete time replicator dynamics."]
                         ]]
                     ]]
 
@@ -521,10 +518,10 @@ var app = $.sammy("#container2", function (){
                         'tr-c': 4,
                         'bl-c': 0,
                         'br-c': 1,
-                        'h1-c': 'C',
-                        'h2-c': 'D',
-                        'h1-r': 'C',
-                        'h2-r': 'D'
+                        'h1-c': 'C2',
+                        'h2-c': 'D2',
+                        'h1-r': 'C1',
+                        'h2-r': 'D1'
                     };
                     this.trigger('symunbind', {form: form});
                     this.trigger('zsumunbind', {form: form});
@@ -544,10 +541,10 @@ var app = $.sammy("#container2", function (){
                         'tr-c': 3,
                         'bl-c': 1,
                         'br-c': 0,
-                        'h1-c': 'C',
-                        'h2-c': 'D',
-                        'h1-r': 'C',
-                        'h2-r': 'D'
+                        'h1-c': 'C2',
+                        'h2-c': 'D2',
+                        'h1-r': 'C1',
+                        'h2-r': 'D1'
                     };
                     this.trigger('symunbind', {form: form});
                     this.trigger('zsumunbind', {form: form});
@@ -567,10 +564,10 @@ var app = $.sammy("#container2", function (){
                         'tr-c': 3,
                         'bl-c': 0,
                         'br-c': 2,
-                        'h1-c': 'S',
-                        'h2-c': 'H',
-                        'h1-r': 'S',
-                        'h2-r': 'H'
+                        'h1-c': 'S2',
+                        'h2-c': 'H2',
+                        'h1-r': 'S1',
+                        'h2-r': 'H1'
                     };
                     this.trigger('symunbind', {form: form});
                     this.trigger('zsumunbind', {form: form});
@@ -590,10 +587,10 @@ var app = $.sammy("#container2", function (){
                         'tr-c': 4,
                         'bl-c': 2,
                         'br-c': 0,
-                        'h1-c': 'D',
-                        'h2-c': 'H',
-                        'h1-r': 'D',
-                        'h2-r': 'H'
+                        'h1-c': 'D2',
+                        'h2-c': 'H2',
+                        'h1-r': 'D1',
+                        'h2-r': 'H1'
                     };
                     this.trigger('symunbind', {form: form});
                     this.trigger('zsumunbind', {form: form});
@@ -613,10 +610,10 @@ var app = $.sammy("#container2", function (){
                         'tr-c': 1,
                         'bl-c': 1,
                         'br-c': -1,
-                        'h1-c': 'H',
-                        'h2-c': 'T',
-                        'h1-r': 'H',
-                        'h2-r': 'T'
+                        'h1-c': 'H2',
+                        'h2-c': 'T2',
+                        'h1-r': 'H1',
+                        'h2-r': 'T1'
                     };
                     this.trigger('symunbind', {form: form});
                     this.trigger('zsumunbind', {form: form});
@@ -636,10 +633,10 @@ var app = $.sammy("#container2", function (){
                         'tr-c': 0,
                         'bl-c': 0,
                         'br-c': 3,
-                        'h1-c': 'A',
-                        'h2-c': 'B',
-                        'h1-r': 'A',
-                        'h2-r': 'B'
+                        'h1-c': 'A2',
+                        'h2-c': 'B2',
+                        'h1-r': 'A1',
+                        'h2-r': 'B1'
                     };
                     this.trigger('symunbind', {form: form});
                     this.trigger('zsumunbind', {form: form});
@@ -1135,7 +1132,7 @@ $(function (){
        forcePlaceholderSize: true,
        items: '.game',
        placeholder: 'info',
-       update: function (e, ui){
+       update: function (){
            app.trigger("updatesort", {order: $("#games").sortable("toArray")});
        }
     });
