@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "author": "Gregory McWhirter <gmcwhirt@uci.edu> (https://www.ideafreemonoid.org)",
+  "name": "dynamics-visualization",
+  "description": "Visualizations of Game Theoretic Dynamics",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/gsmcwhirter/dynamics-visualization.git"
+  },
+  "engines": {
+    "node": "~0.6.5"
+  },
+  "dependencies": {},
+  "devDependencies": {
+      "mocha": ">= 0.0.1"
+    , "expect.js": ">= 0.0.1"
+    , "browser-request": ">= 0.0.1"
+  }
+}

@@ -8,3 +8,5 @@ build
 dist
 applet/master-applet.jnlp
 applet/preview-applet.html
+/client/node_modules/.bin/
+/client/node_modules/mocha/node_modules/.bin/
