@@ -16,5 +16,10 @@
       "mocha": ">= 0.0.1"
     , "expect.js": ">= 0.0.1"
     , "browser-request": ">= 0.0.1"
+    , "jade": ">= 0.16.4"
+    , "stylus": ">= 0.19.2"
+    , "clean-css": ">= 0.3.1"
+    , "jake-uglify": ">= 1.0.1"
+    , "rimraf": ">= 0.0.1"
   }
 }
