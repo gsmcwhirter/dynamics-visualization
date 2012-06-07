@@ -53,10 +53,10 @@ desc('Build all files');
 task('default', ['build']);
 
 desc('Build all files');
-task("build", ["check:build", "markup:build", "js:build", "css:build", "applet:build"]);
+task("build", ["check:build", "markup:build", "js:build", "css:build", "aux:build", "img:build"]);
 
 desc('Build all files for distribution');
-task("dist", ["check:dist", "markup:dist", "js:dist", "css:dist", "applet:dist"]);
+task("dist", ["check:dist", "markup:dist", "js:dist", "css:dist", "aux:dist", "img:dist"]);
 
 desc('Provide a link to the tests');
 task('test', ['build'], function (){
@@ -124,32 +124,28 @@ namespace('markup', function (){
   desc('Compile jade templates');
   task('jade', function (){
     console.log("Rendering jade/index.jade to build/index.html...");
-    var source = fs.readFileSync("jade/index.jade");
-
-    var fn = jade.compile(source, {filename: "jade/index.jade"});
-    var locals = {};
-
-    fs.writeFileSync("build/index.html", fn(locals));
-  });
-  
-  desc('Set up the test.html file');
-  task('test.html', function (){
-    console.log("Copying the test.html file to build...");
-    copyfile('test.html', 'build/test.html', function (err){
-      if (err){
-        fail("Failed to copy the test.html file.");
-      }
-      else {
-        complete();
-      }
+    var source = ""
+      , fn = function (){}
+      , locals = {}
+      , files = [
+          {from: 'jade/index.jade', to: 'build/index.html'}
+        , {from: 'jade/test.jade', to: 'build/test.html'}
+        ]
+      ;
+    
+    files.forEach(function (file){
+      console.log("Compiling %s to %s...", file.from, file.to);
+      source = fs.readFileSync(file.from);
+      fn = jade.compile(source, {filename: file.from});
+      locals = file.locals || {};
+      fs.writeFileSync(file.to, fn(locals));
     });
-  }, {async: true});
+  });
   
   desc('Build all relevant files');
   task('build', function (){
     console.log("Building all markup files...");
     jake.Task["markup:jade"].invoke();
-    jake.Task["markup:test.html"].invoke();
   });
   
   desc('Compile and copy relevant files to dist');
@@ -161,8 +157,30 @@ namespace('markup', function (){
 namespace('css', function (){
   desc('Compile stylus templates');
   task('stylus', function (){
-    //TODO
-  });
+    console.log("Compiling stylus files to css...");
+    var files = [
+        {from: 'css/app.styl', to: 'build/css/app.css'}
+        ]
+      , filesleft = files.length
+      ;
+    
+    files.forEach(function (file){
+      console.log("Compiling %s to %s.", file.from, file.to);
+      var source = fs.readFileSync(file.from, "utf8");
+      stylus.render(source, {filename: file.from}, function (err, css){
+        if (err){
+          fail(err);
+        }
+        else {
+          fs.writeFileSync(file.to);
+          filesleft -= 1;
+          if (filesleft === 0){
+            complete();
+          }
+        }
+      });
+    });
+  }, {async: true});
   
   desc('Build all relevant files');
   task('build', ['check:build_css'], function (){
@@ -172,6 +190,7 @@ namespace('css', function (){
     
     var files = [
             {from: 'node_modules/mocha/mocha.css', to: 'build/css/mocha.css'}
+          , {from: 'css/h5bp.css', to: 'build/css/h5bp.css'}
         ]
       ; 
     
@@ -185,7 +204,7 @@ namespace('css', function (){
         complete();
       }
     });
-  });
+  }, {async: true});
   
   desc('Compile, minify, and copy relevant files to dist');
   task('dist', function (){
@@ -206,6 +225,10 @@ namespace('js', function (){
     var files = [
             {from: 'js/jquery.js', to: 'build/js/jquery.js'}
           , {from: 'js/ember-debug.js', to: 'build/js/ember.js'}
+          , {from: 'js/ember-data-debug.js', to: 'build/js/ember-data.js'}
+          , {from: 'js/modernizr.js', to: 'build/js/modernizr.js'}
+          , {from: 'js/plugins.js', to: 'build/js/plugins.js'}
+          , {from: 'js/handlebars.js', to: 'build/js/handlebars.js'}
           , {from: 'node_modules/mocha/mocha.js', to: 'build/js/mocha.js'}
           , {from: 'node_modules/expect.js/expect.js', to: 'build/js/expect.js'}
           , {from: 'test/test.js', to: 'build/js/test.js'}
@@ -250,27 +273,75 @@ namespace('js', function (){
   });
 });
 
-namespace('applet', function (){
+namespace('aux', function (){
   desc('Build all relevant files');
   task('build', function (){
-    console.log("Building fallback applet files...");
+    console.log("Building auxiliary files...");
+    jake.Task['aux:copy_files'].invoke();
+    jake.Task['aux:manifest'].invoke();
+  });
+  
+  desc('Copy files to appropriate places.');
+  task('copy_files', function (){
+    console.log("Copying static files...");
     var files = [
             {from: 'applet/dynamics-visualization.jar', to: 'build/dynamics-visualization.jar'}
           , {from: 'applet/dynamics-visualization.jnlp', to: 'build/dynamics-visualization.jnlp'}
+          , {from: 'humans.txt', to: 'build/humans.txt'}
+          , {from: 'robots.txt', to: 'build/robots.txt'}
+          , {from: 'crossdomain.xml', to: 'build/crossdomain.xml'}
         ]
       ;  
     
     copyfiles(files, function (err){
       if (err){
         console.log(err);
-        fail("Failed to copy applet files.");
+        fail("Failed to copy auxiliary files.");
       }
       else {
-        console.log("Applet files copied.");
+        console.log("Auxiliary files copied.");
         complete();
       }
     });
+  }, {async: true});
+  
+  desc('Create the manifest.appcache file from the template.');
+  task('manifest', function (){
+    console.log("Writing manifest.appcache file...");
+    var source = fs.readFileSync('manifest.appcache.tpl');
+    
+    source = "CACHE MANIFEST\n#" + Date() + "\n\n" + source;
+    
+    fs.writeFileSync("build/manifest.appcache", source);    
   });
+
+  desc('Build and copy all relevant files to dist');
+  task('dist', function (){
+    //TODO
+  });
+});
+
+namespace('img', function (){
+  desc('Build all relevant files');
+  task('build', function (){
+    console.log("Building image files...");
+    var files = [
+            {from: 'img/favicon.ico', to: 'build/favicon.ico'}
+          , {from: 'img/apple-touch-icon.png', to: 'build/apple-touch-icon.png'}
+        ]
+      ;  
+    
+    copyfiles(files, function (err){
+      if (err){
+        console.log(err);
+        fail("Failed to copy image files.");
+        }
+      else {
+        console.log("Image files copied.");
+        complete();
+      }
+    });
+  }, {async: true});
 
   desc('Build and copy all relevant files to dist');
   task('dist', function (){

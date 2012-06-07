@@ -1,0 +1,21 @@
+extends index
+
+block title
+  title Mocha Tests for Dynamics Visualizations
+
+block test-head
+  link(rel="stylesheet", href="css/mocha.css")
+
+block test-body
+  #mocha
+  
+block test-scripts
+  script(type="text/javascript", src="js/expect.js")
+  script(type="text/javascript", src="js/mocha.js")
+  script(type="text/javascript").
+    mocha.setup('bdd')
+  script(type="text/javascript", src="js/test.js")
+  script(type="text/javascript").
+    $(function (){
+      mocha.run();
+    });

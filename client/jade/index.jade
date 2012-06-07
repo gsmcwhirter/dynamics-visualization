@@ -1,5 +1,52 @@
 !!! 5
-html
-  head
-  body
-    h1 Hiya!
+//if lt IE 7
+  html.no-js.lt-ie9.lt-ie8.lt-ie7(lang="en")
+//if IE 7
+  html.no-js.lt-ie9.lt-ie8(lang="en")
+//if IE 8
+  html.no-js.lt-ie9(lang="en")
+//if gt IE 8
+  html.no-js(lang="en", manifest="manifest.appcache")
+  
+head
+  meta(charset="utf-8")
+  meta(http-equiv="X-UA-Compatible", content="IE=edge,chrome=1")
+  
+  block title
+    title Dynamics Visualizations
+    
+  meta(name="description", content="")
+  meta(name="viewport", content="width=device-width")
+
+  link(rel="author", href="humans.txt")
+  link(rel="stylesheet", href="css/h5bp.css")
+  link(rel="stylesheet", href="css/app.css")  
+  block test-head
+  
+  script(type="text/javascript", src="js/modernizr.js")
+  
+body
+  //if lt IE 7
+    | <p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+
+  block test-body
+  
+  #everything
+    header
+    div(role="main")
+    footer
+    
+  script(type="text/javascript", src="js/jquery.js")
+  script(type="text/javascript", src="js/plugins.js")
+  script(type="text/javascript", src="js/handlebars.js")
+  script(type="text/javascript", src="js/ember.js")
+  script(type="text/javascript", src="js/ember-data.js")
+  script(type="text/javascript", src="js/app.js")
+  block test-scripts
+  script(type="text/javascript").
+    var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+    (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+    g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+    s.parentNode.insertBefore(g,s)}(document,'script'));
+      
+| </html>
