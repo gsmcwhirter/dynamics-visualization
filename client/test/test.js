@@ -17,6 +17,38 @@ describe('App', function (){
     });
   });
   
+  describe("#LocalStorageAdapter", function (){
+    it('should exist', function (){
+      expect(App.LocalStorageAdapter).to.not.be(undefined);
+    });
+  });
+  
+  describe("#StaticStorageAdapter", function (){
+    it('should exist', function (){
+      expect(App.StaticStorageAdapter).to.not.be(undefined);
+    });
+  });
+  
+  describe("#gameStore", function (){
+    it('should exist', function (){
+      expect(App.gameStore).to.not.be(undefined);
+    });
+    
+    it('should use a LocalStorageAdapter', function (){
+      expect(App.gameStore.adapter).to.be.an(App.LocalStorageAdapter);
+    });
+  });
+  
+  describe("#helpStore", function (){
+    it('should exist', function (){
+      expect(App.helpStore).to.not.be(undefined);
+    });
+    
+    it('should use a StaticStorageAdapter', function (){
+      expect(App.helpStore.adapter).to.be.an(App.StaticStorageAdapter);
+    });
+  });
+  
   describe("#Game", function (){
     it('should exist', function (){
       expect(App.Game).to.not.be(undefined);
@@ -41,6 +73,12 @@ describe('App', function (){
     });
   });
   
+  describe("#GameController", function (){
+    it('should exist', function (){
+      expect(App.GameController).to.not.be(undefined);
+    });
+  });
+  
   describe("#HelpController", function (){
     it('should exist', function (){
       expect(App.HelpController).to.not.be(undefined);
@@ -62,6 +100,18 @@ describe('App', function (){
   describe("#GameView", function (){
     it('should exist', function (){
       expect(App.GameView).to.not.be(undefined);
+    });
+  });
+  
+  describe("#GameDisplayView", function (){
+    it('should exist', function (){
+      expect(App.GameDisplayView).to.not.be(undefined);
+    });
+  });
+  
+  describe("#GameEditView", function (){
+    it('should exist', function (){
+      expect(App.GameEditView).to.not.be(undefined);
     });
   });
   

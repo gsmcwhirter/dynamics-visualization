@@ -172,7 +172,7 @@ namespace('css', function (){
           fail(err);
         }
         else {
-          fs.writeFileSync(file.to);
+          fs.writeFileSync(file.to, css);
           filesleft -= 1;
           if (filesleft === 0){
             complete();
@@ -226,6 +226,8 @@ namespace('js', function (){
             {from: 'js/jquery.js', to: 'build/js/jquery.js'}
           , {from: 'js/ember-debug.js', to: 'build/js/ember.js'}
           , {from: 'js/ember-data-debug.js', to: 'build/js/ember-data.js'}
+          , {from: 'js/underscore-debug.js', to: 'build/js/underscore.js'}
+          , {from: 'js/json2.js', to: 'build/js/json2.js'}
           , {from: 'js/modernizr.js', to: 'build/js/modernizr.js'}
           , {from: 'js/plugins.js', to: 'build/js/plugins.js'}
           , {from: 'js/handlebars.js', to: 'build/js/handlebars.js'}

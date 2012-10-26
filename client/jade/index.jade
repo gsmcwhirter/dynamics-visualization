@@ -33,12 +33,28 @@ body
   
   #everything
     header
+      h1 Dynamics Visualizations
+      include templates/menu
     div(role="main")
     footer
+      include templates/menu
+      span.by
+        | Written and maintained by&#32;
+        a(href="https://ideafreemonoid.org") Gregory McWhirter
+        | &#32;with support from NSF Grant ###.
+
+    #templates(style="display: none;")
+      include templates/game_index
+      include templates/game_display
+      include templates/game_edit
+      include templates/help_index
+      include templates/help_display
     
+  script(type="text/javascript", src="js/json2.js")
   script(type="text/javascript", src="js/jquery.js")
   script(type="text/javascript", src="js/plugins.js")
   script(type="text/javascript", src="js/handlebars.js")
+  script(type="text/javascript", src="js/underscore.js")
   script(type="text/javascript", src="js/ember.js")
   script(type="text/javascript", src="js/ember-data.js")
   script(type="text/javascript", src="js/app.js")

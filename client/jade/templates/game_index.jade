@@ -1,0 +1,5 @@
+script(type="text/x-handlebars", data-template-name="game_index")
+  ul
+    | {{#each content}}
+    | {{view App.GameView}}
+    | {{/each}}
