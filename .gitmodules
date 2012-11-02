@@ -1,6 +1,0 @@
-[submodule "blueprint"]
-	path = blueprint
-	url = git://github.com/joshuaclayton/blueprint-css.git
-[submodule "client/js/haml"]
-	path = client/js/haml
-	url = git://github.com/creationix/jquery-haml.git
