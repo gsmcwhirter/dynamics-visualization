@@ -1,2 +1,8 @@
 components
 build
+dist
+index-dist.html
+index.html
+stylus/dynamics-visualization.css
+templates/*.js
+test.html
