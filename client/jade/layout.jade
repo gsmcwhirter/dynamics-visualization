@@ -1,0 +1,68 @@
+!!! 5
+html
+  head
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(http-equiv="Content-Type", content="text/html; charset=utf-8")
+    
+    title Dynamics Visualziations
+    
+    block styles
+    
+  body
+    #content.grid
+      block content
+        .col-1-1
+          h1 Dynamics Visualizations
+        .col-1-1.menu.header
+          a(href="/") Home
+          span.sep |
+          a(href="/help") Help
+        .col-2-3#main
+        .col-1-3#legend
+          h3 Graph Legend
+          h4 Graph Axes
+          p
+            | The graph axes in each graph correspond directly to the 
+            | upper/lower and left/right strategies available to the Row 
+            | Player and Column Player.
+          h4 Top Left
+          p
+            | This graph shows the Best Response Dynamics. Row Player's best 
+            | response curve is in red, and Column Player's is in blue.
+          h4 Top Right
+          p
+            | This graph shows solution trajectories of the discrete time 
+            | replicator dynamics.
+          h4 Bottom left
+          p
+            | This graph shows the continuous time replicator dynamics 
+            | differential vector field.
+          h4 Bottom Right
+          p
+            | This graph shows solution trajectories of the continuous time 
+            | replicator dynamics. 
+        .col-1-1.menu.footer
+          a(href="/") Home
+          span.sep |
+          a(href="/help") Help
+          span.sep |
+          | Copyright 2011 
+          a(href="https://www.ideafreemonoid.org") Gregory McWhirter
+    #foot-spacer
+          
+    block scripts-load
+    
+    block scripts-do
+      script(type="text/javascript")
+        window.dynvis = require('dynamics-visualization');
+        dynvis.run();
+
+    script(type="text/javascript")
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-20562400-1']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();

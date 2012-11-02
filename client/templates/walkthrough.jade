@@ -1,0 +1,144 @@
+- var context = ctx.params || {}
+.cblock
+  h2 System Demonstration
+  - if (context.step)
+    a(href="/help/walkthrough") Table of Contents
+  - if (context.step == 1)
+    h3 Introduction
+    p
+      | This website is intended to assist in building intuition about the
+      | dynamics of two-player games. It provides visualizations for the
+      | best-response dynamics, as well as for two population discrete-time
+      | and continuous-time replicator dynamics.
+    p
+      | This is a tutorial intended to show you what the system can do and
+      | how to use it. Opening another browser window or tab and following
+      | along is highly encouraged. Please see the&#32;
+      a(href="/help/requirements") system requirements
+      | &#32;page as well.
+    p
+      a(href="/help/walkthrough/2") Begin Demonstration &raquo;
+  - else if (context.step == 2)
+    h3 Basic Controls and Adding Games
+    p
+      | To begin, you are presented only with&#32;
+      a.lightbox(href="./images/Screenshot1.png") some controls
+      | . At the outset, we are most concerned with the "add game"
+      | button. 
+    p
+      | Clicking the "add game" button will reveal an&#32;
+      a.lightbox(href="./images/Screenshot2.png") interface for entering game information
+      | . The entry defaults to allowing you to enter all game parameters.
+      | However, there is a&#32;
+      a.lightbox(href="./images/Screenshot3.png") drop-down available
+      | &#32;with which you can select to use one of many common games
+      | instead of entering your own.
+    p
+      a.lightbox(href="./images/Screenshot4.png") Selecting "Stag Hunt" from the drop-down
+      | &#32;will enter values for the game parameters automatically. We
+      | can also&#32;
+      a.lightbox(href="./images/Screenshot5.png") give the game a label
+      | &#32;to more easily remember what game it is later. Giving the game
+      | a label is optional. If one is not provided, a (rather ugly) one
+      | will be generated.
+    p
+      | You can re-select drop-down entries and change the game parameters
+      | as much as you would like. When you are satisfied with the parameter
+      | values, clicking the "save game" button will save the parameters and&#32;
+      a.lightbox(href="./images/Screenshot6.png") show you the normal (strategic) form of the game
+      | .
+    p
+      a(href="/help/walkthrough/1") &laquo; Back to Introduction
+      span.link-sep |
+      a(href="/help/walkthrough/3") Continue with Generating Visualizations &raquo;
+  - else if (context.step == 3)
+    h3 Generating Visualizations
+    p
+      | Once we have the normal (strategic) form of the game, clicking the
+      | "generate graphs" button will (perhaps a bit slowly)&#32;
+      a.lightbox(href="./images/Screenshot7.png") reveal four graphs
+      | . If the graphs are not generated, please check that your system
+      | meets the &#32;
+      a(href="/help/requirements") system requirements
+      | .
+    p
+      | The top-left graph shows the best-response dynamics for the game.
+      | The axes in each graph correspond to the cells of the normal form.
+      | For example, the top-left corner of the graph is the point where the
+      | row player always chooses the upper row and the column player
+      | chooses the left column.
+    p
+      | The bottom-left graph shows a differential vector field according
+      | to the replicator dynamics. The upper-right graph shows trajectories
+      | of the discrete-time replicator dynamics, and the bottom-right graph
+      | shows trajectories of the continuous-time replicator dynamics.
+    p
+      a(href="/help/walkthrough/2") &laquo; Back to Basic Controls and Adding Games
+      span.link-sep |
+      a(href="/help/walkthrough/4") Continue with Editing Games &raquo;
+  - else if (context.step == 4)
+    h3 Editing Games
+    p
+      | At any time, you can go back and edit the game you have entered.
+      | Clicking the "edit game" button will return you to
+      a.lightbox(href="./images/Screenshot8.png") the game editing interface
+      | . Changing the drop-down selector to "Free Entry" will&#32;
+      a.lightbox(href="./images/Screenshot9.png") let us change the values of the game parameters
+      | &#32;to anything we would like. For example, we might enter the
+      | payoffs show in&#32;
+      a.lightbox(href="./images/Screenshot9.png") this screenshot
+      | .
+    p
+      | When we are done editing the parameters, we can again click the
+      | "save game" button and return to&#32;
+      a.lightbox(href="./images/Screenshot11.png") viewing the normal form
+      | &#32;of the game. Clicking "generate graphs" with these new parameters
+      | will once again&#32;
+      a.lightbox(href="./images/Screenshot12.png") reveal several graphs
+      | &#32;visualizing the various aspects of the dynamical systems
+      | mentioned earlier.
+    p
+      a(href="/help/walkthrough/3") &laquo; Back to Generating Visualizations
+      span.link-sep |
+      a(href="/help/walkthrough/5") Continue with Using Multiple Games at Once &raquo;
+  - else if (context.step == 5)
+    h3 Using Multiple Games at Once
+    p
+      | Sometimes it is useful to compare games directly. While we could
+      | look at one game's dynamics, edit the parameters, and then look at
+      | another's, it is often easier to have both sets of graphs on the
+      | screen at the same time. This system makes that relatively easy.
+    p
+      | At any time, you can again click the "add game" button, which will&#32;
+      a.lightbox(href="./images/Screenshot13.png") insert an entry form for another game
+      | &#32;at the bottom of the page. This form works exactly like the
+      | the first one we demonstrated earlier.
+    p
+      | Having many games saved at the same time can be unwieldy. Therefore,
+      | it is possible to "collapse" the games,&#32;
+      a.lightbox(href="./images/Screenshot14.png") leaving only their label showing
+      | .
+      | This is accomplished either by clicking the "collapse all" button,
+      | or by clicking on an individual game's label.
+      | To re-expand the game, click on the label a second time, or click
+      | the "expand all" button.
+    p
+      | Finally, games can also be sorted in the list by dragging them up
+      | and down. A blue area will&#32;
+      a.lightbox(href="./images/Screenshot15.png") show where the game will be inserted
+      | &#32;in the list once it is released.
+    p
+      a(href="/help/walkthrough/4") &laquo; Back to Editing Games
+  - else
+    h3 Table of Contents
+    ol
+      li
+        a(href="/help/walkthrough/1") Introduction
+      li
+        a(href="/help/walkthrough/2") Basic Controls and Adding Games
+      li
+        a(href="/help/walkthrough/3") Generating Visualizations
+      li
+        a(href="/help/walkthrough/4") Editing Games
+      li
+        a(href="/help/walkthrough/5") Using Multiple Games at Once

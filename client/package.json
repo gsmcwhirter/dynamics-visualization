@@ -1,0 +1,15 @@
+{
+  "name": "dynamics-visualization",
+  "version": "0.0.1",
+  "description": "Web application to visualize game theoretic dynamics",
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "~1.6.0",
+    "expect.js": "~0.2.0",
+    "express": "~3.0.0"
+  },
+  "scripts": {},
+  "repository": "",
+  "author": "Gregory McWhirter",
+  "license": "MIT"
+}
