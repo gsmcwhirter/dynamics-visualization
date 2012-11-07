@@ -8,15 +8,16 @@
     "visionmedia/page.js": "*",
     "gsmcwhirter/booting-sub-nav": "*",
     "gsmcwhirter/storage": "*",
-    "component/classes": "*",
     "necolas/normalize.css": "*",
     "component/clone": "*",
     "component/simple-grid": "*",
+    "component/dom": "*",
+    "component/event": "*",
+    "component/each": "*",
+    "component/map": "*",
+    "component/select": "*",
     
     "adamsanderson/inline-edit": "*",
-    "component/object": "*",
-    "component/indexof": "*",
-    "component/underscore": "*",
     "component/simplify": "*",
     "component/autoscale-canvas": "*"
   },
@@ -30,7 +31,8 @@
     "templates/game.js",
     "templates/help.js",
     "templates/requirements.js",
-    "templates/walkthrough.js"
+    "templates/walkthrough.js",
+    "templates/index_actions.js"
   ],
   "styles": [
     "stylus/fix.css",

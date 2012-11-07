@@ -1,8 +1,8 @@
-- var tabindex = startindex || 0
-- var game = game || {}
+- var tabindex = typeof startindex !== "undefined" ? startindex || 0 : 0
+- var game = typeof game !== "undefined" ? game || {} : {}
 
-.col-2-3.game
-  form.editing(accept-charset="utf-8", method="post")
+.cblock.game
+  form(accept-charset="utf-8", method="post")
     fieldset
       .game-actions
         a.button.positive.save-button(tabindex=tabindex + 11) save game
@@ -10,13 +10,13 @@
         br
         a.button.edit-button edit game
         br.edit-button
-        a.button.negative(tabindex=tabindex + 12) delete game
+        a.button.delete-game.negative(tabindex=tabindex + 12) delete game
       .game-header
         a(href="#")
           h1.label
       .game-grid
         input.title(type="text", name="label", placeholder="Game Label", tabindex=++tabindex)
-        h2.game-type= game_type || ""
+        h2.game-type= typeof game_type !== "undefined" ? game_type || "" : ""
         select.presets(size=1, name="presets", tabindex=++tabindex)
           option(value="f") Free Entry
           optgroup(label="Symmetric Games")
@@ -41,7 +41,7 @@
               input.entry-input.right.text(type="text", name="tr-c", placeholder="Col TR", tabindex=++tabindex + 1, value=game['tr-c'])
               .entry.right.tr-c= game['tr-c'] || ""
               input.entry-input.left.text(type="text", name="tr-r", placeholder="Row TR", tabindex=++tabindex - 1, value=game['tr-r'])
-              .entry.right.tr-r= game['tr-r'] || ""
+              .entry.left.tr-r= game['tr-r'] || ""
               span.sep ,
           .row.last
             .cell
@@ -54,6 +54,6 @@
               input.entry-input.right.text(type="text", name="br-c", placeholder="Col BR", tabindex=++tabindex + 1, value=game['br-c'])
               .entry.right.br-c= game['br-c'] || ""
               input.entry-input.left.text(type="text", name="br-r", placeholder="Row BR", tabindex=++tabindex - 1, value=game['br-r'])
-              .entry.right.br-r= game['br-r'] || ""
+              .entry.left.br-r= game['br-r'] || ""
               span.sep ,
 

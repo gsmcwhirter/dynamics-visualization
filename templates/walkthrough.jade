@@ -1,4 +1,4 @@
-- var context = ctx.params || {}
+- var context = typeof ctx !== "undefined" ? ctx.params || {} : {}
 .cblock
   h2 System Demonstration
   - if (context.step)
