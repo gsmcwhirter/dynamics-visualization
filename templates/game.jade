@@ -1,5 +1,6 @@
 - var tabindex = typeof startindex !== "undefined" ? startindex || 0 : 0
 - var game = typeof game !== "undefined" ? game || {} : {}
+- var gtype = typeof game_type !== "undefined" ? game_type || "" : ""
 
 .cblock.game
   form(accept-charset="utf-8", method="post")
@@ -15,8 +16,8 @@
         a(href="#")
           h1.label
       .game-grid
-        input.title(type="text", name="label", placeholder="Game Label", tabindex=++tabindex)
-        h2.game-type= typeof game_type !== "undefined" ? game_type || "" : ""
+        input.title(type="text", name="label", placeholder="Game Label", tabindex=++tabindex, value=game.label || "")
+        h2.game-type= gtype
         select.presets(size=1, name="presets", tabindex=++tabindex)
           option(value="f") Free Entry
           optgroup(label="Symmetric Games")
@@ -32,28 +33,28 @@
         .game-grid-actual
           .row
             .cell
-              input.entry-input.right.text(type="text", name="tl-c", placeholder="Col TL", tabindex=++tabindex + 1, value=game['tl-c'])
+              input.entry-input.right.tl-c.text(type="text", name="tl-c", placeholder="Col TL", tabindex=++tabindex + 1, value=game['tl-c'])
               .entry.right.tl-c= game['tl-c'] || ""
-              input.entry-input.left.text(type="text", name="tl-r", placeholder="Row TL", tabindex=++tabindex - 1, value=game['tl-r'])
+              input.entry-input.left.tl-r.text(type="text", name="tl-r", placeholder="Row TL", tabindex=++tabindex - 1, value=game['tl-r'])
               .entry.left.tl-r= game['tl-r'] || ""
               span.sep ,
             .cell.last
-              input.entry-input.right.text(type="text", name="tr-c", placeholder="Col TR", tabindex=++tabindex + 1, value=game['tr-c'])
+              input.entry-input.right.tr-c.text(type="text", name="tr-c", placeholder="Col TR", tabindex=++tabindex + 1, value=game['tr-c'])
               .entry.right.tr-c= game['tr-c'] || ""
-              input.entry-input.left.text(type="text", name="tr-r", placeholder="Row TR", tabindex=++tabindex - 1, value=game['tr-r'])
+              input.entry-input.left.tr-r.text(type="text", name="tr-r", placeholder="Row TR", tabindex=++tabindex - 1, value=game['tr-r'])
               .entry.left.tr-r= game['tr-r'] || ""
               span.sep ,
           .row.last
             .cell
-              input.entry-input.right.text(type="text", name="bl-c", placeholder="Col BL", tabindex=++tabindex + 1, value=game['bl-c'])
+              input.entry-input.right.bl-c.text(type="text", name="bl-c", placeholder="Col BL", tabindex=++tabindex + 1, value=game['bl-c'])
               .entry.right.bl-c= game['bl-c'] || ""
-              input.entry-input.left.text(type="text", name="bl-r", placeholder="Row BL", tabindex=++tabindex - 1, value=game['bl-r'])
+              input.entry-input.left.bl-r.text(type="text", name="bl-r", placeholder="Row BL", tabindex=++tabindex - 1, value=game['bl-r'])
               .entry.left.bl-r= game['bl-r'] || ""
               span.sep ,
             .cell.last
-              input.entry-input.right.text(type="text", name="br-c", placeholder="Col BR", tabindex=++tabindex + 1, value=game['br-c'])
+              input.entry-input.right.br-c.text(type="text", name="br-c", placeholder="Col BR", tabindex=++tabindex + 1, value=game['br-c'])
               .entry.right.br-c= game['br-c'] || ""
-              input.entry-input.left.text(type="text", name="br-r", placeholder="Row BR", tabindex=++tabindex - 1, value=game['br-r'])
+              input.entry-input.left.br-r.text(type="text", name="br-r", placeholder="Row BR", tabindex=++tabindex - 1, value=game['br-r'])
               .entry.left.br-r= game['br-r'] || ""
               span.sep ,
 

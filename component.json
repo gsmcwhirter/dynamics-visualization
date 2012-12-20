@@ -16,8 +16,9 @@
     "component/each": "*",
     "component/map": "*",
     "component/select": "*",
+    "component/emitter": "*",
+    "component/indexof": "*",
     
-    "adamsanderson/inline-edit": "*",
     "component/simplify": "*",
     "component/autoscale-canvas": "*"
   },
@@ -26,6 +27,7 @@
     "index.js",
     "test.js",
     "game.js",
+    "menu.js",
     "canvas.js",
     "static.js",
     "templates/game.js",
