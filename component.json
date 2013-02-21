@@ -8,6 +8,7 @@
     "visionmedia/page.js": "*",
     "gsmcwhirter/booting-sub-nav": "*",
     "gsmcwhirter/storage": "*",
+    "gsmcwhirter/all": "*",
     "necolas/normalize.css": "*",
     "component/clone": "*",
     "component/simple-grid": "*",
@@ -18,9 +19,10 @@
     "component/select": "*",
     "component/emitter": "*",
     "component/indexof": "*",
-    
     "component/simplify": "*",
-    "component/autoscale-canvas": "*"
+    "component/autoscale-canvas": "*",
+    "brunch/console-polyfill": "*",
+    "gsmcwhirter/all": "*"
   },
   "development": {},
   "scripts": [

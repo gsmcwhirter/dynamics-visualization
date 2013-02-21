@@ -15,6 +15,7 @@ var event = require("event")
   , storage = require("storage")
   , emitter = require("emitter")
   , indexOf = require("indexof")
+  , all = require("all")
   
   , game_tmpl = require('./templates/game')
   , game_store = storage('games')
@@ -396,6 +397,8 @@ Game.prototype.generateGraphs = function (){
  * Determines if the game is symmetric or not
  */
 Game.prototype.isSymmetric = function (){
+  console.log("here");
+  console.log(this.game);
   return  (this.game['tl-r'] || 0) == (this.game['tl-c'] || 0) &&
           (this.game['tr-r'] || 0) == (this.game['bl-c'] || 0) &&
           (this.game['bl-r'] || 0) == (this.game['tr-c'] || 0) &&
@@ -432,11 +435,54 @@ Game.prototype.identify = function (){
 };
 
 /**
+ * Normalizes game payoffs for type checking
+ *
+ */
+Game.prototype.normalizedPayoffs = function (){
+  if (this.game === null) return null;
+  
+  var normal_game = {};
+  var keys = ['tl-r', 'tl-c', 'tr-r', 'tr-c', 'bl-r', 'bl-c', 'br-r', 'br-c'];  
+  
+  var mult_factor;
+  var pre_add_factor;
+  var max;
+  
+  //Normalize to the top-left corner, making the greater payoff 1 and the lesser -1, if possible. If they are equal they are both made 1  
+  pre_add_factor = ((this.game['tl-r'] || 0) + (this.game['tl-c'] || 0)) / 2.0 * -1;
+  
+  if ((this.game['tl-r'] || 0) > (this.game['tl-c'] || 0)){
+    max = this.game['tl-r'] || 0;
+  } 
+  else {
+    max = this.game['tl-c'] || 0;
+  }
+  
+  if (max == 0 && pre_add_factor == 0){
+    pre_add_factor = 1;    
+  }
+  
+  if (max + pre_add_factor != 0){
+    mult_factor = 1.0 / (max + pre_add_factor);
+  }
+  else {
+    mult_factor = 1;
+  }
+  
+  var self = this;
+  keys.forEach(function (key){
+    normal_game[key] = ((self.game[key] || 0) + pre_add_factor) * mult_factor;
+  });
+  
+  return normal_game;
+};
+
+/**
  * Determines if the game is a Battle of the Sexes
  *
  */
 Game.prototype.isBattleOfTheSexes = function (){
-  var min = Math.min(this.game['tl-r'], this.game['tl-c'], this.game['tr-r'], this.game['tl-c'],
+  /*var min = Math.min(this.game['tl-r'], this.game['tl-c'], this.game['tr-r'], this.game['tl-c'],
           this.game['bl-r'], this.game['bl-c'], this.game['br-r'], this.game['br-c']);
 
   var game2 = {};
@@ -460,6 +506,15 @@ Game.prototype.isBattleOfTheSexes = function (){
       Math.max(game2['tl-r'], game2['tl-c'], game2['br-r'], game2['br-c']) == 0 &&
       (game2['tr-r'] - game2['tr-c']) * (game2['bl-r'] - game2['bl-c']) < 0){
           return 'bos';
+  }*/
+  
+  var normal_game = this.normalizedPayoffs();
+  
+  if (normal_game['tl-r'] == normal_game['br-c'] && normal_game['tl-c'] == normal_game['br-r'] && 
+      all(['bl-r', 'bl-c', 'tr-r', 'tr-c'], function (key){
+        return this[key] < -1 && this[key] == this['bl-r'];
+      }, normal_game)){
+        return 'bos';  
   }
 
   return false;
@@ -470,10 +525,12 @@ Game.prototype.isBattleOfTheSexes = function (){
  *
  */
 Game.prototype.isMatchingPennies = function (){
+  var normal_game = this.normalizedPayoffs();
+
   return  this.isZeroSum() &&
-          (this.game['tl-r'] + this.game['tr-r'] == 0) &&
-          (this.game['tl-r'] + this.game['bl-r'] == 0) &&
-          (this.game['bl-r'] + this.game['br-r'] == 0) ? 'mp' : false;
+          (normal_game['tl-r'] + normal_game['tr-r'] == 0) &&
+          (normal_game['tl-r'] + normal_game['bl-r'] == 0) &&
+          (normal_game['bl-r'] + normal_game['br-r'] == 0) ? 'mp' : false;
 };
 
 /**
@@ -481,10 +538,12 @@ Game.prototype.isMatchingPennies = function (){
  *
  */
 Game.prototype.isZeroSum = function (){
-  return  (this.game['tl-r'] + this.game['tl-c'] == 0) &&
-          (this.game['tr-r'] + this.game['tr-c'] == 0) &&
-          (this.game['bl-r'] + this.game['bl-c'] == 0) &&
-          (this.game['br-r'] + this.game['br-c'] == 0) ? 'zsum' : false;
+  var normal_game = this.normalizedPayoffs();
+
+  return  (normal_game['tl-r'] + normal_game['tl-c'] == 0) &&
+          (normal_game['tr-r'] + normal_game['tr-c'] == 0) &&
+          (normal_game['bl-r'] + normal_game['bl-c'] == 0) &&
+          (normal_game['br-r'] + normal_game['br-c'] == 0) ? 'zsum' : false;
 };
 
 /**
