@@ -57,4 +57,8 @@
               input.entry-input.left.br-r.text(type="text", name="br-r", placeholder="Row BR", tabindex=++tabindex - 1, value=game['br-r'])
               .entry.left.br-r= game['br-r'] || ""
               span.sep ,
-
+      .canvas-container
+        canvas.tl(width=320, height=320)
+        canvas.tr(width=320, height=320)
+        canvas.bl(width=320, height=320)
+        canvas.br(width=320, height=320)

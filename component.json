@@ -9,6 +9,7 @@
     "gsmcwhirter/booting-sub-nav": "*",
     "gsmcwhirter/storage": "*",
     "gsmcwhirter/all": "*",
+    "gsmcwhirter/dynamics": "*",
     "necolas/normalize.css": "*",
     "component/clone": "*",
     "component/simple-grid": "*",
@@ -21,8 +22,7 @@
     "component/indexof": "*",
     "component/simplify": "*",
     "component/autoscale-canvas": "*",
-    "brunch/console-polyfill": "*",
-    "gsmcwhirter/all": "*"
+    "brunch/console-polyfill": "*"
   },
   "development": {},
   "scripts": [
