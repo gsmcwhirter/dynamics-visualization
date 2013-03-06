@@ -394,8 +394,6 @@ Game.prototype.setInputValues = function (game){
 };
 
 Game.prototype.generateCanvases = function (){
-  if (this.canvases) return;
-  
   this.canvases = {};
   var self = this;
   
@@ -403,6 +401,7 @@ Game.prototype.generateCanvases = function (){
     if (!canvas) return;
     var key = canvas.className;
     self.canvases[key] = new Canvas(canvas, [1, 19], [1, 19]);
+    self.canvases[key].strongClear();
     self.canvases[key].drawBoundary();
   });
 };
@@ -411,34 +410,7 @@ Game.prototype.generateGraphs = function (){
   console.log("Un-hiding canvas container");
   this.dom.find(".canvas-container").els[0].style.display = 'block';
   
-  if (!this.canvases) this.generateCanvases();
-  else {
-    for (var key in (this.canvases || {})){
-      this.canvases[key].strongClear();
-      this.canvases[key].drawBoundary();
-    }
-  }
-
-  /*each(this.dom.find(".canvas-container canvas").els, function (canvas){
-    var newCanvas = document.createElement("canvas");
-    newCanvas.width = canvas.width;
-    newCanvas.height = canvas.height;
-    newCanvas.className = canvas.className;
-    canvas.parentNode.replaceChild(newCanvas, canvas);
-    
-    var context = newCanvas.getContext("2d");
-    var box = newCanvas.getBoundingClientRect();
-    var width = box.width;
-    var height = box.height;
-    
-    context.lineWidth = 1;
-    context.strokeStyle = '#bbbbbb';
-    context.fillStyle = '#ffffff';
-    context.clearRect(0,0,width,height);
-    
-    context.fillRect(1,1,width-19,height-19);
-    context.strokeRect(1,1,width-19,height-19);
-  });*/
+  this.generateCanvases();
   
   var self = this;
   
@@ -446,37 +418,32 @@ Game.prototype.generateGraphs = function (){
     self.generateBRPaths();
   }, 0);
   
+  
   setTimeout(function (){
-    //self.generateDtRPaths();
+    self.generateDtRPaths();
   }, 0);
   
   setTimeout(function (){
-    //self.generateCtRPaths();
+    self.generateCtVField();
   }, 0);
   
-  //TODO: implement other graphs
+  setTimeout(function (){
+    self.generateCtRPaths();
+  }, 0);
+  
 };
 
 Game.prototype.generateCtRPaths = function (){
-  var canvas = this.dom.find(".canvas-container canvas.br").els[0];
+  var canvas = this.canvases['br'];
   if (!canvas) return;
   
-  var box = canvas.getBoundingClientRect();
-  var context = canvas.getContext("2d");
-  var imgwidth = box.width - 20;
-  var imgheight = box.height - 20;
-  
-  var emitters = [];
-  
-  var grid = 8;
+  var grid = 5;
   var startpts = [];
   for (var xpt = 1; xpt < grid; xpt++){
     for (var ypt = 1; ypt < grid; ypt++){
       startpts.push({x: xpt / grid, y: ypt / grid});
     }
   }
-  
-  console.log(startpts);
   
   var colors = ['green', 'yellow'];
   var colorind = 1;
@@ -499,25 +466,24 @@ Game.prototype.generateCtRPaths = function (){
     console.log("Starting drawing CtR path from (%s, %s)...", start.x, start.y);
     var emitter = new dynamics.ContinuousReplicatorPath(self.game, start, {timestep: 0.005, duration: 10, debug: false});
       
-    context.beginPath();
-    context.moveTo(imgwidth * start.x + 1, imgheight * start.y + 1);
-    context.lineWidth = 1;
-    context.strokeStyle = nextColor();
+    canvas.beginPathFrom(start);
+    canvas.context.lineWidth = 1;
+    canvas.context.strokeStyle = nextColor();
     
-    var path_segments = [[]];
+    var path_segment = [];
     
     emitter.on("point", function (point){
-      if (path_segments[path_segments.length - 1].length >= segment_length){
-        draw_segment(path_segments[path_segments.length - 1]);
-        path_segments.push([]);
+      if (path_segment.length >= segment_length){
+        draw_segment(path_segment);
+        path_segment = [];
       }
       
-      path_segments[path_segments.length - 1].push(point);
+      path_segment.push(point);
     });
     
     emitter.on("done", function (){
       console.log("Done drawing path.");
-      draw_segment(path_segments[path_segments.length - 1]);
+      draw_segment(path_segment);
       setTimeout(next, 0);
     });
     
@@ -525,28 +491,27 @@ Game.prototype.generateCtRPaths = function (){
   }
   
   function draw_segment(segment){
-    var simple_segment = simplify(segment, 0.0001);
+    var simple_segment;
+    if (segment.length > 1){
+      simple_segment = simplify(segment, 0.0001);
+    }
+    else {
+      simple_segment = segment;
+    }
     
     each(simple_segment, function (node){
-      context.lineTo(imgwidth * node.x + 1, imgheight * node.y + 1);
+      canvas.drawLineTo(node);
     });
     
-    context.stroke();
+    canvas.stroke();
   }
   
   next();
 };
 
-Game.prototype.generateDtRPaths = function (){
-  var canvas = this.dom.find(".canvas-container canvas.tr").els[0];
+Game.prototype.generateCtVField = function (){
+  var canvas = this.canvases['bl'];
   if (!canvas) return;
-  
-  var box = canvas.getBoundingClientRect();
-  var context = canvas.getContext("2d");
-  var imgwidth = box.width - 20;
-  var imgheight = box.height - 20;
-  
-  var emitters = [];
   
   var grid = 8;
   var startpts = [];
@@ -556,7 +521,50 @@ Game.prototype.generateDtRPaths = function (){
     }
   }
   
-  console.log(startpts);
+  var color = '#888888';
+  var self = this;
+  
+  function next(){
+    var start = startpts.shift();
+    if (!start){
+      console.log("Done drawing all vectors.");
+      return;
+    }
+    
+    console.log("Starting drawing CtVector from (%s, %s)...", start.x, start.y);
+    var emitter = new dynamics.ContinuousReplicatorVector(self.game, start, {debug: false});
+      
+    canvas.beginPathFrom(start);
+    canvas.context.lineWidth = 1;
+    canvas.context.strokeStyle = color;
+    
+    emitter.on("point", function (point){
+      canvas.drawArrowTo(point);
+      canvas.stroke();
+    });
+    
+    emitter.on("done", function (){
+      console.log("Done drawing path.");
+      setTimeout(next, 0);
+    });
+    
+    emitter.generate(); 
+  }
+  
+  next();
+};
+
+Game.prototype.generateDtRPaths = function (){
+  var canvas = this.canvases['tr'];
+  if (!canvas) return;
+  
+  var grid = 5;
+  var startpts = [];
+  for (var xpt = 1; xpt < grid; xpt++){
+    for (var ypt = 1; ypt < grid; ypt++){
+      startpts.push({x: xpt / grid, y: ypt / grid});
+    }
+  }
   
   var colors = ['green', 'yellow'];
   var colorind = 1;
@@ -579,50 +587,47 @@ Game.prototype.generateDtRPaths = function (){
     console.log("Starting drawing DtR path from (%s, %s)...", start.x, start.y);
     var emitter = new dynamics.DiscreteReplicatorPath(self.game, start, {debug: false});
       
-    context.beginPath();
-    context.moveTo(imgwidth * start.x + 1, imgheight * start.y + 1);
-    context.lineWidth = 1;
-    context.strokeStyle = nextColor();
+    canvas.beginPathFrom(start);
+    canvas.context.lineWidth = 1;
+    canvas.context.strokeStyle = nextColor();
     
-    var path_segments = [[]];
+    var path_segment = [];
     
     emitter.on("point", function (point){
-      if (path_segments[path_segments.length - 1].length >= segment_length){
-        draw_segment(path_segments[path_segments.length - 1]);
-        path_segments.push([]);
+      if (path_segment.length >= segment_length){
+        draw_segment(path_segment);
+        path_segment = [];
       }
       
-      path_segments[path_segments.length - 1].push(point);
+      path_segment.push(point);
     });
     
     emitter.on("done", function (){
       console.log("Done drawing path.");
-      draw_segment(path_segments[path_segments.length - 1]);
+      draw_segment(path_segment);
       setTimeout(next, 0);
     });
     
-    emitter.generate(); 
+    emitter.generate();
   }
   
   function draw_segment(segment){
-    //TODO: arrows instead of just lines
     each(segment, function (node){
       if (!node) return;
-      context.lineTo(imgwidth * node.x + 1, imgheight * node.y + 1);
+      canvas.drawArrowTo(node);
     });
     
-    context.stroke();
+    canvas.stroke();
   }
   
   next();
 };
 
 Game.prototype.generateBRPaths = function (){
-  this.generateCanvases();
   var canvas = this.canvases['tl'];
   if (!canvas) return;
   
-  var grid = 8;
+  var grid = 5;
   var startpts = [];
   for (var xpt = 1; xpt < grid; xpt++){
     for (var ypt = 1; ypt < grid; ypt++){
@@ -646,8 +651,12 @@ Game.prototype.generateBRPaths = function (){
       console.log("Done drawing all paths.");
       console.log("Drawing BR curves for each player...");
       var br_curves = dynamics.BestResponseCurves(self.game, {debug: true});
+      
       br_curves.forEach(function (curve_pts, player){
         start = curve_pts.shift();
+        
+        console.log(start);
+        console.log(curve_pts);
         
         if (!start) return;
         canvas.beginPathFrom(start);
@@ -670,7 +679,8 @@ Game.prototype.generateBRPaths = function (){
     canvas.context.strokeStyle = nextColor();
     
     emitter.on("point", function (point){
-      draw_segment([point]);
+      canvas.drawArrowTo(point);
+      canvas.stroke();
     });
     
     emitter.on("done", function (){
@@ -679,16 +689,6 @@ Game.prototype.generateBRPaths = function (){
     });
     
     emitter.generate(); 
-  }
-  
-  function draw_segment(segment){
-    //TODO: Arrows instead of just lines
-    each(segment, function (node){
-      if (!node) return;
-      canvas.drawLineTo(node);
-    });
-    
-    canvas.stroke();
   }
   
   next();
