@@ -22,7 +22,7 @@
     "component/indexof": "*",
     "component/simplify": "*",
     "component/autoscale-canvas": "*",
-    "brunch/console-polyfill": "*"
+    "paulmillr/console-polyfill": "*"
   },
   "development": {},
   "scripts": [

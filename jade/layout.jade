@@ -1,3 +1,4 @@
+- var prefix = typeof prefix !== "undefined" ? prefix || "" : "";
 !!! 5
 html
   head
@@ -14,9 +15,9 @@ html
         .col-1-1
           h1 Dynamics Visualizations
         .col-1-1.menu.header
-          a(href="/") Home
+          a(href=prefix + "/") Home
           span.sep |
-          a(href="/help") Help
+          a(href=prefix + "/help") Help
         .col-2-3#main
         .col-1-3#legend
           h3 Graph Legend
@@ -42,9 +43,9 @@ html
             | This graph shows solution trajectories of the continuous time 
             | replicator dynamics. 
         .col-1-1.menu.footer
-          a(href="/") Home
+          a(href=prefix + "/") Home
           span.sep |
-          a(href="/help") Help
+          a(href=prefix + "/help") Help
           span.sep |
           | Copyright 2011 
           a(href="https://www.ideafreemonoid.org") Gregory McWhirter
@@ -55,7 +56,7 @@ html
     block scripts-do
       script(type="text/javascript")
         window.dynvis = require('dynamics-visualization');
-        dynvis.run();
+        dynvis.run(typeof prefix !== "undefined" ? prefix : "");
 
     script(type="text/javascript")
       var _gaq = _gaq || [];

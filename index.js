@@ -17,15 +17,17 @@ module.exports = {
   run: setup
 }
   
-function setup(){
+function setup(prefix){
   /* Routing */
+  
+  prefix = prefix || "";
   
   bsnav(document.getElementById('legend'), 10);
 
-  page('/', showLegend, index);
-  page('/help', hideLegend, staticpage('help'));
-  page('/help/requirements', hideLegend, staticpage('requirements'));
-  page('/help/walkthrough/:step?', hideLegend, staticpage('walkthrough'));
+  page(prefix + '/', showLegend, index);
+  page(prefix + '/help', hideLegend, staticpage('help'));
+  page(prefix + '/help/requirements', hideLegend, staticpage('requirements'));
+  page(prefix + '/help/walkthrough/:step?', hideLegend, staticpage('walkthrough'));
   page();
 }
 
