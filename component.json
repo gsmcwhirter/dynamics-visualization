@@ -1,0 +1,47 @@
+{
+  "name": "dynamics-visualization",
+  "repo": "gsmcwhirter/dynamics-visualization",
+  "description": "Game Theoretic Dynamics Visualizations",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {
+    "visionmedia/page.js": "*",
+    "gsmcwhirter/booting-sub-nav": "*",
+    "gsmcwhirter/storage": "*",
+    "gsmcwhirter/all": "*",
+    "gsmcwhirter/dynamics": "*",
+    "necolas/normalize.css": "*",
+    "component/clone": "*",
+    "component/simple-grid": "*",
+    "component/dom": "*",
+    "component/event": "*",
+    "component/each": "*",
+    "component/map": "*",
+    "component/select": "*",
+    "component/emitter": "*",
+    "component/indexof": "*",
+    "component/simplify": "*",
+    "component/autoscale-canvas": "*",
+    "paulmillr/console-polyfill": "*"
+  },
+  "development": {},
+  "scripts": [
+    "index.js",
+    "test.js",
+    "game.js",
+    "menu.js",
+    "canvas.js",
+    "static.js",
+    "templates/game.js",
+    "templates/help.js",
+    "templates/requirements.js",
+    "templates/walkthrough.js",
+    "templates/index_actions.js"
+  ],
+  "styles": [
+    "stylus/fix.css",
+    "stylus/blueprint-forms.css",
+    "stylus/blueprint-buttons.css",
+    "stylus/dynamics-visualization.css"
+  ]
+}

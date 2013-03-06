@@ -1,10 +1,9 @@
-*.pyc
-*.pyo
 nbproject
-client/css/readme.txt
-client/css/site.css
-server/static
+components
 build
 dist
-applet/master-applet.jnlp
-applet/preview-applet.html
+index-dist.html
+index.html
+stylus/dynamics-visualization.css
+templates/*.js
+test.html
