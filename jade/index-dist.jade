@@ -8,6 +8,6 @@ block append scripts-load
   script(src=prefix + "/js/app.js", type="text/javascript")
 
 block prepend scripts-do
-  script(type="text/javascript")
+  script(type="text/javascript").
     var prefix = window.prefix = "#{prefix}";
   

@@ -8,7 +8,7 @@ block append scripts-load
   script(src="/node_modules/expect.js/expect.js", type="text/javascript")
 
 block append scripts-do
-  script(type="text/javascript")
+  script(type="text/javascript").
     mocha.setup('bdd');
     var test = require('dynamics-visualization/test');
     test();

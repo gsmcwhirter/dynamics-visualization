@@ -54,11 +54,11 @@ html
     block scripts-load
     
     block scripts-do
-      script(type="text/javascript")
+      script(type="text/javascript").
         window.dynvis = require('dynamics-visualization');
         dynvis.run(typeof prefix !== "undefined" ? prefix : "");
 
-    script(type="text/javascript")
+    script(type="text/javascript").
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-20562400-1']);
       _gaq.push(['_trackPageview']);
