@@ -7,3 +7,6 @@ index.html
 stylus/dynamics-visualization.css
 templates/*.js
 test.html
+*.sublime-project
+*.sublime-workspace
+node_modules
